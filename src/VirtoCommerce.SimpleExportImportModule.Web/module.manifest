@@ -3,13 +3,12 @@
     <id>VirtoCommerce.SimpleExportImport</id>
     <version>0.0.1-preview</version>
     <version-tag></version-tag>
-    <platformVersion>3.0.0</platformVersion>
+    <platformVersion>3.49.0</platformVersion>
     <dependencies>
-<!--        <dependency id="VirtoCommerce.Core" version="3.0.0" /> -->
     </dependencies>
 
     <title>Simple export/import module</title>
-    <description>This module adds the simple export/import module functionality to VirtoCommerce platform.</description>
+    <description>This module adds the simple export and import functionality to VirtoCommerce platform.</description>
     <authors>
         <author>Solution team</author>
     </authors>
@@ -20,7 +19,7 @@
     <projectUrl>https:=""//github.com/VirtoCommerce/vc-module-simple-export-import</projectUrl>
 
     <releaseNotes>First version.</releaseNotes>
-    <copyright>Copyright © 2021 . All rights reserved</copyright>
+    <copyright>Copyright © 2021. All rights reserved</copyright>
     <tags>extension module</tags>
 
     <assemblyFile>VirtoCommerce.SimpleExportImportModule.Web.dll</assemblyFile>

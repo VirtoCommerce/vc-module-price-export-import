@@ -1,28 +1,5 @@
 {
-  "virtoCommerce.simpleExportImportModule": {
-    "blades": {
-      "hello-world": {
-        "title": "Hello world blade"
-      }
-    }
-  },
   "permissions": {
-    "virtoCommerceSimpleExportImportModule:access": "Open VirtoCommerceSimpleExportImportModule menu",
-    "virtoCommerceSimpleExportImportModule:create": "Create VirtoCommerceSimpleExportImportModule related data",
-    "virtoCommerceSimpleExportImportModule:read": "View VirtoCommerceSimpleExportImportModule related data",
-    "virtoCommerceSimpleExportImportModule:update": "Update VirtoCommerceSimpleExportImportModule related data",
-    "virtoCommerceSimpleExportImportModule:delete": "Delete VirtoCommerceSimpleExportImportModule related data"
-  },
-  "settings": {
-    "VirtoCommerceSimpleExportImportModule": {
-      "VirtoCommerceSimpleExportImportModulePassword": {
-        "title": "VirtoCommerceSimpleExportImportModule Password",
-        "description": "VirtoCommerceSimpleExportImportModule Password setting"
-      },
-      "VirtoCommerceSimpleExportImportModuleEnabled": {
-        "title": "VirtoCommerceSimpleExportImportModule Enabled",
-        "description": "VirtoCommerceSimpleExportImportModule Enabled setting"
-      }
-    }
+    "virtoCommerceSimpleExportImportModule:import": "Simple import ability"
   }
 }
