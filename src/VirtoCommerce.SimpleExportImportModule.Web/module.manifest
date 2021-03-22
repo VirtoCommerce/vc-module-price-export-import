@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<module>
+    <id>VirtoCommerce.SimpleExportImport</id>
+    <version>1.0.0</version>
+    <version-tag></version-tag>
+    <platformVersion>3.0.0</platformVersion>
+    <dependencies>
+<!--        <dependency id="VirtoCommerce.Core" version="3.0.0" /> -->
+    </dependencies>
+
+    <title>Simple export/import module</title>
+    <description>This module adds the simple export/import module functionality to VirtoCommerce platform.</description>
+    <authors>
+        <author>Solution team</author>
+    </authors>
+    <owners>
+      <owner>Virto Commerce</owner>
+    </owners>
+
+    <releaseNotes>First version.</releaseNotes>
+    <copyright>Copyright © 2021 . All rights reserved</copyright>
+    <tags>extension module</tags>
+
+    <assemblyFile>VirtoCommerce.SimpleExportImportModule.Web.dll</assemblyFile>
+    <moduleType>VirtoCommerce.SimpleExportImportModule.Web.Module, VirtoCommerce.SimpleExportImportModule.Web</moduleType>
+
+</module>
