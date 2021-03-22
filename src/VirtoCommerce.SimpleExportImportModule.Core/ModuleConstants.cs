@@ -6,9 +6,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
         {
             public static class Permissions
             {
-                public const string Import = "virtoCommerceSimpleExportImportModule:import";
+                public const string ImportAccess = "import:access";
 
-                public static string[] AllPermissions { get; } = { Import };
+                public static string[] AllPermissions { get; } = { ImportAccess };
             }
         }
     }
