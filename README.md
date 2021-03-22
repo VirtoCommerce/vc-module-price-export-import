@@ -1,4 +1,4 @@
-# Preview of feature flags for VirtoCommerce Platform
+# Preview of simple export & import feature
 
 [![CI status](https://github.com/VirtoCommerce/vc-module-simple-export-import/workflows/Module%20CI/badge.svg?branch=dev)](https://github.com/VirtoCommerce/vc-module-simple-export-import/actions?query=workflow%3A"Module+CI")
 [![Deployment status](https://github.com/VirtoCommerce/vc-module-simple-export-import/workflows/Module%20deployment/badge.svg?branch=dev)](https://github.com/VirtoCommerce/vc-module-simple-export-import/actions?query=workflow%3A"Module+deployment") 
