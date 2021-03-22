@@ -7,7 +7,7 @@
     <dependencies>
     </dependencies>
 
-    <title>Simple export/import module</title>
+    <title>Simple export import module</title>
     <description>This module adds the simple export and import functionality to VirtoCommerce platform.</description>
     <authors>
         <author>Solution team</author>
