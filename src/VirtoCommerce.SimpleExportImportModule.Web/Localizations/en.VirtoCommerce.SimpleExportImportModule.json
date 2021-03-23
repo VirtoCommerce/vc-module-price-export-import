@@ -1,0 +1,5 @@
+{
+  "permissions": {
+    "virtoCommerceSimpleExportImportModule:import": "Simple import ability"
+  }
+}
