@@ -1,4 +1,21 @@
 {
+  "simpleExportImport": {
+    "blades": {
+      "import-preview": {
+        "title": "Preview",
+        "subtitle": "Uploaded CSV file preview",
+        "labels": {
+          "sku": "SKU",
+          "min-quantity": "Min quantity",
+          "list-price": "List price",
+          "sales-price": "Sales price"
+        } 
+      }
+    },
+    "commands": {
+      "upload-new": "Upload new"
+    }
+  },
   "permissions": {
     "virtoCommerceSimpleExportImportModule:import": "Simple import ability"
   },
