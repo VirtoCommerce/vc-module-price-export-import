@@ -14,10 +14,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Repositories
             : base(options)
         {
         }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-        }
     }
 }
 
