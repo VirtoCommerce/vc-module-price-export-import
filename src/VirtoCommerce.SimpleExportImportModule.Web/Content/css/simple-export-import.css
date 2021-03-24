@@ -1,0 +1,43 @@
+.simple-import-header .label {
+    font: bold 14px Roboto;
+    margin-bottom: 5px;
+}
+
+.simple-import-header .count {
+    font: bold 14px Roboto;
+}
+
+.simple-import-header .radio-label {
+    font: normal 13px Roboto;
+    color: #96989C;
+    margin-right: 1rem;
+}
+
+.simple-import-header .d-flex {
+    display: flex;
+}
+
+.simple-import-header .row {
+    flex-direction: row;
+}
+
+.simple-import-header .align-items-center {
+    align-items: center;
+}
+
+.simple-import-header .mr-auto {
+    margin-right: auto;
+}
+
+
+.simple-import-header h-100 {
+    height: 100%;
+}
+
+.simple-import-header .p-3 {
+    padding: 1rem;
+}
+
+.simple-import-header .bl-1 {
+    border-left: 1px solid #E3E7EC;
+}

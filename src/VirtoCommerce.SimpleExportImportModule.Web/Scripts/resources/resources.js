@@ -2,7 +2,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
     .factory('virtoCommerce.simpleExportImportModule.import', ['$resource', '$q', function ($resource, $q) {
 
         var mockData = {
-            totalsCount: 10000,
+            totalCount: 10000,
             records: [
                 {
                     pricelistId: "0456b3ebc0a24c0ab7054ec9a5cea78e",

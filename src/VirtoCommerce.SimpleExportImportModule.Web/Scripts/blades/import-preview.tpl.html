@@ -1,16 +1,36 @@
-<div class="blade-static">
-    <div class="form-group">
-        <div class="form-input __search">
-            <input placeholder="{{ 'platform.placeholders.search-keyword' | translate }}" ng-model="filter.keyword" ng-keyup="$event.which === 13 && filter.criteriaChanged()">
-            <button class="btn __other" style="position: relative;right: 45px;">
-                <em class="btn-ico fa fa-remove" title="Clear" ng-click="filter.keyword=null;filter.criteriaChanged()"></em>
-            </button>
+<div class="blade-static _expanded simple-import-header">
+    <div class="d-flex h-100 align-items-center">
+        <div class="mr-auto p-3">
+            <div class="label">What would you like to do with the imported data?</div>
+            <label class="radio-label">
+                <input type="radio" name="name1" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.createNewOnly}}" /> Create new only
+            </label>
+            <label class="radio-label">
+                <input type="radio" name="name2" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.updateExistingOnly}}" /> Update existing only
+            </label>
+            <label class="radio-label">
+                <input type="radio" name="name3" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.createAndUpdate}}" /> Create & update
+            </label>
         </div>
-        <p class="form-count">{{ 'platform.list.count' | translate }}: <span class="count">{{pageSettings.totalItems | number:0}}</span></p>
+        <div class="p-3 bl-1">
+            <div class="label">Ignore unknown SKU</div>
+            <div>
+                <label class="form-label __switch">
+                    <input type="checkbox" ng-model="blade.ignoreUnknownSku">
+                    <span class="switch"></span>
+                </label>
+            </div>
+        </div>
+        <div class="p-3 bl-1">
+            <div class="label">Preview count:</div>
+            <div>
+                <span class="count">{{blade.currentEntities.length | number:0}}</span> of <span class="count">{{blade.totalCount | number:0}}</span>
+            </div>
+        </div>
     </div>
 </div>
 <div class="blade-static __bottom" ng-if="pageSettings.itemsPerPageCount < pageSettings.totalItems" ng-include="'pagerTemplate.html'"></div>
-<div class="blade-content __large-wide">
+<div class="blade-content __xlarge-wide">
     <div class="blade-inner">
         <div class="inner-block" ng-init="setGridOptions({
                     data: 'blade.currentEntities',
@@ -22,9 +42,9 @@
                             name: 'sku', displayName: 'simpleExportImport.blades.import-preview.labels.sku', 
                             cellTooltip:true,  headerTooltip: true, field: 'product.code', width: '**'
                         },
-                        { name: 'minQuantity', displayName: 'simpleExportImport.blades.import-preview.labels.min-quantity', headerTooltip: true, field: 'minQuantity', width: 10},
-                        { name: 'listPrice', displayName: 'simpleExportImport.blades.import-preview.labels.list-price', headerTooltip: true, field: 'list', width: 10},
-                        { name: 'salesPrice', displayName: 'simpleExportImport.blades.import-preview.labels.sales-price', headerTooltip: true, field: 'sale', width: 10}
+                        { name: 'minQuantity', displayName: 'simpleExportImport.blades.import-preview.labels.min-quantity', headerTooltip: true, field: 'minQuantity', width: 150},
+                        { name: 'listPrice', displayName: 'simpleExportImport.blades.import-preview.labels.list-price', headerTooltip: true, field: 'list', width: 150},
+                        { name: 'salesPrice', displayName: 'simpleExportImport.blades.import-preview.labels.sales-price', headerTooltip: true, field: 'sale', width: 150}
                     ]})">
             <div class="table-wrapper" ng-if="blade.currentEntities.length">
                 <div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-save-state ui-grid-resize-columns ui-grid-move-columns ui-grid-height></div>
