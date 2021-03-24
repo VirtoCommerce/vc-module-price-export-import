@@ -7,16 +7,23 @@ if (AppDependencies !== undefined) {
 
 angular.module(moduleName, [])
     .run(
-        ['platformWebApp.toolbarService',
-            function (toolbarService) {
+        ['platformWebApp.toolbarService', 'platformWebApp.bladeNavigationService',
+            function (toolbarService, bladeNavigationService) {
                 toolbarService.register({
-                    name: "Import", icon: 'fa fa-download',
+                    name: "platform.commands.import", icon: 'fa fa-download',
                     executeMethod: function (blade) {
-                        console.log('test: ' + this.name + this.icon + blade);
+                        var newBlade = {
+                            id: 'simpleImportFileUpload',
+                            title: 'simpleExportImport.blades.file-upload.title',
+                            subtitle: 'simpleExportImport.blades.file-upload.subtitle',
+                            controller: 'virtoCommerce.simpleExportImportModule.fileUploadController',
+                            template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/file-upload.tpl.html'
+                        };
+                        bladeNavigationService.showBlade(newBlade, blade);
                     },
                     canExecuteMethod: function () { return true; },
                     index: 5
-                }, 'virtoCommerce.pricingModule.pricelistItemListController'); 
+                }, 'virtoCommerce.pricingModule.pricelistItemListController');
             }
         ]);
-    
+
