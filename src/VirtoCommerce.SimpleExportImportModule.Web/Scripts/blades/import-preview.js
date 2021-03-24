@@ -28,7 +28,6 @@ angular.module('virtoCommerce.simpleExportImportModule')
             }, function (error) { bladeNavigationService.setError('Error ' + error.status, blade); });
         };
 
-
         blade.toolbarCommands = [
             {
                 name: "platform.commands.import",
@@ -54,7 +53,6 @@ angular.module('virtoCommerce.simpleExportImportModule')
             }
         ];
 
-
         // ui-grid
         $scope.setGridOptions = function (gridOptions) {
             $scope.gridOptions = gridOptions;
@@ -62,6 +60,4 @@ angular.module('virtoCommerce.simpleExportImportModule')
             bladeUtils.initializePagination($scope);
         };
 
-        //No need to call this because page 'pageSettings.currentPage' is watched!!! It would trigger subsequent duplicated req...
-        // blade.refresh();
     }]);
