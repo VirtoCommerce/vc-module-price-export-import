@@ -13,10 +13,6 @@ angular.module('virtoCommerce.simpleExportImportModule')
             name: "platform.commands.cancel",
             icon: 'fa fa-times',
             executeMethod: () => {
-                if (blade.csvFileUrl) {
-                    $scope.deleteUploadedItem();
-                }
-
                 $scope.bladeClose();
             },
             canExecuteMethod: () => true
@@ -86,6 +82,14 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 bladeNavigationService.setError(`${element._file.name} failed: ${response.message ? response.message : status}`, blade);
             };
 
+        }
+
+        $scope.bladeClose = () => {
+            if (blade.csvFileUrl) {
+                $scope.deleteUploadedItem();
+            }
+
+            bladeNavigationService.closeBlade(blade);
         }
 
         $scope.browse = () => {
