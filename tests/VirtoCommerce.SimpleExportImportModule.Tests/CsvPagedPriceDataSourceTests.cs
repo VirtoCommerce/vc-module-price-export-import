@@ -143,6 +143,19 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.Equal(manualCsvStream.Position, stream.Position);
         }
 
+        [Fact]
+        public async Task FetchAsync_MultipleTimes_WillUpdateCurrentPageNumber()
+        {
+            await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
+            var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
+            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 1);
+
+            await csvPagedPriceDataSource.FetchAsync();
+            await csvPagedPriceDataSource.FetchAsync();
+
+            Assert.Equal(2, csvPagedPriceDataSource.CurrentPageNumber);
+        }
+
         [Theory]
         [MemberData(nameof(CsvWithInvalidRows))]
         public async Task FetchAsync_WithInvalidRows_IgnoreInvalidRows(string[] records)
