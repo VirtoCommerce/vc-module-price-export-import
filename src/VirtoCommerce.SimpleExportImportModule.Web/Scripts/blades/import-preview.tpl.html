@@ -1,19 +1,19 @@
 <div class="blade-static _expanded simple-export-import">
     <div class="d-flex h-100 align-items-center">
         <div class="mr-auto p-3">
-            <div class="label">What would you like to do with the imported data?</div>
+            <div class="label">{{ 'simpleExportImport.blades.import-preview.labels.import-strategy' | translate }}</div>
             <label class="radio-label">
-                <input type="radio" name="name1" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.createNewOnly}}" /> Create new only
+                <input type="radio" name="name1" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.createNewOnly}}" /> {{ 'simpleExportImport.blades.import-preview.labels.create-new-only' | translate }}
             </label>
             <label class="radio-label">
-                <input type="radio" name="name2" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.updateExistingOnly}}" /> Update existing only
+                <input type="radio" name="name2" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.updateExistingOnly}}" /> {{ 'simpleExportImport.blades.import-preview.labels.update-existing-only' | translate }}
             </label>
             <label class="radio-label">
-                <input type="radio" name="name3" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.createAndUpdate}}" /> Create & update
+                <input type="radio" name="name3" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.createAndUpdate}}" /> {{ 'simpleExportImport.blades.import-preview.labels.create-and-update' | translate }}
             </label>
         </div>
         <div class="p-3 bl-1">
-            <div class="label">Ignore unknown SKU</div>
+            <div class="label">{{ 'simpleExportImport.blades.import-preview.labels.ignore-unknown-sku' | translate }}</div>
             <div>
                 <label class="form-label __switch">
                     <input type="checkbox" ng-model="blade.ignoreUnknownSku">
@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="p-3 bl-1">
-            <div class="label">Preview count:</div>
+            <div class="label">{{ 'simpleExportImport.blades.import-preview.labels.preview-count' | translate }}</div>
             <div>
                 <span class="count">{{blade.currentEntities.length | number:0}}</span> of <span class="count">{{blade.totalCount | number:0}}</span>
             </div>

@@ -8,8 +8,14 @@
           "sku": "SKU",
           "min-quantity": "Min quantity",
           "list-price": "List price",
-          "sales-price": "Sales price"
-        } 
+          "sales-price": "Sales price",
+          "import-strategy": "What would you like to do with the imported data?",
+          "create-new-only": "Create new only",
+          "update-existing-only": "Update existing only",
+          "create-and-update": "Create & update",
+          "ignore-unknown-sku": "Ignore unknown SKU",
+          "preview-count": "Preview count:"
+        }
       }
     },
     "commands": {
