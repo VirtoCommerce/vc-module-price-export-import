@@ -3,7 +3,9 @@ angular.module('virtoCommerce.simpleExportImportModule')
     ['FileUploader', '$document', '$scope', '$timeout', 'platformWebApp.bladeNavigationService', 'platformWebApp.assets.api',
     function(FileUploader, $document, $scope, $timeout, bladeNavigationService, assetsApi) {
         const blade = $scope.blade;
-        const maxCsvSize = 1048576; // 1024 * 1024 | Math.pow(2,20); | 0x100000
+        const oneKb = 1024;
+        const oneMb = 1024 * oneKb;
+        const maxCsvSize = oneMb;
         blade.headIcon = 'fas fa-file-alt';
         blade.isLoading = false;
         $scope.showUploadResult = false;
