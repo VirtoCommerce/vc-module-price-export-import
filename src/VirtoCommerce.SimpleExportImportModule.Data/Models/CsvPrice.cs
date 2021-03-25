@@ -2,7 +2,7 @@ using CsvHelper.Configuration.Attributes;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Models
 {
-    public class CsvPrice
+    public sealed class CsvPrice
     {
         [Name("SKU")]
         public string Sku { get; set; }
