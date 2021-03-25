@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using VirtoCommerce.FeatureManagementModule.Core.Services;
 using VirtoCommerce.Platform.Core.Modularity;
 using VirtoCommerce.Platform.Core.Security;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Data.Repositories;
+using featureManagementCore = VirtoCommerce.FeatureManagementModule.Core;
+using simpleExportImportCore = VirtoCommerce.SimpleExportImportModule.Core;
 
 
 namespace VirtoCommerce.SimpleExportImportModule.Web
@@ -36,6 +39,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
                     ModuleId = ModuleInfo.Id,
                     Name = x
                 }).ToArray());
+
+            var featureStorage = appBuilder.ApplicationServices.GetService<IFeatureStorage>();
+            featureStorage.TryAddFeatureDefinition(simpleExportImportCore.ModuleConstants.Features.SimpleExportImport, featureManagementCore.ModuleConstants.FeatureFilters.Developers);
 
             // Ensure that any pending migrations are applied
             using (var serviceScope = appBuilder.ApplicationServices.CreateScope())
