@@ -5,6 +5,8 @@
     <version-tag></version-tag>
     <platformVersion>3.49.0</platformVersion>
     <dependencies>
+        <dependency id="VirtoCommerce.Catalog" version="3.35.0" />
+        <dependency id="VirtoCommerce.Pricing" version="3.18.0" />
     </dependencies>
 
     <title>Simple export import module</title>
