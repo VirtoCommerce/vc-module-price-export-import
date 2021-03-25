@@ -21,7 +21,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
         [Theory]
         [MemberData(nameof(GetCsvWithAndWithoutHeader))]
-        public async Task GetTotalCount_Returns_TotalCount(string[] records, string header)
+        public async Task GetTotalCount_Calculate_AndReturnTotalCount(string[] records, string header)
         {
             var csv = GetCsv(records, header);
             var stream = new MemoryStream();
@@ -32,6 +32,26 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
             using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
+
+            Assert.Equal(3, csvPagedPriceDataSource.GetTotalCount());
+        }
+
+        [Fact]
+        public async Task GetTotalCount_CacheTotalCount_AndReturnSameValue()
+        {
+            var csv = GetCsv(CsvRecords, CsvHeader);
+            var stream = new MemoryStream();
+            await using var writer = new StreamWriter(stream);
+            await writer.WriteAsync(csv);
+            await writer.FlushAsync();
+            stream.Position = 0;
+
+            var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
+            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
+
+            Assert.Equal(3, csvPagedPriceDataSource.GetTotalCount());
+
+            await stream.DisposeAsync();
 
             Assert.Equal(3, csvPagedPriceDataSource.GetTotalCount());
         }
