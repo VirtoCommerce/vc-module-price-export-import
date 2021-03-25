@@ -106,6 +106,22 @@ angular.module('virtoCommerce.simpleExportImportModule')
             blade.csvFileUrl = null;
         }
 
+        $scope.showPrevieww = () => {
+            var newBlade = {
+                id: 'simpleImportPreview',
+                currency: blade.currentEntity.currency,
+                currentEntity: blade.currentEntity,
+                currentEntityId: blade.currentEntityId,
+                headIcon: "fa fa-file-csv",
+                title: 'simpleExportImport.blades.import-preview.title',
+                subtitle: 'simpleExportImport.blades.import-preview.subtitle',
+                controller: 'virtoCommerce.simpleExportImportModule.importPreviewController',
+                template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/import-preview.tpl.html'
+            };
+
+            bladeNavigationService.showBlade(newBlade, blade);
+        }
+
         function formatFileSize(bytes, decimals = 2) {
             if (bytes === 0) return '0 Bytes';
 
