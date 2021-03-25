@@ -30,6 +30,19 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 removeAfterUpload: true,
                 filters: [
                 {
+                    name: 'onlyCsv',
+                    fn: (item) => {
+                        $scope.uploadedFile.name = item.name;
+                        if (!uploader.isHTML5) {
+                            return true;
+                        } else {
+                            let result = /^.*\.(csv)$/.test(item.name);
+                            $scope.fileTypeError = !result;
+                            return result;
+                        }
+                    }
+                },
+                {
                     name: 'csvMaxSize',
                     fn: (item) => {
                         $scope.uploadedFile.name = item.name;
@@ -39,19 +52,6 @@ angular.module('virtoCommerce.simpleExportImportModule')
                         } else {
                             $scope.csvMaxSizeError = true;
                             return false;
-                        }
-                    }
-                },
-                {
-                    name: 'onlyCsv',
-                    fn: (item) => {
-                        $scope.uploadedFile.name = item.name;
-                        if (!uploader.isHTML5) {
-                            return true;
-                        } else {
-                            let result = /\/(csv)$/.test(item.type);
-                            $scope.fileTypeError = !result;
-                            return result;
                         }
                     }
                 }]
