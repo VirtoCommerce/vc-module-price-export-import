@@ -80,10 +80,6 @@
     color: #9db0be;
 }
 
-.simple-export-import .align-items-center {
-    align-items: center;
-}
-
 .simple-export-import .label {
     font: bold 14px Roboto;
     margin-bottom: 5px;
@@ -108,8 +104,8 @@
     height: 100%;
 }
 
-.simple-export-import .p-3 {
-    padding: 1rem;
+.simple-export-import .p-15 {
+    padding: 15px;
 }
 
 .simple-export-import .bl-1 {

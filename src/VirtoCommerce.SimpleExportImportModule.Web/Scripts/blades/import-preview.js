@@ -16,26 +16,24 @@ angular.module('virtoCommerce.simpleExportImportModule')
 
         blade.ignoreUnknownSku = false;
 
-        blade.refresh = function () {
+        blade.refresh = () => {
             blade.isLoading = true;
 
-            importResources.preview({fileUrl: blade.fileUrl}, function (data) {
+            importResources.preview({fileUrl: blade.fileUrl}, (data) => {
                 blade.currentEntities = data.records;
                 blade.totalCount = data.totalCount;
                 $scope.pageSettings.totalItems = 10;
 
                 blade.isLoading = false;
-            }, function (error) { bladeNavigationService.setError('Error ' + error.status, blade); });
+            }, (error) => { bladeNavigationService.setError('Error ' + error.status, blade); });
         };
 
         blade.toolbarCommands = [
             {
                 name: "platform.commands.import",
                 icon: 'fa fa-download',
-                canExecuteMethod: function () {
-                    return true;
-                },
-                executeMethod: function () {
+                canExecuteMethod: () => true ,
+                executeMethod: () => {
                    
                 },
                 permission: blade.importPermission
@@ -43,10 +41,8 @@ angular.module('virtoCommerce.simpleExportImportModule')
             {
                 name: "simpleExportImport.commands.upload-new",
                 icon: 'fa fa-download',
-                canExecuteMethod: function () {
-                    return true;
-                },
-                executeMethod: function () {
+                canExecuteMethod: () => true ,
+                executeMethod: () => {
 
                 },
                 permission: blade.importPermission
@@ -54,7 +50,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
         ];
 
         // ui-grid
-        $scope.setGridOptions = function (gridOptions) {
+        $scope.setGridOptions = (gridOptions) => {
             $scope.gridOptions = gridOptions;
 
             bladeUtils.initializePagination($scope);
