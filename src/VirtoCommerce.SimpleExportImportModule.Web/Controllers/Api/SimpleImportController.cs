@@ -34,7 +34,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
             }
 
             var blobStream = _blobStorageProvider.OpenRead(request.FileUrl);
-            var csvDataSource = _csvPagedPriceDataSourceFactory.Create(blobStream, 10);
+            using var csvDataSource = _csvPagedPriceDataSourceFactory.Create(blobStream, 10);
 
             var result = new ImportDataPreview
             {
