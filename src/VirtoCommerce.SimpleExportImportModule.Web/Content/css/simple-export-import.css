@@ -22,6 +22,10 @@
     margin-right: 10px;
 }
 
+.simple-export-import .mr-20 {
+    margin-right: 20px;
+}
+
 .simple-export-import .ml-10 {
     margin-left: 10px;
 }
@@ -36,6 +40,10 @@
 
 .simple-export-import .p-10 {
     padding: 10px;
+}
+
+.simple-export-import .pl-7 {
+    padding-left: 7px;
 }
 
 .simple-export-import .font-weight-500 {
@@ -54,8 +62,26 @@
     color: #999999;
 }
 
+.simple-export-import .upload-result-validation-errors {
+    list-style: inside;
+    color: #fcb040;
+}
+
+.simple-export-import .upload-result-validation-errors::before {
+    content: none;
+}
+
+.simple-export-import .upload-result-validation-errors .upload-result-message {
+    position: relative;
+    left: -0.5em;
+}
+
 .simple-export-import .icon-danger {
     color: #f34747;
+}
+
+.simple-export-import .icon-warning {
+    color: #fcb040;
 }
 
 .simple-export-import .icon-success {

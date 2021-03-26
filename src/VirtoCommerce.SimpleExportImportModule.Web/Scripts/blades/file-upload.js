@@ -9,6 +9,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
         blade.headIcon = 'fas fa-file-alt';
         blade.isLoading = false;
         $scope.showUploadResult = false;
+        $scope.internalCsvError = false;
         $scope.uploadedFile = {};
 
         blade.toolbarCommands = [{
