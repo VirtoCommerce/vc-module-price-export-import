@@ -6,6 +6,7 @@ using CsvHelper.Configuration;
 using VirtoCommerce.CatalogModule.Core.Model.Search;
 using VirtoCommerce.CatalogModule.Core.Search;
 using VirtoCommerce.PricingModule.Core.Model;
+using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
 using VirtoCommerce.SimpleExportImportModule.Data.Models;
 
@@ -39,9 +40,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             {
                 return _totalCount.Value;
             }
-            
+
             var totalCount = 0;
-            
+
             try
             {
                 _csvReader.Read();
@@ -57,7 +58,10 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             {
                 totalCount++;
             }
+
             _totalCount = totalCount;
+
+            _stream.Position = 0;
 
             return _totalCount.Value;
         }
@@ -73,25 +77,25 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             Items = records.Select(record =>
             {
                 var product = products.Results.FirstOrDefault(p => p.Code == record.Sku);
-                return new ProductPrice
+
+                return new ImportProductPrice
                 {
                     ProductId = product?.Id,
+                    ProductCode = record.Sku,
                     Product = product,
-                    Prices = new[]
+                    Price = new Price
                     {
-                        new Price
-                        {
-                            ProductId = product?.Id,
-                            MinQuantity = record.MinQuantity,
-                            List = record.ListPrice,
-                            Sale = record.SalePrice
-                        }
+                        ProductId = product?.Id,
+                        MinQuantity = record.MinQuantity,
+                        List = record.ListPrice,
+                        Sale = record.SalePrice
                     }
+
                 };
             }).ToArray();
         }
 
-        public ProductPrice[] Items { get; private set; }
+        public ImportProductPrice[] Items { get; private set; }
 
         public void Dispose()
         {

@@ -109,8 +109,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
         $scope.showPreview = () => {
             var newBlade = {
                 id: 'simpleImportPreview',
-                currentEntity: blade.currentEntity,
-                currentEntityId: blade.currentEntityId,
+                csvFileUrl: blade.csvFileUrl,
                 headIcon: "fas fa-file-csv",
                 title: 'simpleExportImport.blades.import-preview.title',
                 subtitle: 'simpleExportImport.blades.import-preview.subtitle',

@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using VirtoCommerce.PricingModule.Core.Model;
+using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
 namespace VirtoCommerce.SimpleExportImportModule.Core.Services
 {
-    public interface ICsvPagedPriceDataSource: IDisposable
+    public interface ICsvPagedPriceDataSource : IDisposable
     {
         int CurrentPageNumber { get; }
 
@@ -14,6 +14,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Services
 
         Task FetchAsync();
 
-        ProductPrice[] Items { get; }
+        ImportProductPrice[] Items { get; }
     }
 }

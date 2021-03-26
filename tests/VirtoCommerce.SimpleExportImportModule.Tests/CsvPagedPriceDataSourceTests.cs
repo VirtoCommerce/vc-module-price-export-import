@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -96,27 +95,31 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                     const string productId = "TestId1";
                     Assert.Equal(productId, productPrice.ProductId);
                     Assert.Equal(productId, productPrice.Product?.Id);
-                    Assert.Single(productPrice.Prices);
-                    Assert.Single(productPrice.Prices,
-                        x => x.ProductId == productId && x.MinQuantity == 1 && x.List == 100 && x.Sale == 99);
+
+                    Assert.Equal(productId, productPrice.Price.ProductId);
+                    Assert.Equal(1, productPrice.Price.MinQuantity);
+                    Assert.Equal(100, productPrice.Price.List);
+                    Assert.Equal(99, productPrice.Price.Sale);
                 },
                 productPrice =>
                 {
                     const string productId = "TestId2";
                     Assert.Equal(productId, productPrice.ProductId);
                     Assert.Equal(productId, productPrice.Product?.Id);
-                    Assert.Single(productPrice.Prices);
-                    Assert.Single(productPrice.Prices,
-                        x => x.ProductId == productId && x.MinQuantity == 1 && x.List == 10 && x.Sale == 9.99m);
+                    Assert.Equal(productId, productPrice.Price.ProductId);
+                    Assert.Equal(1, productPrice.Price.MinQuantity);
+                    Assert.Equal(10, productPrice.Price.List);
+                    Assert.Equal(9.99m, productPrice.Price.Sale);
                 },
                 productPrice =>
                 {
                     const string productId = null;
                     Assert.Equal(productId, productPrice.ProductId);
                     Assert.Equal(productId, productPrice.Product?.Id);
-                    Assert.Single(productPrice.Prices);
-                    Assert.Single(productPrice.Prices,
-                        x => x.ProductId == productId && x.MinQuantity == 10 && x.List == 9 && x.Sale == null);
+                    Assert.Equal(productId, productPrice.Price.ProductId);
+                    Assert.Equal(10, productPrice.Price.MinQuantity);
+                    Assert.Equal(9, productPrice.Price.List);
+                    Assert.Null(productPrice.Price.Sale);
                 });
         }
 

@@ -19,8 +19,8 @@ angular.module('virtoCommerce.simpleExportImportModule')
         blade.refresh = () => {
             blade.isLoading = true;
 
-            importResources.preview({fileUrl: blade.fileUrl}, (data) => {
-                blade.currentEntities = data.records;
+            importResources.preview({ fileUrl: blade.csvFileUrl}, (data) => {
+                blade.currentEntities = data.results;
                 blade.totalCount = data.totalCount;
                 $scope.pageSettings.totalItems = 10;
 
