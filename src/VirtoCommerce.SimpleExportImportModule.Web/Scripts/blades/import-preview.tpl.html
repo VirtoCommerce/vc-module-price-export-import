@@ -1,6 +1,6 @@
 <div class="blade-static _expanded simple-export-import">
     <div class="d-flex h-100 align-items-center">
-        <div class="mr-auto p-3">
+        <div class="mr-auto p-14">
             <div class="label">{{ 'simpleExportImport.blades.import-preview.labels.import-strategy' | translate }}</div>
             <label class="radio-label">
                 <input type="radio" name="name1" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.createNewOnly}}" /> {{ 'simpleExportImport.blades.import-preview.labels.create-new-only' | translate }}
@@ -12,7 +12,7 @@
                 <input type="radio" name="name3" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.createAndUpdate}}" /> {{ 'simpleExportImport.blades.import-preview.labels.create-and-update' | translate }}
             </label>
         </div>
-        <div class="p-3 bl-1">
+        <div class="p-14 bl-1">
             <div class="label">{{ 'simpleExportImport.blades.import-preview.labels.ignore-unknown-sku' | translate }}</div>
             <div>
                 <label class="form-label __switch">
@@ -21,7 +21,7 @@
                 </label>
             </div>
         </div>
-        <div class="p-3 bl-1">
+        <div class="p-14 bl-1">
             <div class="label">{{ 'simpleExportImport.blades.import-preview.labels.preview-count' | translate }}</div>
             <div>
                 <span class="count">{{blade.currentEntities.length | number:0}}</span> of <span class="count">{{blade.totalCount | number:0}}</span>
