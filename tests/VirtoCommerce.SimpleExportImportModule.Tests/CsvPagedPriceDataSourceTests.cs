@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,26 +24,32 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         [MemberData(nameof(GetCsvWithAndWithoutHeader))]
         public async Task GetTotalCount_Calculate_AndReturnTotalCount(string[] records, string header)
         {
+            // Arrange
             await using var stream = await GetStream(GetCsv(records, header));
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
             using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
 
+            // Act
             var totalCount = csvPagedPriceDataSource.GetTotalCount();
 
+            // Assert
             Assert.Equal(3, totalCount);
         }
 
         [Fact]
         public async Task GetTotalCount_CacheTotalCount_AndReturnSameValue()
         {
+            // Arrange
             await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
             using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
 
+            // Act
             csvPagedPriceDataSource.GetTotalCount();
             await stream.DisposeAsync();
             var totalCount = csvPagedPriceDataSource.GetTotalCount();
 
+            // Assert
             Assert.Equal(3, totalCount);
         }
 
@@ -55,23 +62,34 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         [Fact]
         public async Task FetchAsync_WithMissedHeader_ThrowsException()
         {
-            await using var stream = await GetStream(GetCsv(CsvRecords));
-            var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
-            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
+            static async Task FetchAsync()
+            {
+                // Arrange
+                await using var stream = await GetStream(GetCsv(CsvRecords));
+                var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
+                using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
 
-            await Assert.ThrowsAsync<HeaderValidationException>(() => csvPagedPriceDataSource.FetchAsync());
+                // Act
+                await csvPagedPriceDataSource.FetchAsync();
+            }
+
+            // Assert
+            await Assert.ThrowsAsync<HeaderValidationException>(FetchAsync);
         }
 
         [Theory]
         [MemberData(nameof(CsvWithAndWithoutAdditionalData))]
         public async Task FetchAsync_RecordsWithAndWithoutAdditionalColumn_ReturnParsedProductPrices(string[] records)
         {
+            // Arrange
             await using var stream = await GetStream(GetCsv(records, CsvHeader));
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
             using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
 
+            // Act
             await csvPagedPriceDataSource.FetchAsync();
 
+            // Assert
             Assert.Collection(csvPagedPriceDataSource.Items,
                 productPrice =>
                 {
@@ -117,18 +135,22 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         [Fact]
         public async Task FetchAsync_WithSpecifiedPageSize_ReturnsOnlyRequestedNumberOfItems()
         {
+            // Arrange
             await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
             using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 1);
 
+            // Act
             await csvPagedPriceDataSource.FetchAsync();
 
+            // Assert
             Assert.Single(csvPagedPriceDataSource.Items);
         }
 
         [Fact]
         public async Task FetchAsync_WithSpecifiedPageSize_LoadsOnlyRequestedNumberOfItems()
         {
+            // Arrange
             var csv = GetCsv(CsvRecords, CsvHeader);
             await using var stream = await GetStream(csv);
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
@@ -138,21 +160,26 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             await manualCsvReader.ReadLineAsync();
             await manualCsvReader.ReadLineAsync();
 
+            // Act
             await csvPagedPriceDataSource.FetchAsync();
 
+            // Assert
             Assert.Equal(manualCsvStream.Position, stream.Position);
         }
 
         [Fact]
         public async Task FetchAsync_MultipleTimes_WillUpdateCurrentPageNumber()
         {
+            // Arrange
             await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
             using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 1);
 
+            // Act
             await csvPagedPriceDataSource.FetchAsync();
             await csvPagedPriceDataSource.FetchAsync();
 
+            // Assert
             Assert.Equal(2, csvPagedPriceDataSource.CurrentPageNumber);
         }
 
@@ -160,12 +187,15 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         [MemberData(nameof(CsvWithInvalidRows))]
         public async Task FetchAsync_WithInvalidRows_IgnoreInvalidRows(string[] records)
         {
+            // Arrange
             await using var stream = await GetStream(GetCsv(records, CsvHeader));
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
             using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
 
+            // Act
             await csvPagedPriceDataSource.FetchAsync();
 
+            // Assert
             Assert.Equal(3, csvPagedPriceDataSource.Items.Length);
         }
 
