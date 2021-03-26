@@ -1,0 +1,81 @@
+.simple-export-import .d-flex {
+    display: flex;
+}
+
+.simple-export-import .flex-column {
+    flex-direction: column;
+}
+
+.simple-export-import .justify-content-end {
+    justify-content: flex-end;
+}
+
+.simple-export-import .word-break-all {
+    word-break: break-all;
+}
+
+.simple-export-import .mr-10 {
+    margin-right: 10px;
+}
+
+.simple-export-import .ml-10 {
+    margin-left: 10px;
+}
+
+.simple-export-import .mt-10 {
+    margin-top: 10px;
+}
+
+.simple-export-import .mt-15 {
+    margin-top: 15px;
+}
+
+.simple-export-import .p-10 {
+    padding: 10px;
+}
+
+.simple-export-import .font-weight-500 {
+    font-weight: 500;
+}
+
+.simple-export-import .upload-result-border {
+    border: 1px solid #eaedf3;
+}
+
+.simple-export-import .upload-result-title {
+    color: #6d889b;
+}
+
+.simple-export-import .upload-result-message {
+    color: #999999;
+}
+
+.simple-export-import .icon-danger {
+    color: #f34747;
+}
+
+.simple-export-import .icon-success {
+    color: #87b563;
+}
+
+.simple-export-import .icon-cloud {
+    color: #c8dbea;
+}
+
+.simple-export-import .text-white {
+    color: #fff;
+}
+
+.simple-export-import .drag-area {
+    padding: 20px;
+    background: #f2f8fd;
+    border-color: #c8dbea;
+}
+
+.simple-export-import .drag-content {
+    color: #9db0be;
+}
+
+.simple-export-import .align-items-center {
+    align-items: center;
+}

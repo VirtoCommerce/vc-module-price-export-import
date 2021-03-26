@@ -2,6 +2,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
 {
     public static class ModuleConstants
     {
+
+        public static class Features
+        {
+            public const string SimpleExportImport = "SimpleExportImport";
+        }
+
         public static class Security
         {
             public static class Permissions
