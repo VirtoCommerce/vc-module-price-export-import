@@ -90,7 +90,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                         List = record.ListPrice,
                         Sale = record.SalePrice
                     }
-
                 };
             }).ToArray();
         }
