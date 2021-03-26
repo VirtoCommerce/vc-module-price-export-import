@@ -14,7 +14,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\Api\" />
     <Folder Include="Scripts\blades\" />
     <Folder Include="Scripts\resources\" />
   </ItemGroup>
