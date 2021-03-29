@@ -45,6 +45,6 @@
     }
   },
   "permissions": {
-    "virtoCommerceSimpleExportImportModule:import": "Simple import ability"
+    "import:access": "Import pricing data"
   }
 }
