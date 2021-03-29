@@ -7,7 +7,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Models
     {
         public string ProductId { get; set; }
 
-        public string ProductCode { get; set; }
+        public string Sku { get; set; }
 
         public CatalogProduct Product { get; set; }
 

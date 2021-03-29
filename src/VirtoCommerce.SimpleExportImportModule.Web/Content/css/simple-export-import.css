@@ -105,7 +105,11 @@
 }
 
 .simple-export-import .p-14 {
-    padding: 14px;
+    padding: 14px; 
+}
+
+.simple-export-import .pl-10 {
+    padding-left: 10px;
 }
 
 .simple-export-import .bl-1 {

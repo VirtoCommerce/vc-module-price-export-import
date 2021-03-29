@@ -81,7 +81,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 return new ImportProductPrice
                 {
                     ProductId = product?.Id,
-                    ProductCode = record.Sku,
+                    Sku = record.Sku,
                     Product = product,
                     Price = new Price
                     {

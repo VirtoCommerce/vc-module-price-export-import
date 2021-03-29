@@ -30,7 +30,7 @@
     </div>
 </div>
 <div class="blade-static __bottom" ng-if="pageSettings.itemsPerPageCount < pageSettings.totalItems" ng-include="'pagerTemplate.html'"></div>
-<div class="blade-content __xlarge-wide">
+<div class="blade-content __xlarge-wide simple-export-import">
     <div class="blade-inner">
         <div class="inner-block" ng-init="setGridOptions({
                     data: 'blade.currentEntities',
@@ -39,12 +39,13 @@
                     rowTemplate: 'list.row.html',
                     columnDefs: [                       
                         { 
-                            name: 'sku', displayName: 'simpleExportImport.blades.import-preview.labels.sku', 
-                            cellTooltip:true,  headerTooltip: true, field: 'productCode', width: '**'
+                            name: 'sku', displayName: 'simpleExportImport.blades.import-preview.labels.sku', field: 'sku',
+                            cellClass: 'pl-10', headerCellClass: 'pl-10',
+                            cellTooltip:true,  headerTooltip: true, width: '**'
                         },
                         { name: 'minQuantity', displayName: 'simpleExportImport.blades.import-preview.labels.min-quantity', headerTooltip: true, field: 'price.minQuantity', width: 150},
-                        { name: 'listPrice', displayName: 'simpleExportImport.blades.import-preview.labels.list-price', headerTooltip: true, field: 'price.list', width: 150},
-                        { name: 'salesPrice', displayName: 'simpleExportImport.blades.import-preview.labels.sales-price', headerTooltip: true, field: 'price.sale', width: 150}
+                        { name: 'listPrice', displayName: 'simpleExportImport.blades.import-preview.labels.list-price', headerTooltip: true, width: 150, cellTemplate: 'list-price.cell.html'},
+                        { name: 'salesPrice', displayName: 'simpleExportImport.blades.import-preview.labels.sales-price', headerTooltip: true, width: 150, cellTemplate: 'list-price.cell.html'}
                     ]})">
             <div class="table-wrapper" ng-if="blade.currentEntities.length">
                 <div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-save-state ui-grid-resize-columns ui-grid-move-columns ui-grid-height></div>
@@ -63,6 +64,9 @@
     role="{{col.isRowHeader ? 'rowheader' : 'gridcell' }}" 
     ui-grid-cell></div>
 </script>
-<script type="text/ng-template" id="productName.cell.html">
-    <div class="ui-grid-cell-contents" > {{ row.entity.product.name}}</div>
+<script type="text/ng-template" id="list-price.cell.html">
+    <div class="ui-grid-cell-contents" >{{ row.entity.price.list | number : 2}}</div>
+</script>
+<script type="text/ng-template" id="list-price.cell.html">
+    <div class="ui-grid-cell-contents" >{{ row.entity.price.sale | number : 2}}</div>
 </script>

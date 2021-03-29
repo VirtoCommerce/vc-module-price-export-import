@@ -23,7 +23,6 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 blade.currentEntities = data.results;
                 blade.totalCount = data.totalCount;
                 $scope.pageSettings.totalItems = 10;
-
                 blade.isLoading = false;
             }, (error) => { bladeNavigationService.setError('Error ' + error.status, blade); });
         };
@@ -34,7 +33,6 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 icon: 'fa fa-download',
                 canExecuteMethod: () => true ,
                 executeMethod: () => {
-                   
                 },
                 permission: blade.importPermission
             },
@@ -43,7 +41,6 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 icon: 'fa fa-download',
                 canExecuteMethod: () => true ,
                 executeMethod: () => {
-
                 },
                 permission: blade.importPermission
             }
@@ -52,7 +49,6 @@ angular.module('virtoCommerce.simpleExportImportModule')
         // ui-grid
         $scope.setGridOptions = (gridOptions) => {
             $scope.gridOptions = gridOptions;
-
             bladeUtils.initializePagination($scope);
         };
 
