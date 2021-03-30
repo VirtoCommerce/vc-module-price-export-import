@@ -30,7 +30,7 @@
           "sku": "SKU",
           "min-quantity": "Min quantity",
           "list-price": "List price",
-          "sales-price": "Sale price",
+          "sale-price": "Sale price",
           "import-strategy": "What would you like to do with the imported data?",
           "create-new-only": "Create new only",
           "update-existing-only": "Update existing only",
