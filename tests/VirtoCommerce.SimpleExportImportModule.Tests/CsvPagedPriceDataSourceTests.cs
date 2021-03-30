@@ -202,20 +202,78 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.Equal(3, csvPagedPriceDataSource.Items.Length);
         }
 
+        public static IEnumerable<object[]> CsvWithInvalidRows
+        {
+            get
+            {
+                // Invalid row
+                var csvRecords = new List<string>(CsvRecords);
+                csvRecords.Insert(2, "x\r\n");
+                yield return new object[] { csvRecords };
+
+                // Wrong delimiter
+                csvRecords = new List<string>(CsvRecords);
+                csvRecords.Insert(2, "TestSku2,1,10,9.99");
+                yield return new object[] { csvRecords };
+
+                // Missed column
+                csvRecords = new List<string>(CsvRecords);
+                csvRecords.Insert(2, "TestSku2;1");
+                yield return new object[] { csvRecords };
+
+                // Missed required value
+                csvRecords = new List<string>(CsvRecords);
+                csvRecords.Insert(2, "TestSku2;;10;9.99");
+                yield return new object[] { csvRecords };
+                csvRecords = new List<string>(CsvRecords);
+                csvRecords.Insert(2, "TestSku2;1;;9.99");
+                yield return new object[] { csvRecords };
+
+                // Invalid value
+                csvRecords = new List<string>(CsvRecords);
+                csvRecords.Insert(2, "TestSku2;string;10;9.99");
+                yield return new object[] { csvRecords };
+
+                // Out of range
+                csvRecords = new List<string>(CsvRecords);
+                csvRecords.Insert(2, $"TestSku2;1;1{decimal.MaxValue};9.99");
+                yield return new object[] { csvRecords };
+            }
+        }
+
         [Fact]
-        public async Task FetchAsync_AfterGetTotalCount_WillStartReadingFromTheStart()
+        public async Task FetchAsync_WithSpecifiedPageSize_WillReturnSpecifiedNumberOfItems()
         {
             // Arrange
-            await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
+            var csv = GetCsv(CsvRecords, CsvHeader);
+            await using var stream = await GetStream(csv);
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
-            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
+            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 1);
 
             // Act
+            await csvPagedPriceDataSource.FetchAsync();
+            await csvPagedPriceDataSource.FetchAsync();
+
+            // Assert
+            Assert.Equal("TestSku2", csvPagedPriceDataSource.Items.Single().Sku);
+        }
+
+        [Fact]
+        public async Task FetchAsync_AfterGetTotalCount_WillStartReadingFromTheSamePosition()
+        {
+            // Arrange
+            var csv = GetCsv(CsvRecords, CsvHeader);
+            await using var stream = await GetStream(csv);
+            var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
+            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 1);
+
+            // Act
+            await csvPagedPriceDataSource.FetchAsync();
             csvPagedPriceDataSource.GetTotalCount();
             await csvPagedPriceDataSource.FetchAsync();
 
             // Assert
-            Assert.Equal(3, csvPagedPriceDataSource.Items.Length);
+            Assert.Equal("TestSku2", csvPagedPriceDataSource.Items.Single().Sku);
         }
 
         [Fact]
@@ -263,45 +321,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             // Assert
             Assert.Empty(csvPagedPriceDataSource.Items);
-        }
-
-        public static IEnumerable<object[]> CsvWithInvalidRows
-        {
-            get
-            {
-                // Invalid row
-                var csvRecords = new List<string>(CsvRecords);
-                csvRecords.Insert(2, "x\r\n");
-                yield return new object[] { csvRecords };
-
-                // Wrong delimiter
-                csvRecords = new List<string>(CsvRecords);
-                csvRecords.Insert(2, "TestSku2,1,10,9.99");
-                yield return new object[] { csvRecords };
-
-                // Missed column
-                csvRecords = new List<string>(CsvRecords);
-                csvRecords.Insert(2, "TestSku2;1");
-                yield return new object[] { csvRecords };
-
-                // Missed required value
-                csvRecords = new List<string>(CsvRecords);
-                csvRecords.Insert(2, "TestSku2;;10;9.99");
-                yield return new object[] { csvRecords };
-                csvRecords = new List<string>(CsvRecords);
-                csvRecords.Insert(2, "TestSku2;1;;9.99");
-                yield return new object[] { csvRecords };
-
-                // Invalid value
-                csvRecords = new List<string>(CsvRecords);
-                csvRecords.Insert(2, "TestSku2;string;10;9.99");
-                yield return new object[] { csvRecords };
-
-                // Out of range
-                csvRecords = new List<string>(CsvRecords);
-                csvRecords.Insert(2, $"TestSku2;1;1{decimal.MaxValue};9.99");
-                yield return new object[] { csvRecords };
-            }
         }
 
         private static IProductSearchService GetProductSearchService()
