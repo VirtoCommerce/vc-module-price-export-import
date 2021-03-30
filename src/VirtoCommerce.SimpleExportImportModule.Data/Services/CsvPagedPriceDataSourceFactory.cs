@@ -1,7 +1,7 @@
-using System.Globalization;
 using System.IO;
 using CsvHelper.Configuration;
 using VirtoCommerce.CatalogModule.Core.Search;
+using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Services
@@ -15,10 +15,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             _productSearchService = productSearchService;
         }
 
-        public ICsvPagedPriceDataSource Create(Stream file, int pageSize)
+        public ICsvPagedPriceDataSource Create(Stream file, int pageSize, Configuration configuration = null)
         {
-            return new CsvPagedPriceDataSource(_productSearchService, file, pageSize,
-                new Configuration(CultureInfo.InvariantCulture) { Delimiter = ";" });
+            return new CsvPagedPriceDataSource(_productSearchService, file, pageSize, configuration ?? new ImportConfiguration());
         }
     }
 }

@@ -10,7 +10,7 @@
         <dependency id="VirtoCommerce.Catalog" version="3.35.0" />
     </dependencies>
 
-    <title>Simple export import module</title>
+    <title>Simple export import module (preview)</title>
     <description>This module adds the simple export and import functionality to VirtoCommerce platform.</description>
     <authors>
         <author>Solution team</author>

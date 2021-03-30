@@ -202,6 +202,38 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.Equal(3, csvPagedPriceDataSource.Items.Length);
         }
 
+        [Fact]
+        public async Task FetchAsync_AfterGetTotalCount_WillStartReadingFromTheStart()
+        {
+            // Arrange
+            await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
+            var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
+            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
+
+            // Act
+            csvPagedPriceDataSource.GetTotalCount();
+            await csvPagedPriceDataSource.FetchAsync();
+
+            // Assert
+            Assert.Equal(3, csvPagedPriceDataSource.Items.Length);
+        }
+
+        [Fact]
+        public async Task FetchAsync_AfterEndOfCsvFile_WillFetchNoItems()
+        {
+            // Arrange
+            await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
+            var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
+            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
+
+            // Act
+            await csvPagedPriceDataSource.FetchAsync();
+            await csvPagedPriceDataSource.FetchAsync();
+
+            // Assert
+            Assert.Empty(csvPagedPriceDataSource.Items);
+        }
+
         public static IEnumerable<object[]> CsvWithInvalidRows
         {
             get

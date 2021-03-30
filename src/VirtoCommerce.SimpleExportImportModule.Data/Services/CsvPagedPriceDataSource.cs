@@ -66,8 +66,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             return _totalCount.Value;
         }
 
-        public async Task FetchAsync()
+        public async Task<bool> FetchAsync()
         {
+            if (CurrentPageNumber * PageSize >= GetTotalCount())
+            {
+                return false;
+            }
+
             var records = _csvReader.GetRecords<CsvPrice>().Skip(CurrentPageNumber * PageSize).Take(PageSize).ToArray();
             CurrentPageNumber++;
 
@@ -92,6 +97,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                     }
                 };
             }).ToArray();
+
+            return true;
         }
 
         public ImportProductPrice[] Items { get; private set; }
