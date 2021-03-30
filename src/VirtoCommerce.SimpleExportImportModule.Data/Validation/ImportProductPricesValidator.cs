@@ -21,7 +21,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
             RuleForEach(importProductPrices => importProductPrices).SetValidator(importProductPrices =>
             {
                 var duplicates = importProductPrices
-                    .GroupBy(importProductPrice => new { importProductPrice.ProductCode, importProductPrice.Price.MinQuantity })
+                    .GroupBy(importProductPrice => new { importProductPrice.Sku, importProductPrice.Price.MinQuantity })
                     .SelectMany(group => group.Skip(1));
                 return new ImportProductPriceDuplicateValidator(duplicates);
             });

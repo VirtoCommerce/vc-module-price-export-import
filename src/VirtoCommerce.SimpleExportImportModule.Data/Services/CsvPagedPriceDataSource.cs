@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -70,6 +71,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         {
             if (CurrentPageNumber * PageSize >= GetTotalCount())
             {
+                Items = Array.Empty<ImportProductPrice>();
                 return false;
             }
 

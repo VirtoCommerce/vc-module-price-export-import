@@ -18,19 +18,19 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             new ImportProductPrice
             {
                 ProductId = "TestId1",
-                ProductCode = "TestSku1",
+                Sku = "TestSku1",
                 Price = new Price { MinQuantity = 1, List = 10m, Sale = 9m }
             },
             new ImportProductPrice
             {
                 ProductId = "TestId2",
-                ProductCode = "TestSku2",
+                Sku = "TestSku2",
                 Price = new Price { MinQuantity = 1, List = 10m, Sale = 9m }
             },
             new ImportProductPrice
             {
                 ProductId = "TestId3",
-                ProductCode = "TestSku3",
+                Sku = "TestSku3",
                 Price = new Price { MinQuantity = 1, List = 10m, Sale = 9m }
             }
         };

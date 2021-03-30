@@ -219,6 +219,37 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         }
 
         [Fact]
+        public async Task FetchAsync_BeforeEndOfCsvFile_WillReturnTrue()
+        {
+            // Arrange
+            await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
+            var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
+            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 1);
+
+            // Act
+            var result = await csvPagedPriceDataSource.FetchAsync();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task FetchAsync_AfterEndOfCsvFile_WillReturnFalse()
+        {
+            // Arrange
+            await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
+            var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
+            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
+
+            // Act
+            await csvPagedPriceDataSource.FetchAsync();
+            var result = await csvPagedPriceDataSource.FetchAsync();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
         public async Task FetchAsync_AfterEndOfCsvFile_WillFetchNoItems()
         {
             // Arrange
