@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
@@ -24,8 +25,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
 
         [HttpPost]
         [Route("preview")]
-        public async Task<ActionResult<ImportDataPreview>> GetImportPreview(ImportDataPreviewRequest request)
+        public async Task<ActionResult<ImportDataPreview>> GetImportPreview([FromBody] ImportDataPreviewRequest request)
         {
+            if (request.FileUrl.IsNullOrEmpty())
+            {
+                return BadRequest($"{nameof(request.FileUrl)} can not be null");
+            }
+
             var blobInfo = await _blobStorageProvider.GetBlobInfoAsync(request.FileUrl);
 
             if (blobInfo == null)

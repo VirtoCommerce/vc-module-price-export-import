@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end"  ng-if="!(csvMaxSizeError || fileTypeError)">
-                                <button class="btn mr-10">{{ 'simpleExportImport.blades.file-upload.actions.preview' | translate }}</button>
+                                <button class="btn mr-10" ng-click="showPreview()">{{ 'simpleExportImport.blades.file-upload.actions.preview' | translate }}</button>
                                 <button class="btn" ng-click="deleteUploadedItem()">{{ 'simpleExportImport.blades.file-upload.actions.delete' | translate }}</button>
                             </div>
                         </div>
