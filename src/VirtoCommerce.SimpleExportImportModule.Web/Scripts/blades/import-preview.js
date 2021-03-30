@@ -33,6 +33,16 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 icon: 'fa fa-download',
                 canExecuteMethod: () => true ,
                 executeMethod: () => {
+                    var newBlade = {
+                        id: 'simpleImportProcessing',
+                        notification: data,
+                        headIcon: "fa fa-download",
+                        title: 'simpleExportImportModule.blades.import-processing.title',
+                        controller: 'virtoCommerce.simpleExportImportModule.importProcessingController',
+                        template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/import-processing.tpl.html'
+                    };
+
+                    bladeNavigationService.showBlade(newBlade, blade);
                 },
                 permission: blade.importPermission
             },
