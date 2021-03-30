@@ -6,6 +6,17 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
         {
             public const string DuplicateError = "Duplicate";
             public const string AlreadyExistsError = "AlreadyExists";
+            public const string FileNotExisted = "file-not-existed";
+
+            public const string ExceedingFileMinSize = "exceeding-file-min-size";
+
+            public const string ExceedingFileMaxSize = "exceeding-file-max-size";
+
+            public const string WrongDelimiter = "wrong-delimiter";
+
+            public const string ExceedingLineLimits = "exceeding-line-limits";
+
+            public const string MissingRequiredColumns = "missing-required-columns";
         }
 
         public static class Features
