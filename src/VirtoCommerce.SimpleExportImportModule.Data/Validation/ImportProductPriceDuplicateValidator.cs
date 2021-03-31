@@ -6,7 +6,7 @@ using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
 {
-    public class ImportProductPriceDuplicateValidator: AbstractValidator<ImportProductPrice>
+    public sealed class ImportProductPriceDuplicateValidator: AbstractValidator<ImportProductPrice>
     {
         private readonly IEnumerable<ImportProductPrice> _duplicates;
 

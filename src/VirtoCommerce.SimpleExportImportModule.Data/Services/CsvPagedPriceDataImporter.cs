@@ -11,7 +11,7 @@ using VirtoCommerce.SimpleExportImportModule.Core.Services;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 {
-    public class CsvPagedPriceDataImporter: ICsvPagedPriceDataImporter
+    public sealed class CsvPagedPriceDataImporter: ICsvPagedPriceDataImporter
     {
         private readonly IPricingService _pricingService;
         private readonly ICsvPagedPriceDataSourceFactory _dataSourceFactory;
