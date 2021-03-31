@@ -45,7 +45,7 @@
                                     <div ng-if="internalCsvError">
                                         <ul>
                                             <li ng-repeat="error in csvValidationErrors" class="upload-result-validation-errors">
-                                                <small class="upload-result-message">{{error.message}}</small>
+                                                <small class="upload-result-message" ng-bind="translateErrorCode(error)"></small>
                                             </li>
                                         </ul>
                                     </div>

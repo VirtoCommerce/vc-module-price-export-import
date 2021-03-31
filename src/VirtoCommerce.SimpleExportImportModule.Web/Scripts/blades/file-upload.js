@@ -1,7 +1,7 @@
 angular.module('virtoCommerce.simpleExportImportModule')
 .controller('virtoCommerce.simpleExportImportModule.fileUploadController',
-    ['FileUploader', '$document', '$scope', '$timeout', 'platformWebApp.bladeNavigationService', 'platformWebApp.assets.api',
-    function(FileUploader, $document, $scope, $timeout, bladeNavigationService, assetsApi) {
+    ['FileUploader', '$document', '$scope', '$timeout', 'platformWebApp.bladeNavigationService', 'platformWebApp.assets.api', 'virtoCommerce.simpleExportImportModule.import', '$translate',
+        function (FileUploader, $document, $scope, $timeout, bladeNavigationService, assetsApi, importResources, $translate) {
         const blade = $scope.blade;
         const oneKb = 1024;
         const oneMb = 1024 * oneKb;
@@ -78,7 +78,13 @@ angular.module('virtoCommerce.simpleExportImportModule')
 
             uploader.onSuccessItem = (_, asset) => {
                 $scope.showUploadResult = true;
-                blade.csvFileUrl = asset[0].url;
+                blade.csvFileUrl = asset[0].relativeUrl;
+
+                importResources.validate({ fileUrl: blade.csvFileUrl }, (data) => {
+                $scope.csvValidationErrors = data.errors;
+                $scope.internalCsvError = !!$scope.csvValidationErrors.length;
+                }, (error) => { bladeNavigationService.setError('Error ' + error.status, blade); });
+
             };
 
             uploader.onErrorItem = (element, response, status) => {
@@ -120,6 +126,12 @@ angular.module('virtoCommerce.simpleExportImportModule')
             };
 
             bladeNavigationService.showBlade(newBlade, blade);
+        }
+
+        $scope.translateErrorCode = (errorCode) => {
+            var translateKey = 'simpleExportImport.validation-errors.' + errorCode;
+            var result = $translate.instant(translateKey);
+            return result === translateKey ? errorCode : result;
         }
 
         function formatFileSize(bytes, decimals = 2) {

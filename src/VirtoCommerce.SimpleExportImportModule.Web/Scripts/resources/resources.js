@@ -4,6 +4,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
             {
                 preview: { method: 'POST', url: 'api/pricing/import/preview'},
                 run: { method: 'POST', url: 'api/pricing/import/run'},
+                validate: { method: 'POST', url: 'api/pricing/import/validate' },
                 cancel: { method: 'POST', url: 'api/pricing/import/cancel'}
             });
 
