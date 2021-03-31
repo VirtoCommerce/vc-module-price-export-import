@@ -43,7 +43,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
                 ValidateRequiredColumns(streamReader, csvReader, errorsList);
 
-                ValidateLineLimit(csvReader, errorsList);
+                ValidateLineLimit(streamReader, csvReader, errorsList);
             }
 
             var result = new ImportDataValidationResult { Errors = errorsList.ToArray() };
@@ -51,41 +51,51 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             return result;
         }
 
-        private static void ValidateLineLimit(CsvReader csvReader, List<string> errorsList)
+        private static void ValidateLineLimit(StreamReader streamReader, CsvReader csvReader, List<string> errorsList)
         {
-            if (errorsList.Count == 0)
+            if (errorsList.Count != 0)
             {
-                ReadCsvHeader(csvReader);
+                return;
+            }
 
-                var totalCount = 1;
+            SeekStreamReaderToStart(streamReader);
 
-                while (csvReader.Read())
-                {
-                    totalCount++;
-                }
+            var totalCount = 0;
 
-                if (totalCount > ModuleConstants.Settings.ImportLimitOfLines)
-                {
-                    errorsList.Add(ModuleConstants.ValidationErrors.ExceedingLineLimits);
-                }
+            csvReader.Read();
+            csvReader.ReadHeader();
+
+            totalCount++;
+
+            while (csvReader.Read())
+            {
+                totalCount++;
+            }
+
+            if (totalCount > ModuleConstants.Settings.ImportLimitOfLines)
+            {
+                errorsList.Add(ModuleConstants.ValidationErrors.ExceedingLineLimits);
             }
         }
 
         private static void ValidateRequiredColumns(StreamReader streamReader, CsvReader csvReader, List<string> errorsList)
         {
+            if (errorsList.Count != 0)
+            {
+                return;
+            }
+
             SeekStreamReaderToStart(streamReader);
 
-            if (errorsList.Count == 0)
+            try
             {
-                try
-                {
-                    ReadCsvHeader(csvReader);
-                    csvReader.ValidateHeader<CsvPrice>();
-                }
-                catch (ValidationException)
-                {
-                    errorsList.Add(ModuleConstants.ValidationErrors.MissingRequiredColumns);
-                }
+                csvReader.Read();
+                csvReader.ReadHeader();
+                csvReader.ValidateHeader<CsvPrice>();
+            }
+            catch (ValidationException)
+            {
+                errorsList.Add(ModuleConstants.ValidationErrors.MissingRequiredColumns);
             }
         }
 
@@ -111,12 +121,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                     errorsList.Add(ModuleConstants.ValidationErrors.NoData);
                 }
             }
-        }
-
-        private static void ReadCsvHeader(CsvReader csvReader)
-        {
-            csvReader.Read();
-            csvReader.ReadHeader();
         }
 
         private static void SeekStreamReaderToStart(StreamReader streamReader)
