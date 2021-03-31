@@ -17,6 +17,7 @@ angular.module(moduleName, [])
                                 id: 'simpleImportFileUpload',
                                 title: 'simpleExportImport.blades.file-upload.title',
                                 subtitle: 'simpleExportImport.blades.file-upload.subtitle',
+                                priceListId: blade.currentEntityId,
                                 controller: 'virtoCommerce.simpleExportImportModule.fileUploadController',
                                 template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/file-upload.tpl.html'
                             };

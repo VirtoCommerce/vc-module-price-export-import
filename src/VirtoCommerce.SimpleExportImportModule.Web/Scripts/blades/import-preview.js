@@ -7,8 +7,8 @@ angular.module('virtoCommerce.simpleExportImportModule')
         blade.importPermission = "import:access";
 
         blade.importStrategyTypes = {
-            createNewOnly: "createNewOnly",
-            updateExistingOnly: "updateExistingOnly",
+            createNewOnly: "createOnly",
+            updateExistingOnly: "updateOnly",
             createAndUpdate: "createAndUpdate"
         }
 
@@ -33,16 +33,23 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 icon: 'fa fa-download',
                 canExecuteMethod: () => true ,
                 executeMethod: () => {
-                    var newBlade = {
-                        id: 'simpleImportProcessing',
-                        notification: data,
-                        headIcon: "fa fa-download",
-                        title: 'simpleExportImportModule.blades.import-processing.title',
-                        controller: 'virtoCommerce.simpleExportImportModule.importProcessingController',
-                        template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/import-processing.tpl.html'
-                    };
+                    const importDataRequest = {
+                        pricelistId: blade.priceListId,
+                        importMode: blade.importStrategy,
+                        fileUrl: blade.csvFileUrl
+                    }
+                    importResources.run(importDataRequest, (data) => {
+                        var newBlade = {
+                            id: 'simpleImportProcessing',
+                            notification: data,
+                            headIcon: "fa fa-download",
+                            title: 'simpleExportImport.blades.import-processing.title',
+                            controller: 'virtoCommerce.simpleExportImportModule.importProcessingController',
+                            template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/import-processing.tpl.html'
+                        };
 
-                    bladeNavigationService.showBlade(newBlade, blade);
+                        bladeNavigationService.showBlade(newBlade, blade);
+                    })
                 },
                 permission: blade.importPermission
             },

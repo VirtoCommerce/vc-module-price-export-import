@@ -1,6 +1,6 @@
 angular.module('virtoCommerce.simpleExportImportModule')
-.controller('virtoCommerce.simpleExportImportModule.importProcessingController', ['$scope',
-    function ($scope) {
+.controller('virtoCommerce.simpleExportImportModule.importProcessingController', ['$scope', 'virtoCommerce.simpleExportImportModule.import',
+    function ($scope, importResources) {
         var blade = $scope.blade;
         blade.isLoading = false;
 
@@ -17,6 +17,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 return blade.notification && !blade.notification.finished;
             },
             executeMethod: function() {
+                importResources.cancel({ jobId: blade.notification.jobId });
             }
         }];
 

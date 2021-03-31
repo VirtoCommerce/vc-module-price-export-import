@@ -77,7 +77,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
 
             uploader.onSuccessItem = (_, asset) => {
                 $scope.showUploadResult = true;
-                blade.csvFileUrl = asset[0].relativeUrl;
+                blade.csvFileUrl = asset[0].url;
             };
 
             uploader.onErrorItem = (element, response, status) => {
@@ -110,6 +110,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
             var newBlade = {
                 id: 'simpleImportPreview',
                 csvFileUrl: blade.csvFileUrl,
+                priceListId: blade.priceListId,
                 headIcon: "fas fa-file-csv",
                 title: 'simpleExportImport.blades.import-preview.title',
                 subtitle: 'simpleExportImport.blades.import-preview.subtitle',

@@ -40,6 +40,7 @@
         }
       },
       "import-processing": {
+        "title": "Import progress",
         "labels": {
           "start": "Start",
           "end": "End",
