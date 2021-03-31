@@ -34,7 +34,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             return csv.ToString();
         }
 
-
         public static string[] GetArrayOfSameRecords(string recordValue, long number)
         {
             var result = new List<string>();
