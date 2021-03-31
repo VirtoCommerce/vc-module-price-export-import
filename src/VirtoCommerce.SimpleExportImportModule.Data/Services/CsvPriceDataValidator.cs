@@ -93,7 +93,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         {
             var headerLine = await streamReader.ReadLineAsync();
 
-            if (headerLine == null || headerLine.Trim() == "")
+            if (string.IsNullOrWhiteSpace(headerLine))
             {
                 errorsList.Add(ModuleConstants.ValidationErrors.NoData);
             }
@@ -104,9 +104,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                     errorsList.Add(ModuleConstants.ValidationErrors.WrongDelimiter);
                 }
 
-                var fistDataRowStr = await streamReader.ReadLineAsync();
+                var fistDataLine = await streamReader.ReadLineAsync();
 
-                if (fistDataRowStr == null || fistDataRowStr.Trim() == "")
+                if (string.IsNullOrWhiteSpace(fistDataLine))
                 {
                     errorsList.Add(ModuleConstants.ValidationErrors.NoData);
                 }
