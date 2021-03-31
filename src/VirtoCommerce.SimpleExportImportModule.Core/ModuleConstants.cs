@@ -16,11 +16,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
             public const string SimpleExportImport = "SimpleExportImport";
         }
 
-        public static class Settings
-        {
-            public const int PageSize = 50;
-        }
-
         public static class Security
         {
             public static class Permissions
@@ -33,6 +28,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
 
         public static class Settings
         {
+            public const int PageSize = 50;
+
             public static class General
             {
                 public static SettingDescriptor SimpleExportLimitOfLines { get; } = new SettingDescriptor
