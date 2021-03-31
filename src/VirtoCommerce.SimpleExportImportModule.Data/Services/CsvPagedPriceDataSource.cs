@@ -51,9 +51,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var streamPosition = _stream.Position;
             _stream.Seek(0, SeekOrigin.Begin);
-            _streamReader.DiscardBufferedData();
 
-            using var csvReader = new CsvReader(_streamReader, _configuration, true);
+            using var streamReader = new StreamReader(_stream, leaveOpen: true);
+            using var csvReader = new CsvReader(streamReader, _configuration, true);
             try
             {
                 csvReader.Read();
@@ -71,7 +71,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             }
 
             _stream.Seek(streamPosition, SeekOrigin.Begin);
-            _streamReader.DiscardBufferedData();
 
             return _totalCount.Value;
         }
