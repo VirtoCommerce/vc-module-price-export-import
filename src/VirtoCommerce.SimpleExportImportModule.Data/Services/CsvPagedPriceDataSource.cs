@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
     {
         private readonly IProductSearchService _productSearchService;
         private readonly Stream _stream;
+        private readonly Configuration _configuration;
         private readonly StreamReader _streamReader;
         private readonly CsvReader _csvReader;
         private int? _totalCount;
@@ -23,10 +25,14 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         public CsvPagedPriceDataSource(IProductSearchService productSearchService, Stream stream, int pageSize, Configuration configuration)
         {
             _productSearchService = productSearchService;
+
             _stream = stream;
             _streamReader = new StreamReader(stream);
-            configuration.ReadingExceptionOccurred = ex => false;
+
+            _configuration = configuration;
+            _configuration.ReadingExceptionOccurred = ex => false;
             _csvReader = new CsvReader(_streamReader, configuration);
+
             PageSize = pageSize;
         }
 
@@ -41,34 +47,45 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 return _totalCount.Value;
             }
 
-            var totalCount = 0;
+            _totalCount = 0;
 
+            var streamPosition = _stream.Position;
+            _stream.Seek(0, SeekOrigin.Begin);
+            _streamReader.DiscardBufferedData();
+
+            using var csvReader = new CsvReader(_streamReader, _configuration, true);
             try
             {
-                _csvReader.Read();
-                _csvReader.ReadHeader();
-                _csvReader.ValidateHeader<CsvPrice>();
+                csvReader.Read();
+                csvReader.ReadHeader();
+                csvReader.ValidateHeader<CsvPrice>();
             }
             catch (ValidationException)
             {
-                totalCount++;
+                _totalCount++;
             }
 
-            while (_csvReader.Read())
+            while (csvReader.Read())
             {
-                totalCount++;
+                _totalCount++;
             }
 
-            _totalCount = totalCount;
-
-            _stream.Position = 0;
+            _stream.Seek(streamPosition, SeekOrigin.Begin);
+            _streamReader.DiscardBufferedData();
 
             return _totalCount.Value;
         }
 
-        public async Task FetchAsync()
+        public async Task<bool> FetchAsync()
         {
-            var records = _csvReader.GetRecords<CsvPrice>().Skip(CurrentPageNumber * PageSize).Take(PageSize).ToArray();
+            if (CurrentPageNumber * PageSize >= GetTotalCount())
+            {
+                Items = Array.Empty<ImportProductPrice>();
+                return false;
+            }
+
+            // CSV Reader can only move forward, i.e. Skip will not work: after reading N items we can read only next N items
+            var records = _csvReader.GetRecords<CsvPrice>().Take(PageSize).ToArray();
             CurrentPageNumber++;
 
             var skus = records.Select(x => x.Sku).ToArray();
@@ -92,6 +109,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                     }
                 };
             }).ToArray();
+
+            return true;
         }
 
         public ImportProductPrice[] Items { get; private set; }

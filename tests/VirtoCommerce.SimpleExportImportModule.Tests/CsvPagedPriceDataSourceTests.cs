@@ -241,6 +241,88 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             }
         }
 
+        [Fact]
+        public async Task FetchAsync_WithSpecifiedPageSize_WillReturnSpecifiedNumberOfItems()
+        {
+            // Arrange
+            var csv = GetCsv(CsvRecords, CsvHeader);
+            await using var stream = await GetStream(csv);
+            var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
+            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 1);
+
+            // Act
+            await csvPagedPriceDataSource.FetchAsync();
+            await csvPagedPriceDataSource.FetchAsync();
+
+            // Assert
+            Assert.Equal("TestSku2", csvPagedPriceDataSource.Items.Single().Sku);
+        }
+
+        [Fact]
+        public async Task FetchAsync_AfterGetTotalCount_WillStartReadingFromTheSamePosition()
+        {
+            // Arrange
+            var csv = GetCsv(CsvRecords, CsvHeader);
+            await using var stream = await GetStream(csv);
+            var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
+            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 1);
+
+            // Act
+            await csvPagedPriceDataSource.FetchAsync();
+            csvPagedPriceDataSource.GetTotalCount();
+            await csvPagedPriceDataSource.FetchAsync();
+
+            // Assert
+            Assert.Equal("TestSku2", csvPagedPriceDataSource.Items.Single().Sku);
+        }
+
+        [Fact]
+        public async Task FetchAsync_BeforeEndOfCsvFile_WillReturnTrue()
+        {
+            // Arrange
+            await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
+            var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
+            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 1);
+
+            // Act
+            var result = await csvPagedPriceDataSource.FetchAsync();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task FetchAsync_AfterEndOfCsvFile_WillReturnFalse()
+        {
+            // Arrange
+            await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
+            var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
+            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
+
+            // Act
+            await csvPagedPriceDataSource.FetchAsync();
+            var result = await csvPagedPriceDataSource.FetchAsync();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task FetchAsync_AfterEndOfCsvFile_WillFetchNoItems()
+        {
+            // Arrange
+            await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
+            var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
+            using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
+
+            // Act
+            await csvPagedPriceDataSource.FetchAsync();
+            await csvPagedPriceDataSource.FetchAsync();
+
+            // Assert
+            Assert.Empty(csvPagedPriceDataSource.Items);
+        }
+
         private static IProductSearchService GetProductSearchService()
         {
             var productSearchServiceMock = new Mock<IProductSearchService>();
@@ -268,7 +350,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             await using var writer = new StreamWriter(stream, leaveOpen: true);
             await writer.WriteAsync(csv);
             await writer.FlushAsync();
-            stream.Position = 0;
+            stream.Seek(0, SeekOrigin.Begin);
             return stream;
         }
 
