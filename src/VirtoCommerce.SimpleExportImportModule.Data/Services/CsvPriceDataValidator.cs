@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
@@ -31,11 +32,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             {
                 errorsList.Add(ModuleConstants.ValidationErrors.FileNotExisted);
             }
-            else if (blobInfo.Size < 1024 * 1024 * 8m)
-            {
-                errorsList.Add(ModuleConstants.ValidationErrors.ExceedingFileMinSize);
-            }
-            else if (blobInfo.Size > 1024 * 1024 * 1024 * 8m)
+            else if (blobInfo.Size > ModuleConstants.FileMaxSize)
             {
                 errorsList.Add(ModuleConstants.ValidationErrors.ExceedingFileMaxSize);
             }
@@ -45,27 +42,66 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
                 var csvConfiguration = new Configuration(CultureInfo.InvariantCulture) { Delimiter = ";" };
                 var streamReader = new StreamReader(stream);
-                //csvConfiguration.ReadingExceptionOccurred = ex => false;
                 var csvReader = new CsvReader(streamReader, csvConfiguration);
 
-                try
+                var headerStr = await streamReader.ReadLineAsync();
+                if (headerStr == null || headerStr.Trim().IsNullOrEmpty())
                 {
-                    csvReader.Read();
-                    csvReader.ReadHeader();
-                    csvReader.ValidateHeader<CsvPrice>();
-
+                    errorsList.Add(ModuleConstants.ValidationErrors.NoData);
                 }
-                catch (ValidationException e)
+                else
                 {
-                    errorsList.Add(ModuleConstants.ValidationErrors.MissingRequiredColumns);
-                    Debug.Write(e.Message);
+                    var headerColumns = headerStr.Split(csvConfiguration.Delimiter);
+
+                    if (headerColumns.Length < 2)
+                    {
+                        errorsList.Add(ModuleConstants.ValidationErrors.WrongDelimiter);
+                    }
+
+                    var fistDataRowStr = await streamReader.ReadLineAsync();
+                    stream.Position = 0;
+
+                    if (fistDataRowStr == null || fistDataRowStr.Trim().IsNullOrEmpty())
+                    {
+                        errorsList.Add(ModuleConstants.ValidationErrors.NoData);
+                    }
                 }
 
+                if (errorsList.Count == 0)
+                {
+                    try
+                    {
+                        csvReader.Read();
+                        csvReader.ReadHeader();
+                        csvReader.ValidateHeader<CsvPrice>();
 
+                    }
+                    catch (ValidationException e)
+                    {
+                        errorsList.Add(ModuleConstants.ValidationErrors.MissingRequiredColumns);
+                        Debug.Write(e.Message);
+                    }
+                }
+
+                if (errorsList.Count == 0)
+                {
+                    var totalCount = 1;
+
+                    while (csvReader.Read())
+                    {
+                        totalCount++;
+                    }
+
+                    if (totalCount > ModuleConstants.ImportLimitOfLines)
+                    {
+                        errorsList.Add(ModuleConstants.ValidationErrors.ExceedingLineLimits);
+                    }
+                }
             }
 
-            return new ImportDataValidationResult { Errors = errorsList.ToArray() };
+            var result = new ImportDataValidationResult { Errors = errorsList.ToArray() };
 
+            return result;
         }
     }
 }

@@ -45,7 +45,6 @@
     },
     "validation-errors": {
       "file-not-existed":  "The file does not exist.",
-      "exceeding-file-min-size": "The file size is too small. Try to upload another one.",
       "exceeding-file-max-size": "The file size is too large. Try to upload another one.",
       "wrong-delimiter": "Wrong delimiter. Should be used ';'.",
       "exceeding-line-limits": "The count of lines exceeds max allowed limit in 10000 lines.",
