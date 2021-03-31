@@ -72,7 +72,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
                 return BadRequest("Blob with the such url does not exist.");
             }
 
-            var blobStream = _blobStorageProvider.OpenRead(request.FileUrl);
+            await using var blobStream = _blobStorageProvider.OpenRead(request.FileUrl);
             using var csvDataSource = _csvPagedPriceDataSourceFactory.Create(blobStream, 10);
 
             var result = new ImportDataPreview
