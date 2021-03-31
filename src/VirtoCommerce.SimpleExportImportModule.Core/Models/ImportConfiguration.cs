@@ -3,9 +3,10 @@ using CsvHelper.Configuration;
 
 namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 {
-    public sealed class ImportConfiguration: Configuration
+    public sealed class ImportConfiguration : Configuration
     {
-        public ImportConfiguration(): base(CultureInfo.InvariantCulture)
+        public ImportConfiguration()
+            : base(CultureInfo.InvariantCulture)
         {
             Delimiter = ";";
         }

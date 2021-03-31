@@ -350,7 +350,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             await using var writer = new StreamWriter(stream, leaveOpen: true);
             await writer.WriteAsync(csv);
             await writer.FlushAsync();
-            stream.Position = 0;
+            stream.Seek(0, SeekOrigin.Begin);
             return stream;
         }
 

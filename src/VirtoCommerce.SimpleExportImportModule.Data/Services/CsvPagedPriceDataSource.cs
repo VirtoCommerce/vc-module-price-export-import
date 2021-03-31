@@ -50,9 +50,10 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             _totalCount = 0;
 
             var streamPosition = _stream.Position;
-            _stream.Position = 0;
+            _stream.Seek(0, SeekOrigin.Begin);
+            _streamReader.DiscardBufferedData();
 
-            var csvReader = new CsvReader(_streamReader, _configuration);
+            using var csvReader = new CsvReader(_streamReader, _configuration, true);
             try
             {
                 csvReader.Read();
@@ -69,7 +70,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 _totalCount++;
             }
 
-            _stream.Position = streamPosition;
+            _stream.Seek(streamPosition, SeekOrigin.Begin);
+            _streamReader.DiscardBufferedData();
 
             return _totalCount.Value;
         }
