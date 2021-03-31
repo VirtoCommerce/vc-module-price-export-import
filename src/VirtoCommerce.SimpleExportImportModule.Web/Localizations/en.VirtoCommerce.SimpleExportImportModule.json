@@ -42,6 +42,36 @@
     },
     "commands": {
       "upload-new": "Upload new"
+    },
+    "dialogs": {
+      "pricelist-export": {
+        "title": "Prices export",
+        "subtitle-all": "All {{count}} lines",
+        "subtitle-not-all": "{{count}} price lines",
+        "subtitle-end": "from this category will be exported to csv file.",
+        "advanced-export-subtitle-start": "You can",
+        "advanced-export-subtitle-link": "use advanced export",
+        "advanced-export-subtitle-end": "to make sophisticated prices selection.",
+        "validation-error-subtitle-start": "You have selected",
+        "validation-error-subtitle-middle": "but export is limited with",
+        "validation-error-subtitle-count": "{{count}} items{{comma}}",
+        "validation-error-subtitle-end": "you retrieve to export more",
+        "export": "Export"
+      }
+    },
+    "widgets": {
+      "prices": {
+        "title": "Prices",
+        "subtitle": "(Simple Export/Import)"
+      }
+    },
+    "settings": {
+      "SimpleExport": {
+        "LimitOfLines": {
+          "title": "The limit for number of lines that can be exported / imported",
+          "description": "High value may cause slow performance"
+        }
+      }
     }
   },
   "permissions": {

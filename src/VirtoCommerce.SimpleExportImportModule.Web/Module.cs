@@ -12,7 +12,11 @@ using VirtoCommerce.SimpleExportImportModule.Data.Repositories;
 using featureManagementCore = VirtoCommerce.FeatureManagementModule.Core;
 using simpleExportImportCore = VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Data.Services;
-
+using VirtoCommerce.SimpleExportImportModule.Core.Models;
+using VirtoCommerce.Platform.Core.Settings;
+using Microsoft.Extensions.Options;
+using VirtoCommerce.PricingModule.Data.ExportImport;
+using VirtoCommerce.Platform.Core.Common;
 
 namespace VirtoCommerce.SimpleExportImportModule.Web
 {
@@ -30,10 +34,24 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
             serviceCollection.AddDbContext<VirtoCommerceSimpleExportImportModuleDbContext>(options => options.UseSqlServer(connectionString));
 
             serviceCollection.AddTransient<ICsvPagedPriceDataSourceFactory, CsvPagedPriceDataSourceFactory>();
+
+            serviceCollection.AddOptions<SimpleExportOptions>().Bind(Configuration.GetSection("SimpleExportImport:SimpleExport")).ValidateDataAnnotations();
         }
 
         public void PostInitialize(IApplicationBuilder appBuilder)
         {
+            // prices
+            AbstractTypeFactory<TabularPrice>.OverrideType<TabularPrice, SimpleExportTabularPrice>();
+            AbstractTypeFactory<ExportablePrice>.OverrideType<ExportablePrice, SimpleExportExportablePrice>();
+
+            var settingsRegistrar = appBuilder.ApplicationServices.GetRequiredService<ISettingsRegistrar>();
+            settingsRegistrar.RegisterSettings(ModuleConstants.Settings.General.AllSettings, ModuleInfo.Id);
+
+            var settingsManager = appBuilder.ApplicationServices.GetService<ISettingsManager>();
+            var simpleExportImportOptions = appBuilder.ApplicationServices.GetService<IOptions<SimpleExportOptions>>().Value;
+            settingsManager.SetValue(ModuleConstants.Settings.General.SimpleExportLimitOfLines.Name,
+                simpleExportImportOptions.LimitOfLines ?? ModuleConstants.Settings.General.SimpleExportLimitOfLines.DefaultValue);
+
             // register permissions
             var permissionsProvider = appBuilder.ApplicationServices.GetRequiredService<IPermissionsRegistrar>();
             permissionsProvider.RegisterPermissions(ModuleConstants.Security.Permissions.AllPermissions.Select(x =>
