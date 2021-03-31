@@ -15,9 +15,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             _productSearchService = productSearchService;
         }
 
-        public ICsvPagedPriceDataSource Create(Stream file, int pageSize, Configuration configuration = null)
+        public ICsvPagedPriceDataSource Create(Stream stream, int pageSize, Configuration configuration = null)
         {
-            return new CsvPagedPriceDataSource(_productSearchService, file, pageSize, configuration ?? new ImportConfiguration());
+            return new CsvPagedPriceDataSource(_productSearchService, stream, pageSize, configuration ?? new ImportConfiguration());
         }
     }
 }

@@ -19,7 +19,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         private readonly Stream _stream;
         private readonly Configuration _configuration;
         private readonly StreamReader _streamReader;
-        private CsvReader _csvReader;
+        private readonly CsvReader _csvReader;
         private int? _totalCount;
 
         public CsvPagedPriceDataSource(IProductSearchService productSearchService, Stream stream, int pageSize, Configuration configuration)
@@ -30,7 +30,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             _streamReader = new StreamReader(stream);
 
             _configuration = configuration;
-            configuration.ReadingExceptionOccurred = ex => false;
+            _configuration.ReadingExceptionOccurred = ex => false;
             _csvReader = new CsvReader(_streamReader, configuration);
 
             PageSize = pageSize;
