@@ -1,4 +1,3 @@
-using System;
 using VirtoCommerce.ExportModule.Core.Model;
 using VirtoCommerce.PricingModule.Core.Model;
 using VirtoCommerce.PricingModule.Data.ExportImport;
