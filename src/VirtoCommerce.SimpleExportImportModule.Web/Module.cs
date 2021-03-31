@@ -3,20 +3,20 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using VirtoCommerce.FeatureManagementModule.Core.Services;
+using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.Platform.Core.Modularity;
 using VirtoCommerce.Platform.Core.Security;
+using VirtoCommerce.Platform.Core.Settings;
+using VirtoCommerce.PricingModule.Data.ExportImport;
 using VirtoCommerce.SimpleExportImportModule.Core;
+using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
 using VirtoCommerce.SimpleExportImportModule.Data.Repositories;
+using VirtoCommerce.SimpleExportImportModule.Data.Services;
 using featureManagementCore = VirtoCommerce.FeatureManagementModule.Core;
 using simpleExportImportCore = VirtoCommerce.SimpleExportImportModule.Core;
-using VirtoCommerce.SimpleExportImportModule.Data.Services;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
-using VirtoCommerce.Platform.Core.Settings;
-using Microsoft.Extensions.Options;
-using VirtoCommerce.PricingModule.Data.ExportImport;
-using VirtoCommerce.Platform.Core.Common;
 
 namespace VirtoCommerce.SimpleExportImportModule.Web
 {
@@ -29,9 +29,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
         public void Initialize(IServiceCollection serviceCollection)
         {
             // database initialization
-            var configuration = serviceCollection.BuildServiceProvider().GetRequiredService<IConfiguration>();
-            var connectionString = configuration.GetConnectionString("VirtoCommerce.SimpleExportImport") ?? configuration.GetConnectionString("VirtoCommerce");
-            serviceCollection.AddDbContext<VirtoCommerceSimpleExportImportModuleDbContext>(options => options.UseSqlServer(connectionString));
+            serviceCollection.AddDbContext<VirtoCommerceSimpleExportImportModuleDbContext>((provider, options) =>
+            {
+                var configuration = provider.GetRequiredService<IConfiguration>();
+                options.UseSqlServer(configuration.GetConnectionString(ModuleInfo.Id) ?? configuration.GetConnectionString("VirtoCommerce"));
+            });
 
             serviceCollection.AddTransient<ICsvPagedPriceDataSourceFactory, CsvPagedPriceDataSourceFactory>();
 
@@ -55,7 +57,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
             // register permissions
             var permissionsProvider = appBuilder.ApplicationServices.GetRequiredService<IPermissionsRegistrar>();
             permissionsProvider.RegisterPermissions(ModuleConstants.Security.Permissions.AllPermissions.Select(x =>
-                new Permission()
+                new Permission
                 {
                     GroupName = "SimpleExportImport",
                     ModuleId = ModuleInfo.Id,
