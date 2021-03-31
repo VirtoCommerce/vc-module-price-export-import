@@ -1,4 +1,5 @@
 using System.Linq;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +18,8 @@ using VirtoCommerce.SimpleExportImportModule.Data.Repositories;
 using VirtoCommerce.SimpleExportImportModule.Data.Services;
 using featureManagementCore = VirtoCommerce.FeatureManagementModule.Core;
 using simpleExportImportCore = VirtoCommerce.SimpleExportImportModule.Core;
+using VirtoCommerce.SimpleExportImportModule.Data.Services;
+using VirtoCommerce.SimpleExportImportModule.Data.Validation;
 
 namespace VirtoCommerce.SimpleExportImportModule.Web
 {
@@ -36,6 +39,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
             });
 
             serviceCollection.AddTransient<ICsvPagedPriceDataSourceFactory, CsvPagedPriceDataSourceFactory>();
+            serviceCollection.AddTransient<ICsvPagedPriceDataImporter, CsvPagedPriceDataImporter>();
+
+            serviceCollection.AddTransient<IValidator<ImportProductPrice[]>, ImportProductPricesValidator>();
 
             serviceCollection.AddOptions<SimpleExportOptions>().Bind(Configuration.GetSection("SimpleExportImport:SimpleExport")).ValidateDataAnnotations();
         }

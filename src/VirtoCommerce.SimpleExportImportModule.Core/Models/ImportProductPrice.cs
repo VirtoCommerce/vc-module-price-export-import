@@ -3,7 +3,7 @@ using VirtoCommerce.PricingModule.Core.Model;
 
 namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 {
-    public class ImportProductPrice
+    public sealed class ImportProductPrice
     {
         public string ProductId { get; set; }
 
