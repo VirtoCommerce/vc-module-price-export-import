@@ -18,7 +18,6 @@ using VirtoCommerce.SimpleExportImportModule.Data.Repositories;
 using VirtoCommerce.SimpleExportImportModule.Data.Services;
 using featureManagementCore = VirtoCommerce.FeatureManagementModule.Core;
 using simpleExportImportCore = VirtoCommerce.SimpleExportImportModule.Core;
-using VirtoCommerce.SimpleExportImportModule.Data.Services;
 using VirtoCommerce.SimpleExportImportModule.Data.Validation;
 
 namespace VirtoCommerce.SimpleExportImportModule.Web
