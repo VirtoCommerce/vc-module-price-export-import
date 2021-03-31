@@ -28,7 +28,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             {
                 errorsList.Add(ModuleConstants.ValidationErrors.FileNotExisted);
             }
-            else if (blobInfo.Size > ModuleConstants.FileMaxSize)
+            else if (blobInfo.Size > ModuleConstants.Settings.FileMaxSize)
             {
                 errorsList.Add(ModuleConstants.ValidationErrors.ExceedingFileMaxSize);
             }
@@ -64,7 +64,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                     totalCount++;
                 }
 
-                if (totalCount > ModuleConstants.ImportLimitOfLines)
+                if (totalCount > ModuleConstants.Settings.ImportLimitOfLines)
                 {
                     errorsList.Add(ModuleConstants.ValidationErrors.ExceedingLineLimits);
                 }

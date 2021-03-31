@@ -56,7 +56,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.FileMaxSize + 1 };
+            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize + 1 };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -77,7 +77,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.FileMaxSize };
+            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -100,7 +100,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.FileMaxSize };
+            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -125,7 +125,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.FileMaxSize };
+            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -149,11 +149,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.FileMaxSize };
+            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
-            var records = TestHelper.GetArrayOfSameRecords(CsvRecord, ModuleConstants.ImportLimitOfLines + 1);
+            var records = TestHelper.GetArrayOfSameRecords(CsvRecord, ModuleConstants.Settings.ImportLimitOfLines + 1);
             var stream = await TestHelper.GetStream(TestHelper.GetCsv(records, CsvHeader));
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
@@ -177,7 +177,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.FileMaxSize };
+            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 

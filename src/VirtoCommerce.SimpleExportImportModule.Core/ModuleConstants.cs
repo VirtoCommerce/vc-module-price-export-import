@@ -8,10 +8,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
 
         public const long MByte = 1024 * KByte;
 
-        public const long FileMaxSize = MByte;
-
-        public const long ImportLimitOfLines = 10000;
-
         public static class ValidationErrors
         {
             public const string DuplicateError = "Duplicate";
@@ -39,6 +35,10 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
         public static class Settings
         {
             public const int PageSize = 50;
+
+            public const long FileMaxSize = MByte;
+
+            public const long ImportLimitOfLines = 10000;
         }
 
         public static class Security
