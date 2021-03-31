@@ -1,6 +1,6 @@
 namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 {
-    public class ImportDataValidationRequest
+    public sealed class ImportDataValidationRequest
     {
         public string FileUrl { get; set; }
     }

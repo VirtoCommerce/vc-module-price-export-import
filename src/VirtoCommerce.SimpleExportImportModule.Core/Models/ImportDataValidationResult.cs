@@ -2,7 +2,7 @@ using System;
 
 namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 {
-    public class ImportDataValidationResult
+    public sealed class ImportDataValidationResult
     {
         public ImportDataValidationResult()
         {

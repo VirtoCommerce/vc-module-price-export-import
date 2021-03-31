@@ -2,14 +2,22 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
 {
     public static class ModuleConstants
     {
-        public const long FileMaxSize = 1024 * 1024 * 8;
+        public const long Byte = 8;
+
+        public const long KByte = 1024 * Byte;
+
+        public const long MByte = 1024 * KByte;
+
+        public const long FileMaxSize = MByte;
 
         public const long ImportLimitOfLines = 10000;
 
         public static class ValidationErrors
         {
             public const string DuplicateError = "Duplicate";
+
             public const string AlreadyExistsError = "AlreadyExists";
+
             public const string FileNotExisted = "file-not-existed";
 
             public const string NoData = "no-data";
