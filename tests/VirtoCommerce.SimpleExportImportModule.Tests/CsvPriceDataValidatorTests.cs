@@ -1,5 +1,3 @@
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using VirtoCommerce.Platform.Core.Assets;
@@ -25,6 +23,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 ";
 
         private const string CsvFileWithoutData = @"";
+
+        private const string CsvFileWithoutDataWithHeader = @"SKU;List price;Sales price;Min quantity";
+
+        private const string CsvHeader = "SKU;Min quantity;List price;Sale price";
+
+        private const string CsvRecord = "TestSku;1;100;99";
+
 
         [Fact]
         public async Task Validate_FileNotExists_ReturnErrorCode()
@@ -76,7 +81,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
-            var stream = new MemoryStream(Encoding.UTF8.GetBytes(CsvFileContentWithoutError));
+            var stream = await TestHelper.GetStream(CsvFileContentWithoutError);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
@@ -99,7 +104,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
-            var stream = new MemoryStream(Encoding.UTF8.GetBytes(CsvFileWithWrongDelimiter));
+            var stream = await TestHelper.GetStream(CsvFileWithWrongDelimiter);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
@@ -124,7 +129,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
-            var stream = new MemoryStream(Encoding.UTF8.GetBytes(CsvFileWithWrongHeader));
+            var stream = await TestHelper.GetStream(CsvFileWithWrongHeader);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
@@ -139,7 +144,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         }
 
         [Fact]
-        public async Task Validate_NoData_ReturnErrorCode()
+        public async Task Validate_ExceedingLineLimits_ReturnErrorCode()
         {
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
@@ -148,7 +153,35 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
-            var stream = new MemoryStream(Encoding.UTF8.GetBytes(CsvFileWithoutData));
+            var records = TestHelper.GetArrayOfSameRecords(CsvRecord, ModuleConstants.ImportLimitOfLines + 1);
+            var stream = await TestHelper.GetStream(TestHelper.GetCsv(records, CsvHeader));
+            blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
+                .Returns(stream);
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+
+            // Act
+            var result = await validator.ValidateAsync("file url");
+
+            // Assert
+            Assert.Single(result.Errors);
+            Assert.True(result.Errors[0] == ModuleConstants.ValidationErrors.ExceedingLineLimits);
+        }
+
+        [Theory]
+        [InlineData(CsvFileWithoutData)]
+        [InlineData(CsvFileWithoutDataWithHeader)]
+
+        public async Task Validate_NoData_ReturnErrorCode(string csv)
+        {
+            // Arrange
+            var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
+
+            var blobInfo = new BlobInfo() { Size = ModuleConstants.FileMaxSize };
+            blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult(blobInfo));
+
+            var stream = await TestHelper.GetStream(csv);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 

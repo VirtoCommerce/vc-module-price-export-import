@@ -38,11 +38,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             else
             {
                 var stream = _blobStorageProvider.OpenRead(fileUrl);
-
-                var csvConfiguration = new Configuration(CultureInfo.InvariantCulture) { Delimiter = ";", };
+                var csvConfiguration = new Configuration(CultureInfo.InvariantCulture) { Delimiter = ";" };
                 using var streamReader = new StreamReader(stream);
+                using var csvReader = new CsvReader(streamReader, csvConfiguration);
 
-                var headerStr = streamReader.ReadLine();
+                var headerStr = await streamReader.ReadLineAsync();
+
                 if (headerStr == null || headerStr.Trim() == "")
                 {
                     errorsList.Add(ModuleConstants.ValidationErrors.NoData);
@@ -56,7 +57,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                         errorsList.Add(ModuleConstants.ValidationErrors.WrongDelimiter);
                     }
 
-                    var fistDataRowStr = streamReader.ReadLine();
+                    var fistDataRowStr = await streamReader.ReadLineAsync();
 
                     if (fistDataRowStr == null || fistDataRowStr.Trim() == "")
                     {
@@ -66,7 +67,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
                 stream.Seek(0, SeekOrigin.Begin);
                 streamReader.DiscardBufferedData();
-                using var csvReader = new CsvReader(streamReader, csvConfiguration);
 
                 if (errorsList.Count == 0)
                 {
@@ -75,7 +75,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                         csvReader.Read();
                         csvReader.ReadHeader();
                         csvReader.ValidateHeader<CsvPrice>();
-
                     }
                     catch (ValidationException e)
                     {
@@ -86,7 +85,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
                 if (errorsList.Count == 0)
                 {
-                    var totalCount = 1;
+                    var totalCount = 0;
 
                     while (csvReader.Read())
                     {

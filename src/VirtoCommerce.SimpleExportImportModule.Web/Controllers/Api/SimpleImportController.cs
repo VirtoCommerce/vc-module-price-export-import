@@ -95,7 +95,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
         {
             if (request.FileUrl.IsNullOrEmpty())
             {
-                return BadRequest($"{nameof(request.FileUrl)} can not be null");
+                return BadRequest($"{nameof(request.FileUrl)} can not be null or empty.");
             }
 
             var result = await _csvPriceDataValidator.ValidateAsync(request.FileUrl);
