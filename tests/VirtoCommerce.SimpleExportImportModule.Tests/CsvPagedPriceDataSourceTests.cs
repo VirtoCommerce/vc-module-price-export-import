@@ -245,8 +245,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task FetchAsync_WithSpecifiedPageSize_WillReturnSpecifiedNumberOfItems()
         {
             // Arrange
-            var csv = GetCsv(CsvRecords, CsvHeader);
-            await using var stream = await GetStream(csv);
+            var csv = TestHelper.GetCsv(CsvRecords, CsvHeader);
+            await using var stream = await TestHelper.GetStream(csv);
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
             using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 1);
 
@@ -262,8 +262,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task FetchAsync_AfterGetTotalCount_WillStartReadingFromTheSamePosition()
         {
             // Arrange
-            var csv = GetCsv(CsvRecords, CsvHeader);
-            await using var stream = await GetStream(csv);
+            var csv = TestHelper.GetCsv(CsvRecords, CsvHeader);
+            await using var stream = await TestHelper.GetStream(csv);
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
             using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 1);
 
@@ -280,7 +280,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task FetchAsync_BeforeEndOfCsvFile_WillReturnTrue()
         {
             // Arrange
-            await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
+            await using var stream = await TestHelper.GetStream(TestHelper.GetCsv(CsvRecords, CsvHeader));
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
             using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 1);
 
@@ -295,7 +295,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task FetchAsync_AfterEndOfCsvFile_WillReturnFalse()
         {
             // Arrange
-            await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
+            await using var stream = await TestHelper.GetStream(TestHelper.GetCsv(CsvRecords, CsvHeader));
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
             using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
 
@@ -311,7 +311,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task FetchAsync_AfterEndOfCsvFile_WillFetchNoItems()
         {
             // Arrange
-            await using var stream = await GetStream(GetCsv(CsvRecords, CsvHeader));
+            await using var stream = await TestHelper.GetStream(TestHelper.GetCsv(CsvRecords, CsvHeader));
             var csvPagedPriceDataSourceFactory = GetCsvPagedPriceDataSourceFactory();
             using var csvPagedPriceDataSource = csvPagedPriceDataSourceFactory.Create(stream, 10);
 

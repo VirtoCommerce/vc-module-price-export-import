@@ -12,10 +12,9 @@ using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
 using VirtoCommerce.SimpleExportImportModule.Data.Repositories;
 using VirtoCommerce.SimpleExportImportModule.Data.Services;
+using VirtoCommerce.SimpleExportImportModule.Data.Validation;
 using featureManagementCore = VirtoCommerce.FeatureManagementModule.Core;
 using simpleExportImportCore = VirtoCommerce.SimpleExportImportModule.Core;
-using VirtoCommerce.SimpleExportImportModule.Data.Services;
-using VirtoCommerce.SimpleExportImportModule.Data.Validation;
 
 namespace VirtoCommerce.SimpleExportImportModule.Web
 {
@@ -28,8 +27,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
         public void Initialize(IServiceCollection serviceCollection)
         {
             // database initialization
-            var configuration = serviceCollection.BuildServiceProvider().GetRequiredService<IConfiguration>();
-            var connectionString = configuration.GetConnectionString("VirtoCommerce.SimpleExportImport") ?? configuration.GetConnectionString("VirtoCommerce");
+            var connectionString = Configuration.GetConnectionString("VirtoCommerce.SimpleExportImport") ?? Configuration.GetConnectionString("VirtoCommerce");
             serviceCollection.AddDbContext<VirtoCommerceSimpleExportImportModuleDbContext>(options => options.UseSqlServer(connectionString));
 
             serviceCollection.AddTransient<ICsvPagedPriceDataSourceFactory, CsvPagedPriceDataSourceFactory>();
