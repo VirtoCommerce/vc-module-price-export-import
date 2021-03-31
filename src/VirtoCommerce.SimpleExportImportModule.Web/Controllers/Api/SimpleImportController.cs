@@ -1,11 +1,15 @@
 using System.Threading.Tasks;
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
+using VirtoCommerce.Platform.Core.PushNotifications;
+using VirtoCommerce.Platform.Core.Security;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
+using VirtoCommerce.SimpleExportImportModule.Web.BackgroundJobs;
 
 namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
 {
@@ -14,13 +18,42 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
     [ApiController]
     public class SimpleImportController : ControllerBase
     {
+        private readonly IUserNameResolver _userNameResolver;
         private readonly IBlobStorageProvider _blobStorageProvider;
+        private readonly IPushNotificationManager _pushNotificationManager;
         private readonly ICsvPagedPriceDataSourceFactory _csvPagedPriceDataSourceFactory;
 
-        public SimpleImportController(IBlobStorageProvider blobStorageProvider, ICsvPagedPriceDataSourceFactory csvPagedPriceDataSourceFactory)
+        public SimpleImportController(IUserNameResolver userNameResolver, IBlobStorageProvider blobStorageProvider,
+            IPushNotificationManager pushNotificationManager, ICsvPagedPriceDataSourceFactory csvPagedPriceDataSourceFactory)
         {
+            _userNameResolver = userNameResolver;
             _blobStorageProvider = blobStorageProvider;
+            _pushNotificationManager = pushNotificationManager;
             _csvPagedPriceDataSourceFactory = csvPagedPriceDataSourceFactory;
+        }
+
+        [HttpPost]
+        [Route("run")]
+        public async Task<ActionResult<ImportPushNotification>> RunImport([FromBody] ImportDataRequest request)
+        {
+            var notification = new ImportPushNotification(_userNameResolver.GetCurrentUserName())
+            {
+                Title = "Prices import",
+                Description = "Starting import task..."
+            };
+            await _pushNotificationManager.SendAsync(notification);
+            
+            notification.JobId = BackgroundJob.Enqueue<ImportJob>(importJob => importJob.ImportBackgroundAsync(request, notification, JobCancellationToken.Null, null));
+
+            return Ok(notification);
+        }
+
+        [HttpPost]
+        [Route("cancel")]
+        public ActionResult CancelExport([FromBody] ImportCancellationRequest cancellationRequest)
+        {
+            BackgroundJob.Delete(cancellationRequest.JobId);
+            return Ok();
         }
 
         [HttpPost]

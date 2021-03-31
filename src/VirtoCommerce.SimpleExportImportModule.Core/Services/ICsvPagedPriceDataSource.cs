@@ -12,7 +12,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Services
 
         int GetTotalCount();
 
-        Task FetchAsync();
+        Task<bool> FetchAsync();
 
         ImportProductPrice[] Items { get; }
     }

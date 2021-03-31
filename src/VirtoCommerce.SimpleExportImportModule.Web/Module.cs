@@ -1,4 +1,5 @@
 using System.Linq;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -7,12 +8,13 @@ using VirtoCommerce.FeatureManagementModule.Core.Services;
 using VirtoCommerce.Platform.Core.Modularity;
 using VirtoCommerce.Platform.Core.Security;
 using VirtoCommerce.SimpleExportImportModule.Core;
+using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
 using VirtoCommerce.SimpleExportImportModule.Data.Repositories;
 using featureManagementCore = VirtoCommerce.FeatureManagementModule.Core;
 using simpleExportImportCore = VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Data.Services;
-
+using VirtoCommerce.SimpleExportImportModule.Data.Validation;
 
 namespace VirtoCommerce.SimpleExportImportModule.Web
 {
@@ -30,6 +32,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
             serviceCollection.AddDbContext<VirtoCommerceSimpleExportImportModuleDbContext>(options => options.UseSqlServer(connectionString));
 
             serviceCollection.AddTransient<ICsvPagedPriceDataSourceFactory, CsvPagedPriceDataSourceFactory>();
+            serviceCollection.AddTransient<ICsvPagedPriceDataImporter, CsvPagedPriceDataImporter>();
+
+            serviceCollection.AddTransient<IValidator<ImportProductPrice[]>, ImportProductPricesValidator>();
         }
 
         public void PostInitialize(IApplicationBuilder appBuilder)
