@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using VirtoCommerce.Platform.Core.Assets;
-using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
@@ -40,12 +39,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             {
                 var stream = _blobStorageProvider.OpenRead(fileUrl);
 
-                var csvConfiguration = new Configuration(CultureInfo.InvariantCulture) { Delimiter = ";" };
-                var streamReader = new StreamReader(stream);
-                var csvReader = new CsvReader(streamReader, csvConfiguration);
+                var csvConfiguration = new Configuration(CultureInfo.InvariantCulture) { Delimiter = ";", };
+                using var streamReader = new StreamReader(stream);
 
-                var headerStr = await streamReader.ReadLineAsync();
-                if (headerStr == null || headerStr.Trim().IsNullOrEmpty())
+                var headerStr = streamReader.ReadLine();
+                if (headerStr == null || headerStr.Trim() == "")
                 {
                     errorsList.Add(ModuleConstants.ValidationErrors.NoData);
                 }
@@ -58,14 +56,17 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                         errorsList.Add(ModuleConstants.ValidationErrors.WrongDelimiter);
                     }
 
-                    var fistDataRowStr = await streamReader.ReadLineAsync();
-                    stream.Position = 0;
+                    var fistDataRowStr = streamReader.ReadLine();
 
-                    if (fistDataRowStr == null || fistDataRowStr.Trim().IsNullOrEmpty())
+                    if (fistDataRowStr == null || fistDataRowStr.Trim() == "")
                     {
                         errorsList.Add(ModuleConstants.ValidationErrors.NoData);
                     }
                 }
+
+                stream.Seek(0, SeekOrigin.Begin);
+                streamReader.DiscardBufferedData();
+                using var csvReader = new CsvReader(streamReader, csvConfiguration);
 
                 if (errorsList.Count == 0)
                 {

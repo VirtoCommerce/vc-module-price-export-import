@@ -12,8 +12,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
     [Trait("Category", "CI")]
     public class CsvPriceDataValidatorTests
     {
-        private const string CsvFileContentWithoutError = @"
-SKU;Product Name;Currency;List price;Sale price;Min quantity;Modified;Valid from;Valid to;Created date;Created by;Modified By
+        private const string CsvFileContentWithoutError = @"SKU;Product Name;Currency;List price;Sale price;Min quantity;Modified;Valid from;Valid to;Created date;Created by;Modified By
 41MY02;""1-1/4"""" Steel Hex Flange Bolt, Grade 5, Zinc Plated Finish, 5/16""""-18 Dia/Thread Size, 50 PK"";USD;9.3000;;1;09/17/2019 10:01:41;;;09/17/2019 10:01:41;unknown;unknown
 4GVA7;""1"""" Steel Carriage Bolt, Grade 5, Chrome Plated Finish, 1/4""""-20 Dia/Thread Size, 5 PK"";USD;13.1000;9.0000;11;03/24/2021 07:15:43;;;09/17/2019 10:01:41;unknown;admin
 19N051;""3-3/4"""" Alloy Steel Bolt, Grade 8, 3/4""""-10 Dia/Thread Size, 10 PK"";USD;108.0000;;1;09/17/2019 10:01:41;;;09/17/2019 10:01:41;unknown;unknown";
