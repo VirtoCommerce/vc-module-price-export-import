@@ -39,7 +39,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
             {
                 fullName: "Sale",
                 group: "TabularPrice",
-                displayName: "Sales price",
+                displayName: "Sale price",
                 isRequired: false,
             },
             {
