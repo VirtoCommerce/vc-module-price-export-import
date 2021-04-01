@@ -32,13 +32,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 filters: [
                     {
                         name: 'sameFile',
-                        fn: (item) => {
-                            if ($scope.uploadedFile.name === item.name) {
-                                return false;
-                            } else {
-                                return true;
-                            }
-                        }
+                        fn: (item) => $scope.uploadedFile.name !== item.name
                     },
                     {
                         name: 'onlyCsv',
