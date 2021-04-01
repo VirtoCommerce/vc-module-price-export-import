@@ -80,12 +80,12 @@ angular.module('virtoCommerce.simpleExportImportModule')
             };
 
             uploader.onSuccessItem = (_, asset) => {
-                $scope.showUploadResult = true;
                 blade.csvFileUrl = asset[0].relativeUrl;
 
                 importResources.validate({ fileUrl: blade.csvFileUrl }, (data) => {
                     $scope.csvValidationErrors = data.errors;
                     $scope.internalCsvError = !!$scope.csvValidationErrors.length;
+                    $scope.showUploadResult = true;
                 }, (error) => { bladeNavigationService.setError('Error ' + error.status, blade); });
 
             };
