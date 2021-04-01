@@ -70,10 +70,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
             };
 
             uploader.onBeforeUploadItem = () => {
-                resetState();
-
                 if (blade.csvFileUrl) {
-                    $scope.uploadedFile = {};
                     $scope.deleteUploadedItem();
                 }
             };
@@ -108,11 +105,16 @@ angular.module('virtoCommerce.simpleExportImportModule')
         }
 
         $scope.deleteUploadedItem = () => {
-            $scope.showUploadResult = false;
+            //$scope.showUploadResult = false;
             assetsApi.remove({urls: [blade.csvFileUrl]},
-                () => {},
-                (error) => bladeNavigationService.setError('Error ' + error.status, blade));
-            blade.csvFileUrl = null;
+                () => {
+
+                },
+                (error) => bladeNavigationService.setError('Error ' + error.status, blade)
+            );
+
+            resetState();
+            //blade.csvFileUrl = null;
         }
 
         $scope.showPreview = () => {
@@ -137,6 +139,9 @@ angular.module('virtoCommerce.simpleExportImportModule')
         }
 
         function resetState() {
+            $scope.uploadedFile = {};
+            blade.csvFileUrl = null;
+
             $scope.showUploadResult = false;
             $scope.fileTypeError = false;
             $scope.csvMaxSizeError = false;
