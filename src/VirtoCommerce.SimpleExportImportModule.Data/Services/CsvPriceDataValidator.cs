@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
+using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.SimpleExportImportModule.Core;
@@ -41,16 +42,16 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             }
             else
             {
-                await using var stream = _blobStorageProvider.OpenRead(fileUrl);
+                var stream = _blobStorageProvider.OpenRead(fileUrl);
                 var csvConfiguration = new ImportConfiguration();
-                using var streamReader = new StreamReader(stream);
-                using var csvReader = new CsvReader(streamReader, csvConfiguration);
 
-                await ValidateDelimiterAndDataExists(streamReader, csvConfiguration.Delimiter, errorsList);
+                await ValidateDelimiterAndDataExists(stream, csvConfiguration, errorsList);
 
-                ValidateRequiredColumns(streamReader, csvReader, errorsList);
+                ValidateRequiredColumns(stream, csvConfiguration, errorsList);
 
-                ValidateLineLimit(streamReader, csvReader, errorsList);
+                ValidateLineLimit(stream, csvConfiguration, errorsList);
+
+                await stream.DisposeAsync();
             }
 
             var result = new ImportDataValidationResult { Errors = errorsList.ToArray() };
@@ -58,7 +59,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             return result;
         }
 
-        private static void ValidateLineLimit(StreamReader streamReader, CsvReader csvReader, List<ImportDataValidationError> errorsList)
+        private static void ValidateLineLimit(Stream stream, Configuration csvConfiguration, List<ImportDataValidationError> errorsList)
         {
             var notCompatibleErrors = new[]
             {
@@ -72,7 +73,10 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 return;
             }
 
-            SeekStreamReaderToStart(streamReader);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            var streamReader = new StreamReader(stream);
+            var csvReader = new CsvReader(streamReader, csvConfiguration);
 
             var totalCount = 0;
 
@@ -95,7 +99,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             }
         }
 
-        private static void ValidateRequiredColumns(StreamReader streamReader, CsvReader csvReader, List<ImportDataValidationError> errorsList)
+        private static void ValidateRequiredColumns(Stream stream, Configuration csvConfiguration, List<ImportDataValidationError> errorsList)
         {
             var notCompatibleErrors = new[]
             {
@@ -110,7 +114,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 return;
             }
 
-            SeekStreamReaderToStart(streamReader);
+            stream.Seek(0, SeekOrigin.Begin);
+            var streamReader = new StreamReader(stream);
+            var csvReader = new CsvReader(streamReader, csvConfiguration);
 
             csvReader.Read();
             csvReader.ReadHeader();
@@ -132,7 +138,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             }
         }
 
-        private static async Task ValidateDelimiterAndDataExists(StreamReader streamReader, string delimiter, List<ImportDataValidationError> errorsList)
+        private static async Task ValidateDelimiterAndDataExists(Stream stream, Configuration csvConfiguration, List<ImportDataValidationError> errorsList)
         {
 
             var notCompatibleErrors = new[]
@@ -146,6 +152,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 return;
             }
 
+            stream.Seek(0, SeekOrigin.Begin);
+            var streamReader = new StreamReader(stream);
+
             var headerLine = await streamReader.ReadLineAsync();
 
             if (string.IsNullOrWhiteSpace(headerLine))
@@ -154,7 +163,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             }
             else
             {
-                if (!headerLine.Contains(delimiter))
+                if (!headerLine.Contains(csvConfiguration.Delimiter))
                 {
                     errorsList.Add(new ImportDataValidationError { ErrorCode = ModuleConstants.ValidationErrors.WrongDelimiter });
                 }
@@ -166,12 +175,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                     errorsList.Add(new ImportDataValidationError { ErrorCode = ModuleConstants.ValidationErrors.NoData });
                 }
             }
-        }
-
-        private static void SeekStreamReaderToStart(StreamReader streamReader)
-        {
-            streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
-            streamReader.DiscardBufferedData();
         }
     }
 }
