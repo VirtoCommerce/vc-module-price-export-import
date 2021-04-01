@@ -15,9 +15,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
         private void AttachValidators()
         {
             RuleFor(importProductPrice => importProductPrice.ProductId).NotEmpty().DependentRules(() =>
-            {
-                RuleFor(importProductPrice => importProductPrice.Product).NotNull().WithErrorCode(ModuleConstants.ValidationErrors.ProductMissingError);
-            }).WithErrorCode(ModuleConstants.ValidationErrors.ProductMissingError);
+                {
+                    RuleFor(importProductPrice => importProductPrice.Product).NotNull()
+                        .WithErrorCode(ModuleConstants.ValidationErrors.ProductMissingError)
+                        .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice });
+                })
+                .WithErrorCode(ModuleConstants.ValidationErrors.ProductMissingError)
+                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice });
         }
     }
 }

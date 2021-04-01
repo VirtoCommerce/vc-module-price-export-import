@@ -23,7 +23,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
                 .Must(price => !_existingPrices.Any(existingPrice =>
                     existingPrice.ProductId == price.ProductId &&
                     existingPrice.MinQuantity == price.Price.MinQuantity))
-                .WithErrorCode(ModuleConstants.ValidationErrors.AlreadyExistsError);
+                .WithErrorCode(ModuleConstants.ValidationErrors.AlreadyExistsError)
+                .WithState(importProductPrice => new ImportValidationState
+                {
+                    InvalidImportProductPrice = importProductPrice
+                });
         }
     }
 }

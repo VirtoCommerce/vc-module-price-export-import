@@ -76,7 +76,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                             case ImportMode.CreateOnly:
                                 var validationResult = await _importProductPricesValidator.ValidateAsync(importProductPrices);
                                 importProductPrices = importProductPrices
-                                    .Except(validationResult.Errors.Select(x => x.AttemptedValue as ImportProductPrice))
+                                    .Except(validationResult.Errors.Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice))
                                     .ToArray();
                                 importProgress.ErrorCount += validationResult.Errors.Count;
                                 createdPrices.AddRange(importProductPrices.Select(importProductPrice => importProductPrice.Price));
