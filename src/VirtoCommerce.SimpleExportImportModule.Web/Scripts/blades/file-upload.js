@@ -105,16 +105,12 @@ angular.module('virtoCommerce.simpleExportImportModule')
         }
 
         $scope.deleteUploadedItem = () => {
-            //$scope.showUploadResult = false;
             assetsApi.remove({urls: [blade.csvFileUrl]},
-                () => {
-
-                },
+                () => { },
                 (error) => bladeNavigationService.setError('Error ' + error.status, blade)
             );
 
             resetState();
-            //blade.csvFileUrl = null;
         }
 
         $scope.showPreview = () => {
