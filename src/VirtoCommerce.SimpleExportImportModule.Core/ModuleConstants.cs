@@ -53,7 +53,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
 
             public const long FileMaxSize = MByte;
 
-            public const long ImportLimitOfLines = 30;
+            public const long ImportLimitOfLines = 10000;
 
             public static class General
             {
