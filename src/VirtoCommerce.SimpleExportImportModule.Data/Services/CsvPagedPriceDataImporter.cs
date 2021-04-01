@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
+using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.PricingModule.Core.Model;
 using VirtoCommerce.PricingModule.Core.Services;
@@ -13,27 +14,38 @@ using VirtoCommerce.SimpleExportImportModule.Core.Services;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 {
-    public sealed class CsvPagedPriceDataImporter: ICsvPagedPriceDataImporter
+    public sealed class CsvPagedPriceDataImporter : ICsvPagedPriceDataImporter
     {
         private readonly IPricingService _pricingService;
         private readonly ICsvPagedPriceDataSourceFactory _dataSourceFactory;
         private readonly IValidator<ImportProductPrice[]> _importProductPricesValidator;
+        private readonly IBlobStorageProvider _blobStorageProvider;
+        private readonly ICsvPriceDataValidator _csvPriceDataValidator;
 
-        public CsvPagedPriceDataImporter(IPricingService pricingService, ICsvPagedPriceDataSourceFactory dataSourceFactory, IValidator<ImportProductPrice[]> importProductPricesValidator)
+        public CsvPagedPriceDataImporter(IPricingService pricingService, ICsvPagedPriceDataSourceFactory dataSourceFactory, IValidator<ImportProductPrice[]> importProductPricesValidator, IBlobStorageProvider blobStorageProvider, ICsvPriceDataValidator csvPriceDataValidator)
         {
             _pricingService = pricingService;
             _dataSourceFactory = dataSourceFactory;
             _importProductPricesValidator = importProductPricesValidator;
+            _blobStorageProvider = blobStorageProvider;
+            _csvPriceDataValidator = csvPriceDataValidator;
         }
 
-        public async Task ImportAsync(Stream stream, ImportDataRequest request, Action<ImportProgressInfo> progressCallback, ICancellationToken cancellationToken)
+        public async Task ImportAsync(ImportDataRequest request, Action<ImportProgressInfo> progressCallback, ICancellationToken cancellationToken)
         {
 
-            ValidateParameters(stream, request, progressCallback, cancellationToken);
+            ValidateParameters(request, progressCallback, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            // TODO: Run import file validation
+            var csvPriceDataValidationResult = await _csvPriceDataValidator.ValidateAsync(request.FileUrl);
+
+            if (csvPriceDataValidationResult.Errors.Any())
+            {
+                throw new InvalidDataException();
+            }
+
+            await using var stream = _blobStorageProvider.OpenRead(request.FileUrl);
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -118,12 +130,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             }
         }
 
-        private static void ValidateParameters(Stream stream, ImportDataRequest request, Action<ImportProgressInfo> progressCallback, ICancellationToken cancellationToken)
+        private static void ValidateParameters(ImportDataRequest request, Action<ImportProgressInfo> progressCallback, ICancellationToken cancellationToken)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException(nameof(stream));
-            }
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));

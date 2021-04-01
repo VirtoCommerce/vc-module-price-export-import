@@ -47,7 +47,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             // Assert
             Assert.Single(result.Errors);
-            Assert.True(result.Errors[0] == ModuleConstants.ValidationErrors.FileNotExisted);
+            Assert.True(result.Errors[0].ErrorCode == ModuleConstants.ValidationErrors.FileNotExisted);
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             // Assert
             Assert.Single(result.Errors);
-            Assert.True(result.Errors[0] == ModuleConstants.ValidationErrors.ExceedingFileMaxSize);
+            Assert.True(result.Errors[0].ErrorCode == ModuleConstants.ValidationErrors.ExceedingFileMaxSize);
         }
 
 
@@ -115,7 +115,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             // Assert
             Assert.Single(result.Errors);
-            Assert.True(result.Errors[0] == ModuleConstants.ValidationErrors.WrongDelimiter);
+            Assert.True(result.Errors[0].ErrorCode == ModuleConstants.ValidationErrors.WrongDelimiter);
         }
 
 
@@ -140,7 +140,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             // Assert
             Assert.Single(result.Errors);
-            Assert.True(result.Errors[0] == ModuleConstants.ValidationErrors.MissingRequiredColumns);
+            Assert.True(result.Errors[0].ErrorCode == ModuleConstants.ValidationErrors.MissingRequiredColumns);
         }
 
         [Fact]
@@ -165,7 +165,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             // Assert
             Assert.Single(result.Errors);
-            Assert.True(result.Errors[0] == ModuleConstants.ValidationErrors.ExceedingLineLimits);
+            Assert.True(result.Errors[0].ErrorCode == ModuleConstants.ValidationErrors.ExceedingLineLimits);
         }
 
         [Theory]
@@ -192,7 +192,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             // Assert
             Assert.Single(result.Errors);
-            Assert.True(result.Errors[0] == ModuleConstants.ValidationErrors.NoData);
+            Assert.True(result.Errors[0].ErrorCode == ModuleConstants.ValidationErrors.NoData);
         }
     }
 }

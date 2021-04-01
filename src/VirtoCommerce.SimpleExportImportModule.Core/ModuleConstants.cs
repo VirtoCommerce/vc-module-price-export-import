@@ -50,7 +50,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
         public static class Settings
         {
             public const int PageSize = 50;
-          
+
             public const long FileMaxSize = MByte;
 
             public const long ImportLimitOfLines = 10000;

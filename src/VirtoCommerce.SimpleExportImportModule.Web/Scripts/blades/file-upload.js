@@ -1,7 +1,7 @@
 angular.module('virtoCommerce.simpleExportImportModule')
 .controller('virtoCommerce.simpleExportImportModule.fileUploadController',
-    ['FileUploader', '$document', '$scope', '$timeout', 'platformWebApp.bladeNavigationService', 'platformWebApp.assets.api',
-    function(FileUploader, $document, $scope, $timeout, bladeNavigationService, assetsApi) {
+    ['FileUploader', '$document', '$scope', '$timeout', 'platformWebApp.bladeNavigationService', 'platformWebApp.assets.api', 'virtoCommerce.simpleExportImportModule.import', '$translate',
+        function (FileUploader, $document, $scope, $timeout, bladeNavigationService, assetsApi, importResources, $translate) {
         const blade = $scope.blade;
         const oneKb = 1024;
         const oneMb = 1024 * oneKb;
@@ -9,6 +9,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
         blade.headIcon = 'fas fa-file-alt';
         blade.isLoading = false;
         $scope.showUploadResult = false;
+        $scope.internalCsvError = false;
         $scope.uploadedFile = {};
 
         blade.toolbarCommands = [{
@@ -29,32 +30,35 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 autoUpload: true,
                 removeAfterUpload: true,
                 filters: [
-                {
-                    name: 'onlyCsv',
-                    fn: (item) => {
-                        $scope.uploadedFile.name = item.name;
-                        if (!uploader.isHTML5) {
-                            return true;
-                        } else {
-                            let result = /^.*\.(csv)$/.test(item.name);
-                            $scope.fileTypeError = !result;
-                            return result;
+                    {
+                        name: 'sameFile',
+                        fn: (item) => $scope.uploadedFile.name !== item.name
+                    },
+                    {
+                        name: 'onlyCsv',
+                        fn: (item) => {
+                            $scope.uploadedFile.name = item.name;
+                            if (!uploader.isHTML5) {
+                                return true;
+                            } else {
+                                let result = /^.*\.(csv)$/.test(item.name);
+                                $scope.fileTypeError = !result;
+                                return result;
+                            }
                         }
-                    }
-                },
-                {
-                    name: 'csvMaxSize',
-                    fn: (item) => {
-                        $scope.uploadedFile.name = item.name;
-                        if (item.size <= maxCsvSize) {
-                            $scope.uploadedFile.size = formatFileSize(item.size);
-                            return true;
-                        } else {
-                            $scope.csvMaxSizeError = true;
-                            return false;
+                    }, {
+                        name: 'csvMaxSize',
+                        fn: (item) => {
+                            $scope.uploadedFile.name = item.name;
+                            if (item.size <= maxCsvSize) {
+                                $scope.uploadedFile.size = formatFileSize(item.size);
+                                return true;
+                            } else {
+                                $scope.csvMaxSizeError = true;
+                                return false;
+                            }
                         }
-                    }
-                }]
+                    }]
             });
 
             uploader.onWhenAddingFileFailed = () => {
@@ -76,8 +80,14 @@ angular.module('virtoCommerce.simpleExportImportModule')
             };
 
             uploader.onSuccessItem = (_, asset) => {
-                $scope.showUploadResult = true;
-                blade.csvFileUrl = asset[0].url;
+                blade.csvFileUrl = asset[0].relativeUrl;
+
+                importResources.validate({ fileUrl: blade.csvFileUrl }, (data) => {
+                    $scope.csvValidationErrors = data.errors;
+                    $scope.internalCsvError = !!$scope.csvValidationErrors.length;
+                    $scope.showUploadResult = true;
+                }, (error) => { bladeNavigationService.setError('Error ' + error.status, blade); });
+
             };
 
             uploader.onErrorItem = (element, response, status) => {
@@ -119,6 +129,13 @@ angular.module('virtoCommerce.simpleExportImportModule')
             };
 
             bladeNavigationService.showBlade(newBlade, blade);
+        }
+
+            $scope.translateErrorCode = (error
+            ) => {
+            var translateKey = 'simpleExportImport.validation-errors.' + error.errorCode;
+            var result = $translate.instant(translateKey, error.properties);
+            return result === translateKey ? errorCode : result;
         }
 
         function formatFileSize(bytes, decimals = 2) {
