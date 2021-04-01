@@ -7,6 +7,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
 using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.Platform.Core.Settings;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
@@ -17,14 +18,19 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
     public sealed class CsvPriceDataValidator : ICsvPriceDataValidator
     {
         private readonly IBlobStorageProvider _blobStorageProvider;
+        private readonly ISettingsManager _settingsManager;
 
-        public CsvPriceDataValidator(IBlobStorageProvider blobStorageProvider)
+        public CsvPriceDataValidator(IBlobStorageProvider blobStorageProvider, ISettingsManager settingsManager)
         {
             _blobStorageProvider = blobStorageProvider;
+            _settingsManager = settingsManager;
         }
         public async Task<ImportDataValidationResult> ValidateAsync(string fileUrl)
         {
             var errorsList = new List<ImportDataValidationError>();
+
+            var fileMaxSize = _settingsManager.GetValue(ModuleConstants.Settings.General.SimpleImportLimitOfLines.Name,
+                (int)ModuleConstants.Settings.General.SimpleImportLimitOfLines.DefaultValue);
 
             var blobInfo = await _blobStorageProvider.GetBlobInfoAsync(fileUrl);
 
@@ -33,10 +39,10 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 var error = new ImportDataValidationError() { ErrorCode = ModuleConstants.ValidationErrors.FileNotExisted };
                 errorsList.Add(error);
             }
-            else if (blobInfo.Size > ModuleConstants.Settings.FileMaxSize)
+            else if (blobInfo.Size > fileMaxSize)
             {
                 var error = new ImportDataValidationError() { ErrorCode = ModuleConstants.ValidationErrors.ExceedingFileMaxSize };
-                error.Properties.Add(nameof(ModuleConstants.Settings.FileMaxSize), ModuleConstants.Settings.FileMaxSize.ToString());
+                error.Properties.Add(nameof(fileMaxSize), fileMaxSize.ToString());
                 error.Properties.Add(nameof(blobInfo.Size), blobInfo.Size.ToString());
                 errorsList.Add(error);
             }
@@ -73,6 +79,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 return;
             }
 
+            var importLimitOfLines = _settingsManager.GetValue(ModuleConstants.Settings.General.SimpleImportLimitOfLines.Name,
+                (int)ModuleConstants.Settings.General.SimpleImportLimitOfLines.DefaultValue);
+
             stream.Seek(0, SeekOrigin.Begin);
 
             var streamReader = new StreamReader(stream);
@@ -88,10 +97,10 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 totalCount++;
             }
 
-            if (totalCount > ModuleConstants.Settings.ImportLimitOfLines)
+            if (totalCount > importLimitOfLines)
             {
                 var error = new ImportDataValidationError() { ErrorCode = ModuleConstants.ValidationErrors.ExceedingLineLimits };
-                error.Properties.Add(nameof(ModuleConstants.Settings.ImportLimitOfLines), ModuleConstants.Settings.ImportLimitOfLines.ToString());
+                error.Properties.Add(nameof(importLimitOfLines), importLimitOfLines.ToString());
                 error.Properties.Add("LinesCount", totalCount.ToString());
                 errorsList.Add(error);
             }

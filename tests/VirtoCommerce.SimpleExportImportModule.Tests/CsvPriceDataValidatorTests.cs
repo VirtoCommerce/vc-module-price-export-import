@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Moq;
 using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.Platform.Core.Settings;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Data.Services;
 using Xunit;
@@ -40,7 +41,19 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .ReturnsAsync((BlobInfo)null);
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = new Mock<ISettingsManager>();
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue<int>(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportFileMaxSize.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue);
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue<int>(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportLimitOfLines.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportLimitOfLines.DefaultValue);
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -56,11 +69,23 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize + 1 };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue + 1 };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = new Mock<ISettingsManager>();
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportFileMaxSize.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue);
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportLimitOfLines.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportLimitOfLines.DefaultValue);
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -77,7 +102,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -85,7 +110,19 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = new Mock<ISettingsManager>();
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportFileMaxSize.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue);
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportLimitOfLines.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportLimitOfLines.DefaultValue);
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -100,7 +137,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -108,7 +145,19 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = new Mock<ISettingsManager>();
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportFileMaxSize.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue);
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportLimitOfLines.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportLimitOfLines.DefaultValue);
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -125,7 +174,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -133,7 +182,19 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = new Mock<ISettingsManager>();
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportFileMaxSize.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue);
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportLimitOfLines.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportLimitOfLines.DefaultValue);
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -149,7 +210,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -158,7 +219,19 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = new Mock<ISettingsManager>();
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportFileMaxSize.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue);
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportLimitOfLines.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportLimitOfLines.DefaultValue);
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -177,7 +250,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -185,7 +258,19 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = new Mock<ISettingsManager>();
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportFileMaxSize.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue);
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetValue(It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportLimitOfLines.Name),
+                        It.IsAny<int>()))
+                .Returns((int)ModuleConstants.Settings.General.SimpleImportLimitOfLines.DefaultValue);
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");

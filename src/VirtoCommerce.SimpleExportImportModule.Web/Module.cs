@@ -41,6 +41,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
             serviceCollection.AddTransient<IValidator<ImportProductPrice[]>, ImportProductPricesValidator>();
 
             serviceCollection.AddOptions<SimpleExportOptions>().Bind(Configuration.GetSection("SimpleExportImport:SimpleExport")).ValidateDataAnnotations();
+            serviceCollection.AddOptions<SimpleImportOptions>().Bind(Configuration.GetSection("SimpleExportImport:SimpleImport")).ValidateDataAnnotations();
         }
 
         public void PostInitialize(IApplicationBuilder appBuilder)
@@ -53,9 +54,18 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
             settingsRegistrar.RegisterSettings(ModuleConstants.Settings.General.AllSettings, ModuleInfo.Id);
 
             var settingsManager = appBuilder.ApplicationServices.GetService<ISettingsManager>();
-            var simpleExportImportOptions = appBuilder.ApplicationServices.GetService<IOptions<SimpleExportOptions>>().Value;
+            var simpleExportOptions = appBuilder.ApplicationServices.GetService<IOptions<SimpleExportOptions>>().Value;
+
             settingsManager.SetValue(ModuleConstants.Settings.General.SimpleExportLimitOfLines.Name,
-                simpleExportImportOptions.LimitOfLines ?? ModuleConstants.Settings.General.SimpleExportLimitOfLines.DefaultValue);
+                simpleExportOptions.LimitOfLines ?? ModuleConstants.Settings.General.SimpleExportLimitOfLines.DefaultValue);
+
+            var simpleImportOptions = appBuilder.ApplicationServices.GetService<IOptions<SimpleImportOptions>>().Value;
+
+            settingsManager.SetValue(ModuleConstants.Settings.General.SimpleImportLimitOfLines.Name,
+                simpleImportOptions.LimitOfLines ?? ModuleConstants.Settings.General.SimpleImportLimitOfLines.DefaultValue);
+
+            settingsManager.SetValue(ModuleConstants.Settings.General.SimpleImportFileMaxSize.Name,
+                simpleImportOptions.FileMaxSize ?? ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue);
 
             // register permissions
             var permissionsProvider = appBuilder.ApplicationServices.GetRequiredService<IPermissionsRegistrar>();

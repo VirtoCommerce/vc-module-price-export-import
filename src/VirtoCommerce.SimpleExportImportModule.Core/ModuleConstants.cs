@@ -51,9 +51,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
         {
             public const int PageSize = 50;
 
-            public const long FileMaxSize = MByte;
+            //public const long FileMaxSize = MByte;
 
-            public const long ImportLimitOfLines = 10000;
+            //public const long ImportLimitOfLines = 10000;
 
             public static class General
             {
@@ -65,6 +65,25 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
                     IsHidden = true,
                     DefaultValue = 10000
                 };
+
+                public static SettingDescriptor SimpleImportLimitOfLines { get; } = new SettingDescriptor
+                {
+                    Name = "SimpleExportImport.SimpleImport.LimitOfLines",
+                    GroupName = "SimpleExportImport|SimpleImport",
+                    ValueType = SettingValueType.PositiveInteger,
+                    IsHidden = true,
+                    DefaultValue = 10000
+                };
+
+                public static SettingDescriptor SimpleImportFileMaxSize { get; } = new SettingDescriptor
+                {
+                    Name = "SimpleExportImport.SimpleImport.FileMaxSize",
+                    GroupName = "SimpleExportImport|SimpleImport",
+                    ValueType = SettingValueType.PositiveInteger,
+                    IsHidden = true,
+                    DefaultValue = MByte
+                };
+
 
                 public static IEnumerable<SettingDescriptor> AllSettings
                 {
