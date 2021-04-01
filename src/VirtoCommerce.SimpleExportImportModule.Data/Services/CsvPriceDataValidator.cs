@@ -83,8 +83,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             csvReader.Read();
             csvReader.ReadHeader();
 
-            totalCount++;
-
             while (csvReader.Read())
             {
                 totalCount++;
