@@ -30,32 +30,41 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 autoUpload: true,
                 removeAfterUpload: true,
                 filters: [
-                {
-                    name: 'onlyCsv',
-                    fn: (item) => {
-                        $scope.uploadedFile.name = item.name;
-                        if (!uploader.isHTML5) {
-                            return true;
-                        } else {
-                            let result = /^.*\.(csv)$/.test(item.name);
-                            $scope.fileTypeError = !result;
-                            return result;
+                    {
+                        name: 'sameFile',
+                        fn: (item) => {
+                            if ($scope.uploadedFile.name === item.name) {
+                                return false;
+                            } else {
+                                return true;
+                            }
                         }
-                    }
-                },
-                {
-                    name: 'csvMaxSize',
-                    fn: (item) => {
-                        $scope.uploadedFile.name = item.name;
-                        if (item.size <= maxCsvSize) {
-                            $scope.uploadedFile.size = formatFileSize(item.size);
-                            return true;
-                        } else {
-                            $scope.csvMaxSizeError = true;
-                            return false;
+                    },
+                    {
+                        name: 'onlyCsv',
+                        fn: (item) => {
+                            $scope.uploadedFile.name = item.name;
+                            if (!uploader.isHTML5) {
+                                return true;
+                            } else {
+                                let result = /^.*\.(csv)$/.test(item.name);
+                                $scope.fileTypeError = !result;
+                                return result;
+                            }
                         }
-                    }
-                }]
+                    }, {
+                        name: 'csvMaxSize',
+                        fn: (item) => {
+                            $scope.uploadedFile.name = item.name;
+                            if (item.size <= maxCsvSize) {
+                                $scope.uploadedFile.size = formatFileSize(item.size);
+                                return true;
+                            } else {
+                                $scope.csvMaxSizeError = true;
+                                return false;
+                            }
+                        }
+                    }]
             });
 
             uploader.onWhenAddingFileFailed = () => {
