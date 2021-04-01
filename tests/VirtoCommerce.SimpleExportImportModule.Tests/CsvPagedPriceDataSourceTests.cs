@@ -343,7 +343,5 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         {
             return new CsvPagedPriceDataSourceFactory(GetProductSearchService());
         }
-
-
     }
 }

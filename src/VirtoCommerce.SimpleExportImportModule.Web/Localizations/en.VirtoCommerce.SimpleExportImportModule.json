@@ -38,6 +38,18 @@
           "ignore-unknown-sku": "Ignore unknown SKU",
           "preview-count": "Preview count:"
         }
+      },
+      "import-processing": {
+        "title": "Import progress",
+        "labels": {
+          "start": "Start",
+          "end": "End",
+          "errors": "Error count",
+          "total": "Total count",
+          "created": "Lines created",
+          "updated": "Lines updated",
+          "errors-url": "Errors report download Url:"
+        }
       }
     },
     "commands": {

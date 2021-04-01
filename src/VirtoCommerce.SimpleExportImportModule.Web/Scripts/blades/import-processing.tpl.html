@@ -1,0 +1,40 @@
+<div class="blade-content">
+    <div class="blade-inner">
+        <div class="inner-block">
+            <div class="form">
+                <div class="sub-t">{{blade.notification.description}}</div>
+                <div class="block" ng-if="blade.notification.created || blade.notification.finished">
+                    <p ng-if="blade.notification.created" ng-class="{'no-data': blade.notification.created}" class="text">{{ 'simpleExportImport.blades.import-processing.labels.start' | translate }} — <i class="fa fa-clock-o"></i>&nbsp;{{ blade.notification.created | amParse | date:'mediumTime' }}</p>
+                    <p ng-if="!blade.notification.finished" class="dropdown-content">
+                        <span class="list-bar progress-bar" data-role="progress-bar" data-value="30" style="margin-left: 0"></span>
+                    </p>
+                    <p ng-if="blade.notification.finished" ng-class="{'no-data': blade.notification.finished}" class="text">{{ 'simpleExportImport.blades.import-processing.labels.end' | translate }} — <i class="fa fa-clock-o"></i>&nbsp;{{ blade.notification.finished | amParse | date:'mediumTime' }}</p>
+                </div>
+                <div class="block" ng-if="blade.notification.totalCount || blade.notification.processedCount || blade.notification.errorCount">
+                    <ul class="list __info">
+                        <li class="list-item">
+                            <div class="list-t">{{ 'simpleExportImport.blades.import-processing.labels.total' | translate }}</div>
+                            <div class="list-descr">{{blade.notification.totalCount | number:0}}</div>
+                        </li>
+                        <li class="list-item">
+                            <div class="list-t">{{ 'simpleExportImport.blades.import-processing.labels.created' | translate }}</div>
+                            <div class="list-descr">{{blade.notification.createdCount | number:0}}</div>
+                        </li>
+                        <li class="list-item">
+                            <div class="list-t">{{ 'simpleExportImport.blades.import-processing.labels.updated' | translate }}</div>
+                            <div class="list-descr">{{blade.notification.updatedCount | number:0}}</div>
+                        </li>
+                        <li class="list-item">
+                            <div class="list-t">{{ 'simpleExportImport.blades.import-processing.labels.errors' | translate }}</div>
+                            <div class="list-descr">{{blade.notification.errorCount | number:0}}</div>
+                        </li>
+                        <li class="list-item" ng-if="blade.notification.reportUrl">
+                            <div class="list-t">{{ 'platform.blades.export-main.labels.errors-url' | translate }}</div>
+                            <div class="list-descr"><a href="{{blade.notification.reportUrl}}" target="_blank">{{blade.notification.reportUrl}}</a></div>
+                        </li>
+                    </ul>
+                </div>
+             </div>
+        </div>
+    </div>
+</div>
