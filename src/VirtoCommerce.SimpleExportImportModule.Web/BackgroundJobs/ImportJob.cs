@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Hangfire;
 using Hangfire.Server;
-using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Exceptions;
 using VirtoCommerce.Platform.Core.PushNotifications;
 using VirtoCommerce.Platform.Hangfire;
@@ -16,15 +15,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.BackgroundJobs
     {
         private readonly ICsvPagedPriceDataImporter _dataImporter;
         private readonly IPushNotificationManager _pushNotificationManager;
-        private readonly IBlobStorageProvider _blobStorageProvider;
 
         public ImportJob(ICsvPagedPriceDataImporter dataImporter,
-            IPushNotificationManager pushNotificationManager,
-            IBlobStorageProvider blobStorageProvider)
+            IPushNotificationManager pushNotificationManager)
         {
             _dataImporter = dataImporter;
             _pushNotificationManager = pushNotificationManager;
-            _blobStorageProvider = blobStorageProvider;
+
         }
 
         public async Task ImportBackgroundAsync(ImportDataRequest request, ImportPushNotification pushNotification, IJobCancellationToken jobCancellationToken, PerformContext context)
@@ -33,8 +30,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.BackgroundJobs
 
             try
             {
-                await using var blobStream = _blobStorageProvider.OpenRead(request.FileUrl);
-                await _dataImporter.ImportAsync(blobStream, request,
+                await _dataImporter.ImportAsync(request,
                     progressInfo => ProgressCallback(progressInfo, pushNotification, context),
                     new JobCancellationTokenWrapper(jobCancellationToken));
             }
