@@ -105,7 +105,7 @@
 }
 
 .simple-export-import .p-14 {
-    padding: 14px; 
+    padding: 14px;
 }
 
 .simple-export-import .pl-10 {
@@ -114,4 +114,21 @@
 
 .simple-export-import .bl-1 {
     border-left: 1px solid #E3E7EC;
+}
+
+.simple-export-import .cancel-btn {
+    background: transparent;
+    color: #43b0e6;
+    border: 1px solid #43b0e6;
+    text-shadow: none;
+}
+
+.simple-export-import .cancel-btn:hover {
+    background: #43b0e6;
+    color: #fff;
+}
+
+.simple-export-import.modal-warning {
+    background: #fcb040 !important;
+    color: #fff !important;
 }
