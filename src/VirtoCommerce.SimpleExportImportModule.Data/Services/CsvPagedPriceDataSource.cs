@@ -6,6 +6,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using VirtoCommerce.CatalogModule.Core.Model.Search;
 using VirtoCommerce.CatalogModule.Core.Search;
+using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.PricingModule.Core.Model;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
@@ -94,19 +95,18 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             {
                 var product = products.Results.FirstOrDefault(p => p.Code == record.Sku);
 
-                return new ImportProductPrice
+                var importProductPrice = new ImportProductPrice
                 {
                     ProductId = product?.Id,
                     Sku = record.Sku,
                     Product = product,
-                    Price = new Price
-                    {
-                        ProductId = product?.Id,
-                        MinQuantity = record.MinQuantity,
-                        List = record.ListPrice,
-                        Sale = record.SalePrice
-                    }
+                    Price = AbstractTypeFactory<Price>.TryCreateInstance()
                 };
+                importProductPrice.Price.ProductId = product?.Id;
+                importProductPrice.Price.MinQuantity = record.MinQuantity;
+                importProductPrice.Price.List = record.ListPrice;
+                importProductPrice.Price.Sale = record.SalePrice;
+                return importProductPrice;
             }).ToArray();
 
             return true;

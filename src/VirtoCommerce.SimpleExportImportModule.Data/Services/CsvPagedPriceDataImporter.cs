@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using VirtoCommerce.Platform.Core.Common;
+using VirtoCommerce.PricingModule.Core.Model;
 using VirtoCommerce.PricingModule.Core.Services;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
@@ -35,7 +37,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            var importProgress = new ImportProgressInfo { ProcessedCount = 0, Description = "Import has started" };
+            var importProgress = new ImportProgressInfo { ProcessedCount = 0, CreatedCount = 0, UpdatedCount = 0, Description = "Import has started" };
 
             var dataSource = _dataSourceFactory.Create(stream, ModuleConstants.Settings.PageSize, new ImportConfiguration
             {
@@ -65,6 +67,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
                     try
                     {
+                        var createdPrices = new List<Price>();
+
                         switch (request.ImportMode)
                         {
                             case ImportMode.CreateAndUpdate:
@@ -75,6 +79,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                                     .Except(validationResult.Errors.Select(x => x.AttemptedValue as ImportProductPrice))
                                     .ToArray();
                                 importProgress.ErrorCount += validationResult.Errors.Count;
+                                createdPrices.AddRange(importProductPrices.Select(importProductPrice => importProductPrice.Price));
                                 break;
                             case ImportMode.UpdateOnly:
                                 throw new NotImplementedException();
@@ -82,8 +87,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                                 throw new ArgumentException("Import mode has invalid value", nameof(request));
                         }
 
-                        var prices = importProductPrices.Select(importProductPrice => importProductPrice.Price).ToArray();
-                        await _pricingService.SavePricesAsync(prices);
+                        await _pricingService.SavePricesAsync(createdPrices.ToArray());
+
+                        importProgress.CreatedCount += createdPrices.Count;
                     }
                     catch (Exception e)
                     {

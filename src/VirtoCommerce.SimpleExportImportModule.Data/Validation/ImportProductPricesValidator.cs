@@ -23,7 +23,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
                 var duplicates = importProductPrices
                     .GroupBy(importProductPrice => new { importProductPrice.Sku, importProductPrice.Price.MinQuantity })
                     .SelectMany(group => group.Skip(1));
-                return new ImportProductPriceDuplicateValidator(duplicates);
+                return new ImportProductPriceIsNotDuplicateValidator(duplicates);
             });
             RuleForEach(importProductPrices => importProductPrices).SetValidator(importProductPrices =>
             {
@@ -34,8 +34,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
                     ProductIds = productIds,
                     PriceListIds = pricelistIds
                 }).GetAwaiter().GetResult().Results;
-                return new ImportProductPriceExistsValidator(existingPrices);
+                return new ImportProductPriceNotExistsValidator(existingPrices);
             });
+            RuleForEach(importProductPrices => importProductPrices).SetValidator(importProductPrice => new ImportProductPriceProductExistsValidator());
         }
     }
 }

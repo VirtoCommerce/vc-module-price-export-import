@@ -8,6 +8,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Helpers
             {
                 target.Description = source.Description;
                 target.ProcessedCount = source.ProcessedCount;
+                target.CreatedCount = source.CreatedCount;
+                target.UpdatedCount = source.UpdatedCount;
                 target.TotalCount = source.TotalCount;
                 target.ErrorCount = source.ErrorCount;
                 target.Errors = source.Errors;

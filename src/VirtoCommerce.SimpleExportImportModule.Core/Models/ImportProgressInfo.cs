@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using VirtoCommerce.Platform.Core.Common;
 
@@ -11,8 +12,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Models
         }
 
         public string Description { get; set; }
-
+        
         public int ProcessedCount { get; set; }
+
+        public int CreatedCount { get; set; }
+
+        public int UpdatedCount { get; set; }
 
         public int TotalCount { get; set; }
 

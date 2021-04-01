@@ -17,6 +17,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
 
             public const string AlreadyExistsError = "AlreadyExists";
 
+            public const string ProductMissingError = "ProductMissing";
+
             public const string FileNotExisted = "file-not-existed";
 
             public const string NoData = "no-data";
