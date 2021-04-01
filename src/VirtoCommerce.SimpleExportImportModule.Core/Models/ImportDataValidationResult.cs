@@ -6,8 +6,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Models
     {
         public ImportDataValidationResult()
         {
-            Errors = Array.Empty<string>();
+            Errors = Array.Empty<ImportDataValidationError>();
         }
-        public string[] Errors { get; set; }
+
+        public ImportDataValidationError[] Errors { get; set; }
     }
 }

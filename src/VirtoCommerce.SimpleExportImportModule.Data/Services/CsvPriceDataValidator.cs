@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
+using CsvHelper.Configuration.Attributes;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
@@ -20,17 +23,21 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         }
         public async Task<ImportDataValidationResult> ValidateAsync(string fileUrl)
         {
-            var errorsList = new List<string>();
+            var errorsList = new List<ImportDataValidationError>();
 
             var blobInfo = await _blobStorageProvider.GetBlobInfoAsync(fileUrl);
 
             if (blobInfo == null)
             {
-                errorsList.Add(ModuleConstants.ValidationErrors.FileNotExisted);
+                var error = new ImportDataValidationError() { ErrorCode = ModuleConstants.ValidationErrors.FileNotExisted };
+                errorsList.Add(error);
             }
             else if (blobInfo.Size > ModuleConstants.Settings.FileMaxSize)
             {
-                errorsList.Add(ModuleConstants.ValidationErrors.ExceedingFileMaxSize);
+                var error = new ImportDataValidationError() { ErrorCode = ModuleConstants.ValidationErrors.ExceedingFileMaxSize };
+                error.Properties.Add(nameof(ModuleConstants.Settings.FileMaxSize), ModuleConstants.Settings.FileMaxSize.ToString());
+                error.Properties.Add(nameof(blobInfo.Size), blobInfo.Size.ToString());
+                errorsList.Add(error);
             }
             else
             {
@@ -51,9 +58,16 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             return result;
         }
 
-        private static void ValidateLineLimit(StreamReader streamReader, CsvReader csvReader, List<string> errorsList)
+        private static void ValidateLineLimit(StreamReader streamReader, CsvReader csvReader, List<ImportDataValidationError> errorsList)
         {
-            if (errorsList.Count != 0)
+            var notCompatibleErrors = new[]
+            {
+                ModuleConstants.ValidationErrors.FileNotExisted,
+                ModuleConstants.ValidationErrors.ExceedingFileMaxSize,
+                ModuleConstants.ValidationErrors.NoData,
+            };
+
+            if (errorsList.Any(x => notCompatibleErrors.Contains(x.ErrorCode)))
             {
                 return;
             }
@@ -74,51 +88,82 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             if (totalCount > ModuleConstants.Settings.ImportLimitOfLines)
             {
-                errorsList.Add(ModuleConstants.ValidationErrors.ExceedingLineLimits);
+                var error = new ImportDataValidationError() { ErrorCode = ModuleConstants.ValidationErrors.ExceedingLineLimits };
+                error.Properties.Add(nameof(ModuleConstants.Settings.ImportLimitOfLines), ModuleConstants.Settings.ImportLimitOfLines.ToString());
+                error.Properties.Add("LinesCount", totalCount.ToString());
+                errorsList.Add(error);
             }
         }
 
-        private static void ValidateRequiredColumns(StreamReader streamReader, CsvReader csvReader, List<string> errorsList)
+        private static void ValidateRequiredColumns(StreamReader streamReader, CsvReader csvReader, List<ImportDataValidationError> errorsList)
         {
-            if (errorsList.Count != 0)
+            var notCompatibleErrors = new[]
+            {
+                ModuleConstants.ValidationErrors.FileNotExisted,
+                ModuleConstants.ValidationErrors.ExceedingFileMaxSize,
+                ModuleConstants.ValidationErrors.WrongDelimiter,
+                ModuleConstants.ValidationErrors.NoData,
+            };
+
+            if (errorsList.Any(x => notCompatibleErrors.Contains(x.ErrorCode)))
             {
                 return;
             }
 
             SeekStreamReaderToStart(streamReader);
 
-            try
+            csvReader.Read();
+            csvReader.ReadHeader();
+
+            var existedColumns = csvReader.Context.HeaderRecord;
+
+            var requiredColumns = typeof(CsvPrice).GetProperties()
+                .Select(p =>
+                    ((NameAttribute)Attribute.GetCustomAttribute(p, typeof(NameAttribute)))?.Names.First() ??
+                    p.Name).ToArray();
+
+            var missedColumns = requiredColumns.Except(existedColumns).ToArray();
+
+            if (missedColumns.Length > 0)
             {
-                csvReader.Read();
-                csvReader.ReadHeader();
-                csvReader.ValidateHeader<CsvPrice>();
-            }
-            catch (ValidationException)
-            {
-                errorsList.Add(ModuleConstants.ValidationErrors.MissingRequiredColumns);
+                var error = new ImportDataValidationError() { ErrorCode = ModuleConstants.ValidationErrors.MissingRequiredColumns };
+                error.Properties.Add(nameof(missedColumns), string.Join(", ", missedColumns));
+                errorsList.Add(error);
             }
         }
 
-        private static async Task ValidateDelimiterAndDataExists(StreamReader streamReader, string delimiter, List<string> errorsList)
+        private static async Task ValidateDelimiterAndDataExists(StreamReader streamReader, string delimiter, List<ImportDataValidationError> errorsList)
         {
+
+            var notCompatibleErrors = new[]
+            {
+                ModuleConstants.ValidationErrors.FileNotExisted,
+                ModuleConstants.ValidationErrors.ExceedingFileMaxSize,
+            };
+
+            if (errorsList.Any(x => notCompatibleErrors.Contains(x.ErrorCode)))
+            {
+                return;
+            }
+
             var headerLine = await streamReader.ReadLineAsync();
 
             if (string.IsNullOrWhiteSpace(headerLine))
             {
-                errorsList.Add(ModuleConstants.ValidationErrors.NoData);
+                errorsList.Add(new ImportDataValidationError { ErrorCode = ModuleConstants.ValidationErrors.NoData });
             }
             else
             {
                 if (!headerLine.Contains(delimiter))
                 {
-                    errorsList.Add(ModuleConstants.ValidationErrors.WrongDelimiter);
+                    errorsList.Add(new ImportDataValidationError { ErrorCode = ModuleConstants.ValidationErrors.WrongDelimiter });
                 }
 
                 var fistDataLine = await streamReader.ReadLineAsync();
 
                 if (string.IsNullOrWhiteSpace(fistDataLine))
                 {
-                    errorsList.Add(ModuleConstants.ValidationErrors.NoData);
+                    errorsList.Add(new ImportDataValidationError { ErrorCode = ModuleConstants.ValidationErrors.NoData });
                 }
             }
         }

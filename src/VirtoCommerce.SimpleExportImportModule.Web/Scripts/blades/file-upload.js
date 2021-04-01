@@ -81,8 +81,8 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 blade.csvFileUrl = asset[0].relativeUrl;
 
                 importResources.validate({ fileUrl: blade.csvFileUrl }, (data) => {
-                $scope.csvValidationErrors = data.errors;
-                $scope.internalCsvError = !!$scope.csvValidationErrors.length;
+                    $scope.csvValidationErrors = data.errors;
+                    $scope.internalCsvError = !!$scope.csvValidationErrors.length;
                 }, (error) => { bladeNavigationService.setError('Error ' + error.status, blade); });
 
             };
@@ -128,9 +128,10 @@ angular.module('virtoCommerce.simpleExportImportModule')
             bladeNavigationService.showBlade(newBlade, blade);
         }
 
-        $scope.translateErrorCode = (errorCode) => {
-            var translateKey = 'simpleExportImport.validation-errors.' + errorCode;
-            var result = $translate.instant(translateKey);
+            $scope.translateErrorCode = (error
+            ) => {
+            var translateKey = 'simpleExportImport.validation-errors.' + error.errorCode;
+            var result = $translate.instant(translateKey, error.properties);
             return result === translateKey ? errorCode : result;
         }
 
