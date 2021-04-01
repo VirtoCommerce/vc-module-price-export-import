@@ -22,14 +22,16 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
         private readonly IBlobStorageProvider _blobStorageProvider;
         private readonly IPushNotificationManager _pushNotificationManager;
         private readonly ICsvPagedPriceDataSourceFactory _csvPagedPriceDataSourceFactory;
+        private readonly ICsvPriceDataValidator _csvPriceDataValidator;
 
-        public SimpleImportController(IUserNameResolver userNameResolver, IBlobStorageProvider blobStorageProvider,
+        public SimpleImportController(IUserNameResolver userNameResolver, IBlobStorageProvider blobStorageProvider, ICsvPriceDataValidator csvPriceDataValidator,
             IPushNotificationManager pushNotificationManager, ICsvPagedPriceDataSourceFactory csvPagedPriceDataSourceFactory)
         {
             _userNameResolver = userNameResolver;
             _blobStorageProvider = blobStorageProvider;
             _pushNotificationManager = pushNotificationManager;
             _csvPagedPriceDataSourceFactory = csvPagedPriceDataSourceFactory;
+            _csvPriceDataValidator = csvPriceDataValidator;
         }
 
         [HttpPost]
@@ -72,7 +74,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
                 return BadRequest("Blob with the such url does not exist.");
             }
 
-            var blobStream = _blobStorageProvider.OpenRead(request.FileUrl);
+            await using var blobStream = _blobStorageProvider.OpenRead(request.FileUrl);
             using var csvDataSource = _csvPagedPriceDataSourceFactory.Create(blobStream, 10);
 
             var result = new ImportDataPreview
@@ -83,6 +85,20 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
             await csvDataSource.FetchAsync();
 
             result.Results = csvDataSource.Items;
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("validate")]
+        public async Task<ActionResult<ImportDataValidationResult>> Validate([FromBody] ImportDataValidationRequest request)
+        {
+            if (request.FileUrl.IsNullOrEmpty())
+            {
+                return BadRequest($"{nameof(request.FileUrl)} can not be null or empty.");
+            }
+
+            var result = await _csvPriceDataValidator.ValidateAsync(request.FileUrl);
 
             return Ok(result);
         }

@@ -72,7 +72,15 @@
           "description": "High value may cause slow performance"
         }
       }
-    }
+    },
+    "validation-errors": {
+      "file-not-existed":  "The file does not exist.",
+      "exceeding-file-max-size": "The file size is too large. Try to upload another one.",
+      "wrong-delimiter": "Wrong delimiter. Should be used ';'.",
+      "exceeding-line-limits": "The count of lines exceeds max allowed limit in 10000 lines.",
+      "missing-required-columns": "Some required columns is missed. Correct file and try upload again.",
+      "no-data": "File has no data." 
+    } 
   },
   "permissions": {
     "import:access": "Import pricing data"

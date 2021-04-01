@@ -16,9 +16,9 @@ using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
 using VirtoCommerce.SimpleExportImportModule.Data.Repositories;
 using VirtoCommerce.SimpleExportImportModule.Data.Services;
+using VirtoCommerce.SimpleExportImportModule.Data.Validation;
 using featureManagementCore = VirtoCommerce.FeatureManagementModule.Core;
 using simpleExportImportCore = VirtoCommerce.SimpleExportImportModule.Core;
-using VirtoCommerce.SimpleExportImportModule.Data.Validation;
 
 namespace VirtoCommerce.SimpleExportImportModule.Web
 {
@@ -31,13 +31,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
         public void Initialize(IServiceCollection serviceCollection)
         {
             // database initialization
-            serviceCollection.AddDbContext<VirtoCommerceSimpleExportImportModuleDbContext>((provider, options) =>
-            {
-                var configuration = provider.GetRequiredService<IConfiguration>();
-                options.UseSqlServer(configuration.GetConnectionString(ModuleInfo.Id) ?? configuration.GetConnectionString("VirtoCommerce"));
-            });
+            var connectionString = Configuration.GetConnectionString("VirtoCommerce.SimpleExportImport") ?? Configuration.GetConnectionString("VirtoCommerce");
+            serviceCollection.AddDbContext<VirtoCommerceSimpleExportImportModuleDbContext>(options => options.UseSqlServer(connectionString));
 
             serviceCollection.AddTransient<ICsvPagedPriceDataSourceFactory, CsvPagedPriceDataSourceFactory>();
+            serviceCollection.AddTransient<ICsvPriceDataValidator, CsvPriceDataValidator>();
             serviceCollection.AddTransient<ICsvPagedPriceDataImporter, CsvPagedPriceDataImporter>();
 
             serviceCollection.AddTransient<IValidator<ImportProductPrice[]>, ImportProductPricesValidator>();
