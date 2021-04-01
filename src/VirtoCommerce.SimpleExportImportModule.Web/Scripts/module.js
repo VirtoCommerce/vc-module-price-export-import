@@ -7,25 +7,16 @@ if (AppDependencies !== undefined) {
 
 angular.module(moduleName, [])
     .run(
-        ['platformWebApp.toolbarService', 'platformWebApp.bladeNavigationService', 'virtoCommerce.featureManagerSubscriber',
-            function (toolbarService, bladeNavigationService, featureManagerSubscriber) {
+        ['virtoCommerce.featureManagerSubscriber', 'platformWebApp.widgetService', 'platformWebApp.authService',
+            function (featureManagerSubscriber, widgetService, authService) {
                 featureManagerSubscriber.onLoginStatusChanged('SimpleExportImport', () => {
-                    toolbarService.register({
-                        name: "platform.commands.import", icon: 'fa fa-download',
-                        executeMethod: function (blade) {
-                            var newBlade = {
-                                id: 'simpleImportFileUpload',
-                                title: 'simpleExportImport.blades.file-upload.title',
-                                subtitle: 'simpleExportImport.blades.file-upload.subtitle',
-                                priceListId: blade.currentEntityId,
-                                controller: 'virtoCommerce.simpleExportImportModule.fileUploadController',
-                                template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/file-upload.tpl.html'
-                            };
-                            bladeNavigationService.showBlade(newBlade, blade);
-                        },
-                        canExecuteMethod: function () { return true; },
-                        index: 5
-                    }, 'virtoCommerce.pricingModule.pricelistItemListController');
+
+                    widgetService.registerWidget({
+                        isVisible: function (blade) { return blade.controller === 'virtoCommerce.pricingModule.pricelistDetailController' && authService.checkPermission('pricing:read'); },
+                        controller: 'virtoCommerce.simpleExportImportModule.pricesWidgetController',
+                        template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/widgets/pricesWidget.tpl.html'
+                    }, 'pricelistDetail');
+
                 });
             }
         ]);
