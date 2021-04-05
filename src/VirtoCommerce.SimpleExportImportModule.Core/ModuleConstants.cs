@@ -5,11 +5,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
 {
     public static class ModuleConstants
     {
-        public const long Byte = 8;
+        public const int Byte = 8;
 
-        public const long KByte = 1024 * Byte;
+        public const int KByte = 1024 * Byte;
 
-        public const long MByte = 1024 * KByte;
+        public const int MByte = 1024 * KByte;
 
         public static class ValidationErrors
         {

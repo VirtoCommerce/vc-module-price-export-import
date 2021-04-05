@@ -29,8 +29,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         {
             var errorsList = new List<ImportDataValidationError>();
 
-            var fileMaxSize = _settingsManager.GetValue(ModuleConstants.Settings.General.SimpleImportLimitOfLines.Name,
-                (int)ModuleConstants.Settings.General.SimpleImportLimitOfLines.DefaultValue);
+            var fileMaxSize = _settingsManager.GetValue(ModuleConstants.Settings.General.SimpleImportFileMaxSize.Name,
+                (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue);
 
             var blobInfo = await _blobStorageProvider.GetBlobInfoAsync(fileUrl);
 
@@ -65,7 +65,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             return result;
         }
 
-        private static void ValidateLineLimit(Stream stream, Configuration csvConfiguration, List<ImportDataValidationError> errorsList)
+        private void ValidateLineLimit(Stream stream, Configuration csvConfiguration, List<ImportDataValidationError> errorsList)
         {
             var notCompatibleErrors = new[]
             {
