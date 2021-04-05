@@ -35,7 +35,6 @@
           "create-new-only": "Create new only",
           "update-existing-only": "Update existing only",
           "create-and-update": "Create & update",
-          "ignore-unknown-sku": "Ignore unknown SKU",
           "preview-count": "Preview count:"
         }
       },
@@ -92,7 +91,7 @@
       "exceeding-line-limits": "The import limit is {{ importLimitOfLines }} lines but your file contains {{ linesCount }} lines. The file can not be imported.",
       "missing-required-columns": "The required columns: \"{{ missedColumns }}\" are not in the file. The file can not be imported.",
       "no-data": "File has no data."
-    } 
+    }
   },
   "permissions": {
     "import:access": "Import pricing data"
