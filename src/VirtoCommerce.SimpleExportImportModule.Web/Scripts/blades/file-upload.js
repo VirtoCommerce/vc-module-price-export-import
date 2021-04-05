@@ -8,8 +8,6 @@ angular.module('virtoCommerce.simpleExportImportModule')
         const maxCsvSize = oneMb;
         blade.headIcon = 'fas fa-file-alt';
         blade.isLoading = false;
-        $scope.showUploadResult = false;
-        $scope.internalCsvError = false;
         $scope.uploadedFile = {};
 
         blade.toolbarCommands = [{
@@ -22,6 +20,8 @@ angular.module('virtoCommerce.simpleExportImportModule')
         }];
 
         function initialize () {
+            resetState();
+
             let uploader = $scope.uploader = new FileUploader({
                 scope: $scope,
                 headers: {Accept: 'application/json'},
@@ -73,10 +73,6 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 if (blade.csvFileUrl) {
                     $scope.deleteUploadedItem();
                 }
-
-                $scope.showUploadResult = false;
-                $scope.fileTypeError = false;
-                $scope.csvMaxSizeError = false;
             };
 
             uploader.onSuccessItem = (_, asset) => {
@@ -109,11 +105,12 @@ angular.module('virtoCommerce.simpleExportImportModule')
         }
 
         $scope.deleteUploadedItem = () => {
-            $scope.showUploadResult = false;
             assetsApi.remove({urls: [blade.csvFileUrl]},
-                () => {},
-                (error) => bladeNavigationService.setError('Error ' + error.status, blade));
-            blade.csvFileUrl = null;
+                () => { },
+                (error) => bladeNavigationService.setError('Error ' + error.status, blade)
+            );
+
+            resetState();
         }
 
         $scope.showPreview = () => {
@@ -131,12 +128,22 @@ angular.module('virtoCommerce.simpleExportImportModule')
             bladeNavigationService.showBlade(newBlade, blade);
         }
 
-            $scope.translateErrorCode = (error
-            ) => {
+        $scope.translateErrorCode = (error) => {
             var translateKey = 'simpleExportImport.validation-errors.' + error.errorCode;
             var result = $translate.instant(translateKey, error.properties);
             return result === translateKey ? errorCode : result;
         }
+
+        function resetState() {
+            $scope.uploadedFile = {};
+            blade.csvFileUrl = null;
+
+            $scope.showUploadResult = false;
+            $scope.fileTypeError = false;
+            $scope.csvMaxSizeError = false;
+            $scope.internalCsvError = false;
+        }
+
 
         function formatFileSize(bytes, decimals = 2) {
             if (bytes === 0) return '0 Bytes';
