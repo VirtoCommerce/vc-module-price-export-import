@@ -51,10 +51,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
         {
             public const int PageSize = 50;
 
-            //public const long FileMaxSize = MByte;
-
-            //public const long ImportLimitOfLines = 10000;
-
             public static class General
             {
                 public static SettingDescriptor SimpleExportLimitOfLines { get; } = new SettingDescriptor
@@ -91,7 +87,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
                     {
                         return new List<SettingDescriptor>
                                {
-                                   SimpleExportLimitOfLines
+                                   SimpleExportLimitOfLines,
+                                   SimpleImportLimitOfLines,
+                                   SimpleImportFileMaxSize
                                };
                     }
                 }
