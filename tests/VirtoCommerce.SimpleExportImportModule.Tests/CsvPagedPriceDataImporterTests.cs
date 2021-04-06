@@ -164,7 +164,60 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.Equal(0, errorProgressInfo?.UpdatedCount);
             Assert.Equal(1, errorProgressInfo?.ErrorCount);
             Assert.NotNull(errorProgressInfo?.Description);
-            Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
+            Assert.StartsWith("Import completed with errors", errorProgressInfo.Description);
+        }
+
+        [Fact]
+        public async Task ImportAsync_ValidPrices_WillReportSuccess()
+        {
+            // Arrange
+            var request = new ImportDataRequest { ImportMode = ImportMode.CreateOnly, PricelistId = "TestId" };
+            var cancellationTokenWrapper = GetCancellationTokenWrapper();
+            var progressInfos = new List<ImportProgressInfo>();
+            void ProgressCallback(ImportProgressInfo progressInfo)
+            {
+                progressInfos.Add((ImportProgressInfo) progressInfo.Clone());
+            }
+            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, new [] { CsvRecords.First() }));
+
+            // Act
+            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+
+            // Assert
+            var successProgressInfo = progressInfos.LastOrDefault();
+            Assert.Equal(1, successProgressInfo?.ProcessedCount);
+            Assert.Equal(1, successProgressInfo?.CreatedCount);
+            Assert.Equal(0, successProgressInfo?.UpdatedCount);
+            Assert.Equal(0, successProgressInfo?.ErrorCount);
+            Assert.NotNull(successProgressInfo?.Description);
+            Assert.StartsWith("Import completed", successProgressInfo.Description);
+            Assert.DoesNotContain("error", successProgressInfo.Description);
+        }
+
+        [Fact]
+        public async Task ImportAsync_InvalidPrices_WillIgnore()
+        {
+            // Arrange
+            var request = new ImportDataRequest { ImportMode = ImportMode.CreateOnly, PricelistId = "TestId" };
+            var cancellationTokenWrapper = GetCancellationTokenWrapper();
+            var progressInfos = new List<ImportProgressInfo>();
+            void ProgressCallback(ImportProgressInfo progressInfo)
+            {
+                progressInfos.Add((ImportProgressInfo) progressInfo.Clone());
+            }
+            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
+
+            // Act
+            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+
+            // Assert
+            var successProgressInfo = progressInfos.LastOrDefault();
+            Assert.Equal(3, successProgressInfo?.ProcessedCount);
+            Assert.Equal(1, successProgressInfo?.CreatedCount);
+            Assert.Equal(0, successProgressInfo?.UpdatedCount);
+            Assert.Equal(2, successProgressInfo?.ErrorCount);
+            Assert.NotNull(successProgressInfo?.Description);
+            Assert.StartsWith("Import completed with errors", successProgressInfo.Description);
         }
 
         private static CancellationTokenWrapper GetCancellationTokenWrapper()
@@ -204,8 +257,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                     {
                         new Price
                         {
-                            PricelistId = "TestId1",
-                            ProductId = "TestId1",
+                            PricelistId = "TestId",
+                            ProductId = "TestId2",
                             MinQuantity = 1
                         },
                     }
