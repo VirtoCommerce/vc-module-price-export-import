@@ -30,7 +30,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             var errorsList = new List<ImportDataValidationError>();
 
             var fileMaxSize = _settingsManager.GetValue(ModuleConstants.Settings.General.ImportFileMaxSize.Name,
-                (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue);
+                (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue) * ModuleConstants.MByte;
 
             var blobInfo = await _blobStorageProvider.GetBlobInfoAsync(fileUrl);
 

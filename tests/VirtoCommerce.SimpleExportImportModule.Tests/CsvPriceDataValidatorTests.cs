@@ -59,7 +59,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue + 1 };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue * ModuleConstants.MByte + 1 };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -80,11 +80,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task Validate_FileWithoutError_ReturnEmptyErrors()
         {
             // Arrange
-            var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
-
-            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue };
-            blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(blobInfo));
+            var blobStorageProviderMoq = GetBlobStorageProviderMoq();
 
             var stream = TestHelper.GetStream(CsvFileContentWithoutError);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
@@ -101,15 +97,22 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.Empty(result.Errors);
         }
 
+        private static Mock<IBlobStorageProvider> GetBlobStorageProviderMoq()
+        {
+            var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
+
+            var blobInfo = new BlobInfo()
+            { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue * ModuleConstants.MByte };
+            blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult(blobInfo));
+            return blobStorageProviderMoq;
+        }
+
         [Fact]
         public async Task Validate_WongDelimiter_ReturnErrorCode()
         {
             // Arrange
-            var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
-
-            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue };
-            blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(blobInfo));
+            var blobStorageProviderMoq = GetBlobStorageProviderMoq();
 
             var stream = TestHelper.GetStream(CsvFileWithWrongDelimiter);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
@@ -132,11 +135,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task Validate_WrongHeader_ReturnErrorCode()
         {
             // Arrange
-            var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
-
-            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue };
-            blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(blobInfo));
+            var blobStorageProviderMoq = GetBlobStorageProviderMoq();
 
             var stream = TestHelper.GetStream(CsvFileWithWrongHeader);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
@@ -158,11 +157,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task Validate_ExceedingLineLimits_ReturnErrorCode()
         {
             // Arrange
-            var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
-
-            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue };
-            blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(blobInfo));
+            var blobStorageProviderMoq = GetBlobStorageProviderMoq();
 
             var records = TestHelper.GetArrayOfSameRecords(CsvRecord, ModuleConstants.Settings.ImportLimitOfLines + 1);
             var stream = TestHelper.GetStream(TestHelper.GetCsv(records, CsvHeader));
@@ -188,11 +183,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task Validate_NoData_ReturnErrorCode(string csv)
         {
             // Arrange
-            var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
-
-            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue };
-            blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(blobInfo));
+            var blobStorageProviderMoq = GetBlobStorageProviderMoq();
 
             var stream = TestHelper.GetStream(csv);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))

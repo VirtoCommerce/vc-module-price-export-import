@@ -75,7 +75,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
                     GroupName = "SimpleExportImport|Import",
                     ValueType = SettingValueType.PositiveInteger,
                     IsHidden = true,
-                    DefaultValue = MByte
+                    DefaultValue = 1 // MB
                 };
 
 
