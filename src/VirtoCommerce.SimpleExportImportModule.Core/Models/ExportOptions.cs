@@ -1,6 +1,6 @@
 namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 {
-    public class SimpleExportOptions
+    public class ExportOptions
     {
         public int? LimitOfLines { get; set; }
     }

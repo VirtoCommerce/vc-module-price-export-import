@@ -29,8 +29,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         {
             var errorsList = new List<ImportDataValidationError>();
 
-            var fileMaxSize = _settingsManager.GetValue(ModuleConstants.Settings.General.SimpleImportFileMaxSize.Name,
-                (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue);
+            var fileMaxSize = _settingsManager.GetValue(ModuleConstants.Settings.General.ImportFileMaxSize.Name,
+                (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue);
 
             var blobInfo = await _blobStorageProvider.GetBlobInfoAsync(fileUrl);
 
@@ -79,8 +79,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 return;
             }
 
-            var importLimitOfLines = _settingsManager.GetValue(ModuleConstants.Settings.General.SimpleImportLimitOfLines.Name,
-                (int)ModuleConstants.Settings.General.SimpleImportLimitOfLines.DefaultValue);
+            var importLimitOfLines = _settingsManager.GetValue(ModuleConstants.Settings.General.ImportLimitOfLines.Name,
+                (int)ModuleConstants.Settings.General.ImportLimitOfLines.DefaultValue);
 
             stream.Seek(0, SeekOrigin.Begin);
 

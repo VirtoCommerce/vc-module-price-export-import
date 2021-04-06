@@ -59,7 +59,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue + 1 };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue + 1 };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -82,7 +82,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -107,7 +107,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -134,7 +134,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -160,7 +160,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -190,7 +190,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
@@ -216,17 +216,17 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             settingsManagerMoq.Setup(x =>
                     x.GetObjectSettingAsync(
-                        It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportFileMaxSize.Name),
+                        It.Is<string>(x => x == ModuleConstants.Settings.General.ImportFileMaxSize.Name),
                         null, null))
                 .ReturnsAsync(new ObjectSettingEntry()
-                { Value = ModuleConstants.Settings.General.SimpleImportFileMaxSize.DefaultValue });
+                { Value = ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue });
 
             settingsManagerMoq.Setup(x =>
                     x.GetObjectSettingAsync(
-                        It.Is<string>(x => x == ModuleConstants.Settings.General.SimpleImportLimitOfLines.Name),
+                        It.Is<string>(x => x == ModuleConstants.Settings.General.ImportLimitOfLines.Name),
                         null, null))
                 .ReturnsAsync(new ObjectSettingEntry()
-                { Value = ModuleConstants.Settings.General.SimpleImportLimitOfLines.DefaultValue });
+                { Value = ModuleConstants.Settings.General.ImportLimitOfLines.DefaultValue });
             return settingsManagerMoq;
         }
     }

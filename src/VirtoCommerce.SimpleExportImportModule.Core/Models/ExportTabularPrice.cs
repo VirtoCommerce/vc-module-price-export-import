@@ -3,7 +3,7 @@ using VirtoCommerce.PricingModule.Data.ExportImport;
 
 namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 {
-    public class SimpleExportTabularPrice : TabularPrice
+    public class ExportTabularPrice : TabularPrice
     {
         public string Code { get; set; }
         public DateTime? ModifiedDate { get; set; }
