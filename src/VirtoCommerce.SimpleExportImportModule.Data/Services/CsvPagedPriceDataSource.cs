@@ -31,7 +31,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             _streamReader = new StreamReader(stream);
 
             _configuration = configuration;
-            _configuration.ReadingExceptionOccurred = ex => false;
             _csvReader = new CsvReader(_streamReader, configuration);
 
             PageSize = pageSize;
