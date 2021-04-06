@@ -53,6 +53,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var dataSource = _dataSourceFactory.Create(stream, ModuleConstants.Settings.PageSize, new ImportConfiguration
             {
+                ReadingExceptionOccurred = exception =>
+                {
+                    HandleError(progressCallback, importProgress);
+                    return false;
+                },
                 BadDataFound = context => HandleError(progressCallback, importProgress),
                 MissingFieldFound = (headerNames, index, context) => HandleError(progressCallback, importProgress)
             });
@@ -79,14 +84,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
                     try
                     {
+                        var validationResult = await _importProductPricesValidator.ValidateAsync(importProductPrices);
                         var createdPrices = new List<Price>();
-
                         switch (request.ImportMode)
                         {
                             case ImportMode.CreateAndUpdate:
                                 throw new NotImplementedException();
                             case ImportMode.CreateOnly:
-                                var validationResult = await _importProductPricesValidator.ValidateAsync(importProductPrices);
                                 var invalidImportProductPrices = validationResult.Errors.Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
                                 importProgress.ErrorCount += invalidImportProductPrices.Length;
                                 importProductPrices = importProductPrices.Except(invalidImportProductPrices).ToArray();

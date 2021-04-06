@@ -81,7 +81,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
-            var stream = await TestHelper.GetStream(CsvFileContentWithoutError);
+            var stream = TestHelper.GetStream(CsvFileContentWithoutError);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
@@ -104,7 +104,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
-            var stream = await TestHelper.GetStream(CsvFileWithWrongDelimiter);
+            var stream = TestHelper.GetStream(CsvFileWithWrongDelimiter);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
@@ -129,7 +129,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
-            var stream = await TestHelper.GetStream(CsvFileWithWrongHeader);
+            var stream = TestHelper.GetStream(CsvFileWithWrongHeader);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
@@ -154,7 +154,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                 .Returns(Task.FromResult(blobInfo));
 
             var records = TestHelper.GetArrayOfSameRecords(CsvRecord, ModuleConstants.Settings.ImportLimitOfLines + 1);
-            var stream = await TestHelper.GetStream(TestHelper.GetCsv(records, CsvHeader));
+            var stream = TestHelper.GetStream(TestHelper.GetCsv(records, CsvHeader));
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
@@ -181,7 +181,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
-            var stream = await TestHelper.GetStream(csv);
+            var stream = TestHelper.GetStream(csv);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
