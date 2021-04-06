@@ -89,7 +89,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
         blade.refresh = function () {
             blade.isLoading = true;
 
-            settings.getValues({ id: 'SimpleExportImport.SimpleExport.LimitOfLines' }, (value) => {
+            settings.getValues({ id: 'SimpleExportImport.Export.LimitOfLines' }, (value) => {
                 $scope.exportLimit = value[0];
             });
 

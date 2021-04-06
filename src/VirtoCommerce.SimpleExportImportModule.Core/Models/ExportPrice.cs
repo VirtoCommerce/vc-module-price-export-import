@@ -4,7 +4,7 @@ using VirtoCommerce.PricingModule.Data.ExportImport;
 
 namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 {
-    public class ExportExportablePrice : ExportablePrice
+    public class ExportPrice : ExportablePrice
     {
         public override ExportablePrice FromModel(Price source)
         {

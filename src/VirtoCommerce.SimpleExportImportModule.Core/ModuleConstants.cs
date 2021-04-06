@@ -5,9 +5,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
 {
     public static class ModuleConstants
     {
-        public const int Byte = 8;
-
-        public const int KByte = 1024 * Byte;
+        public const int KByte = 1024;
 
         public const int MByte = 1024 * KByte;
 

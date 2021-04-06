@@ -48,7 +48,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
         {
             // prices
             AbstractTypeFactory<TabularPrice>.OverrideType<TabularPrice, ExportTabularPrice>();
-            AbstractTypeFactory<ExportablePrice>.OverrideType<ExportablePrice, ExportExportablePrice>();
+            AbstractTypeFactory<ExportablePrice>.OverrideType<ExportablePrice, ExportPrice>();
 
             var settingsRegistrar = appBuilder.ApplicationServices.GetRequiredService<ISettingsRegistrar>();
             settingsRegistrar.RegisterSettings(ModuleConstants.Settings.General.AllSettings, ModuleInfo.Id);
