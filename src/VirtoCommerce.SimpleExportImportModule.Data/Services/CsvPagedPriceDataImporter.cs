@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CsvHelper;
 using FluentValidation;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
@@ -51,6 +52,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             await using var stream = _blobStorageProvider.OpenRead(request.FileUrl);
 
+            await using var importReporterStream = _blobStorageProvider.OpenWrite(getReportFileName(request.FileUrl));
+
+            var csvConfiguration = new ImportConfiguration();
+
+            var importReporter = new CsvPriceImportReporter(importReporterStream, csvConfiguration);
+
             cancellationToken.ThrowIfCancellationRequested();
             
             var importProgress = new ImportProgressInfo { ProcessedCount = 0, CreatedCount = 0, UpdatedCount = 0, Description = "Import has started" };
@@ -62,8 +69,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                     HandleError(progressCallback, importProgress);
                     return false;
                 },
-                BadDataFound = context => HandleError(progressCallback, importProgress),
-                MissingFieldFound = (headerNames, index, context) => HandleError(progressCallback, importProgress)
+                BadDataFound = context => HandleBadDataError(progressCallback, importProgress, importReporter, context),
+                MissingFieldFound = (headerNames, index, context) => HandleMissedColumnError(progressCallback, importProgress, importReporter, context, headerNames)
             });
 
             importProgress.TotalCount = dataSource.GetTotalCount();
@@ -148,7 +155,20 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 var completedMessage = importProgress.ErrorCount > 0 ? "Import completed with errors" : "Import completed";
                 importProgress.Description = $"{completedMessage}: {string.Format(importDescription, importProgress.ProcessedCount, importProgress.TotalCount)}";
                 progressCallback(importProgress);
+
             }
+        }
+
+        private static string getReportFileName(string fileUrl)
+        {
+            var uri = new Uri(fileUrl);
+            var fileName = uri.Segments.Last();
+            var fileExtension = Path.GetExtension(fileName);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+            var reportFileName = $"{fileNameWithoutExtension}_report.{fileExtension}";
+            var result = fileUrl.Replace(fileName, reportFileName);
+
+            return result;
         }
 
         private static void ValidateParameters(ImportDataRequest request, Action<ImportProgressInfo> progressCallback, ICancellationToken cancellationToken)
@@ -175,6 +195,30 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             }
             importProgress.ErrorCount++;
             progressCallback(importProgress);
+        }
+
+        private static async void HandleBadDataError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, CsvPriceImportReporter reporter, ReadingContext context)
+        {
+            var importError = new ImportError { Error = "This row has invalid data", RawRow = context.RawRecord };
+            await reporter.WriteAsync(importError);
+            HandleError(progressCallback, importProgress);
+        }
+
+        private static async void HandleMissedColumnError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, CsvPriceImportReporter reporter, ReadingContext context, string[] headerNames)
+        {
+            string error;
+
+            if (headerNames.Length == 1)
+            {
+                error = $"Column {headerNames.First()} is required";
+            } else
+            {
+                error = $"Columns {String.Join(',', headerNames)} are required";
+            }
+
+            var importError = new ImportError { Error = error, RawRow = context.RawRecord };
+            await reporter.WriteAsync(importError);
+            HandleError(progressCallback, importProgress);
         }
     }
 }
