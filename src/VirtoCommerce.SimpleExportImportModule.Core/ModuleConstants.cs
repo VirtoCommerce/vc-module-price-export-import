@@ -53,28 +53,28 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
 
             public static class General
             {
-                public static SettingDescriptor SimpleExportLimitOfLines { get; } = new SettingDescriptor
+                public static SettingDescriptor ExportLimitOfLines { get; } = new SettingDescriptor
                 {
-                    Name = "SimpleExportImport.SimpleExport.LimitOfLines",
-                    GroupName = "SimpleExportImport|SimpleExport",
+                    Name = "SimpleExportImport.Export.LimitOfLines",
+                    GroupName = "SimpleExportImport|Export",
                     ValueType = SettingValueType.PositiveInteger,
                     IsHidden = true,
                     DefaultValue = 10000
                 };
 
-                public static SettingDescriptor SimpleImportLimitOfLines { get; } = new SettingDescriptor
+                public static SettingDescriptor ImportLimitOfLines { get; } = new SettingDescriptor
                 {
-                    Name = "SimpleExportImport.SimpleImport.LimitOfLines",
-                    GroupName = "SimpleExportImport|SimpleImport",
+                    Name = "SimpleExportImport.Import.LimitOfLines",
+                    GroupName = "SimpleExportImport|Import",
                     ValueType = SettingValueType.PositiveInteger,
                     IsHidden = true,
                     DefaultValue = 10000
                 };
 
-                public static SettingDescriptor SimpleImportFileMaxSize { get; } = new SettingDescriptor
+                public static SettingDescriptor ImportFileMaxSize { get; } = new SettingDescriptor
                 {
-                    Name = "SimpleExportImport.SimpleImport.FileMaxSize",
-                    GroupName = "SimpleExportImport|SimpleImport",
+                    Name = "SimpleExportImport.Import.FileMaxSize",
+                    GroupName = "SimpleExportImport|Import",
                     ValueType = SettingValueType.PositiveInteger,
                     IsHidden = true,
                     DefaultValue = MByte
@@ -87,9 +87,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Core
                     {
                         return new List<SettingDescriptor>
                                {
-                                   SimpleExportLimitOfLines,
-                                   SimpleImportLimitOfLines,
-                                   SimpleImportFileMaxSize
+                                   ExportLimitOfLines,
+                                   ImportLimitOfLines,
+                                   ImportFileMaxSize
                                };
                     }
                 }
