@@ -14,8 +14,6 @@ angular.module('virtoCommerce.simpleExportImportModule')
 
         blade.importStrategy = blade.importStrategyTypes.updateExistingOnly;
 
-        blade.ignoreUnknownSku = false;
-
         blade.refresh = () => {
             blade.isLoading = true;
 

@@ -13,15 +13,6 @@
             </label>
         </div>
         <div class="p-14 bl-1">
-            <div class="label">{{ 'simpleExportImport.blades.import-preview.labels.ignore-unknown-sku' | translate }}</div>
-            <div>
-                <label class="form-label __switch">
-                    <input type="checkbox" ng-model="blade.ignoreUnknownSku">
-                    <span class="switch"></span>
-                </label>
-            </div>
-        </div>
-        <div class="p-14 bl-1">
             <div class="label">{{ 'simpleExportImport.blades.import-preview.labels.preview-count' | translate }}</div>
             <div>
                 <span class="count">{{blade.currentEntities.length | number:0}}</span> of <span class="count">{{blade.totalCount | number:0}}</span>
@@ -37,8 +28,8 @@
                     useExternalSorting: false,
                     rowHeight: 60,
                     rowTemplate: 'list.row.html',
-                    columnDefs: [                       
-                        { 
+                    columnDefs: [
+                        {
                             name: 'sku', displayName: 'simpleExportImport.blades.import-preview.labels.sku', field: 'sku',
                             cellClass: 'pl-10', headerCellClass: 'pl-10',
                             cellTooltip:true,  headerTooltip: true, width: '**'
@@ -56,12 +47,12 @@
 </div>
 
 <script type="text/ng-template" id="list.row.html">
-    <div  
-    ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" 
-    ui-grid-one-bind-id-grid="rowRenderIndex + '-' + col.uid + '-cell'" 
-    class="ui-grid-cell" 
-    ng-class="{'ui-grid-row-header-cell': col.isRowHeader}" 
-    role="{{col.isRowHeader ? 'rowheader' : 'gridcell' }}" 
+    <div
+    ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid"
+    ui-grid-one-bind-id-grid="rowRenderIndex + '-' + col.uid + '-cell'"
+    class="ui-grid-cell"
+    ng-class="{'ui-grid-row-header-cell': col.isRowHeader}"
+    role="{{col.isRowHeader ? 'rowheader' : 'gridcell' }}"
     ui-grid-cell></div>
 </script>
 <script type="text/ng-template" id="price.cell.html">
