@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CsvHelper.Configuration;
 using Moq;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
@@ -153,8 +154,71 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             {
                 progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
-            var invalidRows = new[] { "XXX;Y;Y;Y" };
+
+            var validRows = new[] { "SKU1;1;10.99;9.99", "SKU2;1;10.99;9" };
+            var invalidRows = new[] { "\"X\"XX\";Y;Y;Y", "\"XXX\";1;Text;3" };
+
             var errorReporterStream = new MemoryStream();
+
+            var importReporterFactoryMock = new Mock<ICsvPriceImportReporterFactory>();
+            var importReporterMock = new Mock<ICsvPriceImportReporter>();
+            var errorsForAssertion = new List<ImportError>();
+
+            importReporterMock.Setup(x => x.WriteAsync(It.IsAny<ImportError>()))
+                .Callback<ImportError>(error => errorsForAssertion.Add(error)).Returns(Task.CompletedTask);
+
+            importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
+                .Returns(importReporterMock.Object);
+
+            var allRows = validRows.Union(invalidRows).ToArray();
+
+            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, allRows, errorReporterStream));
+
+            // Act
+            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+
+            // Assert
+            var errorProgressInfo = progressInfos.LastOrDefault();
+            Assert.Equal(4, errorProgressInfo?.ProcessedCount);
+            Assert.Equal(0, errorProgressInfo?.CreatedCount);
+            Assert.Equal(0, errorProgressInfo?.UpdatedCount);
+            Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ErrorCount);
+            Assert.NotNull(errorProgressInfo?.Description);
+            Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
+
+            importReporterMock.Verify(x => x.WriteAsync(It.IsAny<ImportError>()), Times.Exactly(invalidRows.Length));
+
+            for (var i = 0; i < invalidRows.Length; i++)
+            {
+                Assert.Equal("This row has invalid data", errorsForAssertion[i].Error);
+                Assert.Equal($"{invalidRows[i]}\r\n", errorsForAssertion[i].RawRow);
+            }
+        }
+
+        [Fact]
+        public async Task ImportAsync_MissedColumns_WillReportError()
+        {
+            // Arrange
+            var request = CreateImportDataRequest();
+            var cancellationTokenWrapper = GetCancellationTokenWrapper();
+            var progressInfos = new List<ImportProgressInfo>();
+            void ProgressCallback(ImportProgressInfo progressInfo)
+            {
+                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
+            }
+            var invalidRows = new[] { "1;9;10" };
+            var errorReporterStream = new MemoryStream();
+
+            var importReporterFactoryMock = new Mock<ICsvPriceImportReporterFactory>();
+            var importReporterMock = new Mock<ICsvPriceImportReporter>();
+            ImportError errorForAssertion = null;
+
+            importReporterMock.Setup(x => x.WriteAsync(It.IsAny<ImportError>()))
+                .Callback<ImportError>(error => errorForAssertion = error);
+
+            importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
+                .Returns(importReporterMock.Object);
+
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, invalidRows, errorReporterStream));
 
             // Act
@@ -168,6 +232,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.Equal(1, errorProgressInfo?.ErrorCount);
             Assert.NotNull(errorProgressInfo?.Description);
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
+
+            importReporterMock.Verify(x => x.WriteAsync(It.IsAny<ImportError>()), Times.Once());
+
+            Assert.Equal("Missed columns", errorForAssertion.Error);
+            Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
         }
 
         [Fact]
@@ -337,7 +406,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
         private static IBlobStorageProvider GetBlobStorageProvider(string header, string[] records, MemoryStream errorReporterMemoryStream = null)
         {
-            errorReporterMemoryStream = errorReporterMemoryStream != null ? errorReporterMemoryStream : new MemoryStream();
+            errorReporterMemoryStream ??= new MemoryStream();
             var blobStorageProviderMock = new Mock<IBlobStorageProvider>();
             blobStorageProviderMock.Setup(x => x.OpenRead(It.IsAny<string>())).Returns(() => TestHelper.GetStream(TestHelper.GetCsv(records, header)));
             blobStorageProviderMock.Setup(x => x.OpenWrite(It.IsAny<string>())).Returns(() => errorReporterMemoryStream);
@@ -371,11 +440,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             return new ImportProductPricesValidator(pricingSearchService);
         }
 
-        private static CsvPagedPriceDataImporter GetCsvPagedPriceDataImporter(IBlobStorageProvider blobStorageProvider)
+        private static CsvPagedPriceDataImporter GetCsvPagedPriceDataImporter(IBlobStorageProvider blobStorageProvider, ICsvPriceImportReporterFactory importReporterFactory = null)
         {
-            var pricingSearchService = GetPricingSearchService();
+            importReporterFactory ??= new CsvPriceImportReporterFactory();
             return new CsvPagedPriceDataImporter(blobStorageProvider, GetPricingService(), pricingSearchService,
-                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(), GetImportProductPricesValidator(pricingSearchService), new CsvPriceImportReporterFactory());
+                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(), GetImportProductPricesValidator(pricingSearchService), importReporterFactory);
         }
     }
 }

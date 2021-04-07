@@ -64,21 +64,26 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             
             var importProgress = new ImportProgressInfo { ProcessedCount = 0, CreatedCount = 0, UpdatedCount = 0, Description = "Import has started" };
 
-            var dataSource = _dataSourceFactory.Create(stream, ModuleConstants.Settings.PageSize, new ImportConfiguration
-            {
-                ReadingExceptionOccurred = exception =>
-                {
-                    HandleError(progressCallback, importProgress);
-                    return false;
-                },
-                BadDataFound = context => HandleBadDataError(progressCallback, importProgress, importReporter, context),
-                MissingFieldFound = (headerNames, index, context) => HandleMissedColumnError(progressCallback, importProgress, importReporter, context, headerNames)
-            });
+            var configuration = new ImportConfiguration();
+
+            var dataSource = _dataSourceFactory.Create(stream, ModuleConstants.Settings.PageSize, configuration);
 
             importProgress.TotalCount = dataSource.GetTotalCount();
             progressCallback(importProgress);
 
             const string importDescription = "{0} out of {1} have been imported.";
+
+            configuration.ReadingExceptionOccurred = exception =>
+            {
+                HandleBadDataError(progressCallback, importProgress, importReporter, exception.ReadingContext);
+                return false;
+            };
+
+            //configuration.BadDataFound = context =>
+            //    HandleBadDataError(progressCallback, importProgress, importReporter, context);
+
+            configuration.MissingFieldFound = (headerNames, index, context) =>
+                HandleMissedColumnError(progressCallback, importProgress, importReporter, context, headerNames);
 
             try
             {
@@ -199,7 +204,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             progressCallback(importProgress);
         }
 
-        private static async void HandleBadDataError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context)
+        private static async Task HandleBadDataError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context)
         {
             var importError = new ImportError { Error = "This row has invalid data", RawRow = context.RawRecord };
             await reporter.WriteAsync(importError);
@@ -210,14 +215,16 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         {
             string error;
 
-            if (headerNames.Length == 1)
-            {
-                error = $"Column {headerNames.First()} is required";
-            }
-            else
-            {
-                error = $"Columns {String.Join(',', headerNames)} are required";
-            }
+            //if (headerNames.Length == 1)
+            //{
+            //    error = $"Column {headerNames.First()} is required";
+            //}
+            //else
+            //{
+            //    error = $"Columns {String.Join(',', headerNames)} are required";
+            //}
+
+            error = "Missed columns";
 
             var importError = new ImportError { Error = error, RawRow = context.RawRecord };
             await reporter.WriteAsync(importError);

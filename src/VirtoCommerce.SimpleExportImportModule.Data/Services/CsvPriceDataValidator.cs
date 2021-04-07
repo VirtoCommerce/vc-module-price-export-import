@@ -49,7 +49,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             else
             {
                 var stream = _blobStorageProvider.OpenRead(fileUrl);
-                var csvConfiguration = new ImportConfiguration();
+                var csvConfiguration = new ImportConfiguration()
+                {
+                    BadDataFound = null,
+                    MissingFieldFound = null
+                };
 
                 await ValidateDelimiterAndDataExists(stream, csvConfiguration, errorsList);
 
