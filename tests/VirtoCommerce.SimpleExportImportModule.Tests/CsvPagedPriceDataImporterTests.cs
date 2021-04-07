@@ -30,7 +30,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             static async Task ImportAsync()
             {
                 // Arrange
-                var request = new ImportDataRequest { ImportMode = ImportMode.CreateOnly, PricelistId = "TestId" };
+                var request = CreateImportDataRequest();
                 var cancellationToken = new CancellationToken(true);
                 var cancellationTokenWrapper = new CancellationTokenWrapper(cancellationToken);
                 var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
@@ -49,7 +49,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             static async Task ImportAsync()
             {
                 // Arrange
-                var request = new ImportDataRequest { ImportMode = ImportMode.CreateOnly, PricelistId = "TestId" };
+                var request = CreateImportDataRequest();
                 var cancellationTokenWrapper = GetCancellationTokenWrapper();
                 var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(null, CsvRecords));
 
@@ -65,7 +65,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_BeforeImport_WillReportProgressWithTotalCount()
         {
             // Arrange
-            var request = new ImportDataRequest { ImportMode = ImportMode.CreateOnly, PricelistId = "TestId" };
+            var request = CreateImportDataRequest();
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
 
@@ -93,7 +93,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_StartImport_WillReportStartOfReading()
         {
             // Arrange
-            var request = new ImportDataRequest { ImportMode = ImportMode.CreateOnly, PricelistId = "TestId" };
+            var request = CreateImportDataRequest();
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
 
@@ -116,7 +116,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_ExceptionDuringImport_WillReportError()
         {
             // Arrange
-            var request = new ImportDataRequest { ImportMode = ImportMode.CreateOnly, PricelistId = "TestId" };
+            var request = CreateImportDataRequest();
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
 
@@ -145,7 +145,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_IfImportCancelled_WillStop()
         {
             // Arrange
-            var request = new ImportDataRequest { ImportMode = ImportMode.CreateOnly, PricelistId = "TestId" };
+            var request = CreateImportDataRequest();
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
             var cancellationTokenWrapper = new CancellationTokenWrapper(cancellationToken);
@@ -180,7 +180,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_CreateValidPrices_WillReportSuccess()
         {
             // Arrange
-            var request = new ImportDataRequest { ImportMode = ImportMode.CreateOnly, PricelistId = "TestId" };
+            var request = CreateImportDataRequest();
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
 
@@ -209,7 +209,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_CreateInvalidPrices_WillIgnore()
         {
             // Arrange
-            var request = new ImportDataRequest { ImportMode = ImportMode.CreateOnly, PricelistId = "TestId" };
+            var request = CreateImportDataRequest();
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
 
@@ -291,6 +291,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.DoesNotContain("error", successProgressInfo.Description);
         }
 
+        private static ImportDataRequest CreateImportDataRequest()
+        {
+            return new ImportDataRequest { FileUrl = "https://localhost/test_url.csv", ImportMode = ImportMode.CreateOnly, PricelistId = "TestId" };
+        }
+
         private static CancellationTokenWrapper GetCancellationTokenWrapper()
         {
             return new CancellationTokenWrapper(new CancellationToken());
@@ -305,6 +310,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         {
             var blobStorageProviderMock = new Mock<IBlobStorageProvider>();
             blobStorageProviderMock.Setup(x => x.OpenRead(It.IsAny<string>())).Returns(() => TestHelper.GetStream(TestHelper.GetCsv(records, header)));
+            blobStorageProviderMock.Setup(x => x.OpenWrite(It.IsAny<string>())).Returns(() => new MemoryStream());
             blobStorageProviderMock.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(() => Task.FromResult(new BlobInfo { Size = TestHelper.GetStream(TestHelper.GetCsv(records, header)).Length }));
             return blobStorageProviderMock.Object;

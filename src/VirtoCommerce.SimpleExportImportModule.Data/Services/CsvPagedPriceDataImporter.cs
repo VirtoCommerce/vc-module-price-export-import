@@ -52,7 +52,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             await using var stream = _blobStorageProvider.OpenRead(request.FileUrl);
 
-            await using var importReporterStream = _blobStorageProvider.OpenWrite(getReportFileName(request.FileUrl));
+            await using var importReporterStream = _blobStorageProvider.OpenWrite(GetReportFileName(request.FileUrl));
 
             var csvConfiguration = new ImportConfiguration();
 
@@ -159,7 +159,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             }
         }
 
-        private static string getReportFileName(string fileUrl)
+        private static string GetReportFileName(string fileUrl)
         {
             var uri = new Uri(fileUrl);
             var fileName = uri.Segments.Last();
