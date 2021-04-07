@@ -7,10 +7,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 {
     public sealed class CsvPriceImportReporterFactory : ICsvPriceImportReporterFactory
     {
-        public CsvPriceImportReporterFactory()
-        {
-        }
-
         public ICsvPriceImportReporter Create(Stream stream, Configuration configuration = null)
         {
             return new CsvPriceImportReporter(stream, configuration ?? new ImportConfiguration());

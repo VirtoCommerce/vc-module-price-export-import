@@ -141,6 +141,35 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
         }
 
+
+        [Fact]
+        public async Task ImportAsync_BadDataDuringImport_WillReportError()
+        {
+            // Arrange
+            var request = CreateImportDataRequest();
+            var cancellationTokenWrapper = GetCancellationTokenWrapper();
+            var progressInfos = new List<ImportProgressInfo>();
+            void ProgressCallback(ImportProgressInfo progressInfo)
+            {
+                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
+            }
+            var invalidRows = new[] { "XXX;Y;Y;Y" };
+            var errorReporterStream = new MemoryStream();
+            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, invalidRows, errorReporterStream));
+
+            // Act
+            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+
+            // Assert
+            var errorProgressInfo = progressInfos.LastOrDefault();
+            Assert.Equal(1, errorProgressInfo?.ProcessedCount);
+            Assert.Equal(0, errorProgressInfo?.CreatedCount);
+            Assert.Equal(0, errorProgressInfo?.UpdatedCount);
+            Assert.Equal(1, errorProgressInfo?.ErrorCount);
+            Assert.NotNull(errorProgressInfo?.Description);
+            Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
+        }
+
         [Fact]
         public async Task ImportAsync_IfImportCancelled_WillStop()
         {
@@ -306,11 +335,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Mock
         }
 
-        private static IBlobStorageProvider GetBlobStorageProvider(string header, string[] records)
+        private static IBlobStorageProvider GetBlobStorageProvider(string header, string[] records, MemoryStream errorReporterMemoryStream = null)
         {
+            errorReporterMemoryStream = errorReporterMemoryStream != null ? errorReporterMemoryStream : new MemoryStream();
             var blobStorageProviderMock = new Mock<IBlobStorageProvider>();
             blobStorageProviderMock.Setup(x => x.OpenRead(It.IsAny<string>())).Returns(() => TestHelper.GetStream(TestHelper.GetCsv(records, header)));
-            blobStorageProviderMock.Setup(x => x.OpenWrite(It.IsAny<string>())).Returns(() => new MemoryStream());
+            blobStorageProviderMock.Setup(x => x.OpenWrite(It.IsAny<string>())).Returns(() => errorReporterMemoryStream);
             blobStorageProviderMock.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(() => Task.FromResult(new BlobInfo { Size = TestHelper.GetStream(TestHelper.GetCsv(records, header)).Length }));
             return blobStorageProviderMock.Object;
@@ -345,7 +375,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         {
             var pricingSearchService = GetPricingSearchService();
             return new CsvPagedPriceDataImporter(blobStorageProvider, GetPricingService(), pricingSearchService,
-                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(), GetImportProductPricesValidator(pricingSearchService));
+                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(), GetImportProductPricesValidator(pricingSearchService), new CsvPriceImportReporterFactory());
         }
     }
 }

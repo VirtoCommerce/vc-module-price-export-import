@@ -24,9 +24,10 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         private readonly IValidator<ImportProductPrice[]> _importProductPricesValidator;
         private readonly IBlobStorageProvider _blobStorageProvider;
         private readonly ICsvPriceDataValidator _csvPriceDataValidator;
+        private readonly ICsvPriceImportReporterFactory _importReporterFactory;
 
         public CsvPagedPriceDataImporter(IBlobStorageProvider blobStorageProvider, IPricingService pricingService, IPricingSearchService pricingSearchService,
-            ICsvPriceDataValidator csvPriceDataValidator, ICsvPagedPriceDataSourceFactory dataSourceFactory, IValidator<ImportProductPrice[]> importProductPricesValidator)
+            ICsvPriceDataValidator csvPriceDataValidator, ICsvPagedPriceDataSourceFactory dataSourceFactory, IValidator<ImportProductPrice[]> importProductPricesValidator, ICsvPriceImportReporterFactory importReporterFactory)
         {
             _pricingService = pricingService;
             _pricingSearchService = pricingSearchService;
@@ -34,6 +35,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             _importProductPricesValidator = importProductPricesValidator;
             _blobStorageProvider = blobStorageProvider;
             _csvPriceDataValidator = csvPriceDataValidator;
+            _importReporterFactory = importReporterFactory;
         }
 
         public async Task ImportAsync(ImportDataRequest request, Action<ImportProgressInfo> progressCallback, ICancellationToken cancellationToken)
@@ -56,7 +58,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var csvConfiguration = new ImportConfiguration();
 
-            var importReporter = new CsvPriceImportReporter(importReporterStream, csvConfiguration);
+            var importReporter = _importReporterFactory.Create(importReporterStream, csvConfiguration);
 
             cancellationToken.ThrowIfCancellationRequested();
             
@@ -197,21 +199,22 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             progressCallback(importProgress);
         }
 
-        private static async void HandleBadDataError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, CsvPriceImportReporter reporter, ReadingContext context)
+        private static async void HandleBadDataError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context)
         {
             var importError = new ImportError { Error = "This row has invalid data", RawRow = context.RawRecord };
             await reporter.WriteAsync(importError);
             HandleError(progressCallback, importProgress);
         }
 
-        private static async void HandleMissedColumnError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, CsvPriceImportReporter reporter, ReadingContext context, string[] headerNames)
+        private static async void HandleMissedColumnError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, string[] headerNames)
         {
             string error;
 
             if (headerNames.Length == 1)
             {
                 error = $"Column {headerNames.First()} is required";
-            } else
+            }
+            else
             {
                 error = $"Columns {String.Join(',', headerNames)} are required";
             }
