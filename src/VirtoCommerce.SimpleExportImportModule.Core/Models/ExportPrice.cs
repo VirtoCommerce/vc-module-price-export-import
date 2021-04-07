@@ -4,7 +4,7 @@ using VirtoCommerce.PricingModule.Data.ExportImport;
 
 namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 {
-    public class SimpleExportExportablePrice : ExportablePrice
+    public class ExportPrice : ExportablePrice
     {
         public override ExportablePrice FromModel(Price source)
         {
@@ -23,7 +23,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 
         public override IExportable ToTabular()
         {
-            var result = (SimpleExportTabularPrice)base.ToTabular();
+            var result = (ExportTabularPrice)base.ToTabular();
 
             result.Code = Code;
             result.ModifiedDate = ModifiedDate;

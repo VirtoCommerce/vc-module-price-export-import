@@ -1,11 +1,11 @@
 angular.module('virtoCommerce.simpleExportImportModule')
 .controller('virtoCommerce.simpleExportImportModule.fileUploadController',
-    ['FileUploader', '$document', '$scope', '$timeout', 'platformWebApp.bladeNavigationService', 'platformWebApp.assets.api', 'virtoCommerce.simpleExportImportModule.import', '$translate',
-        function (FileUploader, $document, $scope, $timeout, bladeNavigationService, assetsApi, importResources, $translate) {
+    ['FileUploader', '$document', '$scope', '$timeout', 'platformWebApp.bladeNavigationService', 'platformWebApp.assets.api', 'virtoCommerce.simpleExportImportModule.import', '$translate', 'platformWebApp.settings',
+        function (FileUploader, $document, $scope, $timeout, bladeNavigationService, assetsApi, importResources, $translate, settings) {
         const blade = $scope.blade;
         const oneKb = 1024;
         const oneMb = 1024 * oneKb;
-        const maxCsvSize = oneMb;
+        $scope.maxCsvSize = oneMb;
         blade.headIcon = 'fas fa-file-alt';
         blade.isLoading = false;
         $scope.uploadedFile = {};
@@ -21,6 +21,12 @@ angular.module('virtoCommerce.simpleExportImportModule')
 
         function initialize () {
             resetState();
+
+            settings.getValues({ id: 'SimpleExportImport.Import.FileMaxSize' }, (value) => {
+                if (!!value) {
+                    $scope.maxCsvSize = value[0] * oneMb;
+                }
+            });
 
             let uploader = $scope.uploader = new FileUploader({
                 scope: $scope,
@@ -50,7 +56,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
                         name: 'csvMaxSize',
                         fn: (item) => {
                             $scope.uploadedFile.name = item.name;
-                            if (item.size <= maxCsvSize) {
+                            if (item.size <= $scope.maxCsvSize) {
                                 $scope.uploadedFile.size = formatFileSize(item.size);
                                 return true;
                             } else {

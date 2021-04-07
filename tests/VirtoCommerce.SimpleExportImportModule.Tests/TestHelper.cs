@@ -6,6 +6,8 @@ using Moq;
 using VirtoCommerce.CatalogModule.Core.Model;
 using VirtoCommerce.CatalogModule.Core.Model.Search;
 using VirtoCommerce.CatalogModule.Core.Search;
+using VirtoCommerce.Platform.Core.Settings;
+using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Data.Services;
 
 namespace VirtoCommerce.SimpleExportImportModule.Tests
@@ -33,7 +35,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             return new CsvPagedPriceDataSourceFactory(GetProductSearchService());
         }
 
-        public static Stream GetStream(string csv) 
+        public static Stream GetStream(string csv)
         {
             var stream = new MemoryStream();
             using var writer = new StreamWriter(stream, leaveOpen: true);
@@ -70,6 +72,26 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             }
 
             return result.ToArray();
+        }
+
+        public static Mock<ISettingsManager> GetSettingsManagerMoq()
+        {
+            var settingsManagerMoq = new Mock<ISettingsManager>();
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetObjectSettingAsync(
+                        It.Is<string>(x => x == ModuleConstants.Settings.General.ImportFileMaxSize.Name),
+                        null, null))
+                .ReturnsAsync(new ObjectSettingEntry()
+                { Value = ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue });
+
+            settingsManagerMoq.Setup(x =>
+                    x.GetObjectSettingAsync(
+                        It.Is<string>(x => x == ModuleConstants.Settings.General.ImportLimitOfLines.Name),
+                        null, null))
+                .ReturnsAsync(new ObjectSettingEntry()
+                { Value = ModuleConstants.Settings.General.ImportLimitOfLines.DefaultValue });
+            return settingsManagerMoq;
         }
     }
 }

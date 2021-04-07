@@ -40,22 +40,32 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
 
             serviceCollection.AddTransient<IValidator<ImportProductPrice[]>, ImportProductPricesValidator>();
 
-            serviceCollection.AddOptions<SimpleExportOptions>().Bind(Configuration.GetSection("SimpleExportImport:SimpleExport")).ValidateDataAnnotations();
+            serviceCollection.AddOptions<ExportOptions>().Bind(Configuration.GetSection("SimpleExportImport:Export")).ValidateDataAnnotations();
+            serviceCollection.AddOptions<ImportOptions>().Bind(Configuration.GetSection("SimpleExportImport:Import")).ValidateDataAnnotations();
         }
 
         public void PostInitialize(IApplicationBuilder appBuilder)
         {
             // prices
-            AbstractTypeFactory<TabularPrice>.OverrideType<TabularPrice, SimpleExportTabularPrice>();
-            AbstractTypeFactory<ExportablePrice>.OverrideType<ExportablePrice, SimpleExportExportablePrice>();
+            AbstractTypeFactory<TabularPrice>.OverrideType<TabularPrice, ExportTabularPrice>();
+            AbstractTypeFactory<ExportablePrice>.OverrideType<ExportablePrice, ExportPrice>();
 
             var settingsRegistrar = appBuilder.ApplicationServices.GetRequiredService<ISettingsRegistrar>();
             settingsRegistrar.RegisterSettings(ModuleConstants.Settings.General.AllSettings, ModuleInfo.Id);
 
             var settingsManager = appBuilder.ApplicationServices.GetService<ISettingsManager>();
-            var simpleExportImportOptions = appBuilder.ApplicationServices.GetService<IOptions<SimpleExportOptions>>().Value;
-            settingsManager.SetValue(ModuleConstants.Settings.General.SimpleExportLimitOfLines.Name,
-                simpleExportImportOptions.LimitOfLines ?? ModuleConstants.Settings.General.SimpleExportLimitOfLines.DefaultValue);
+            var simpleExportOptions = appBuilder.ApplicationServices.GetService<IOptions<ExportOptions>>().Value;
+
+            settingsManager.SetValue(ModuleConstants.Settings.General.ExportLimitOfLines.Name,
+                simpleExportOptions.LimitOfLines ?? ModuleConstants.Settings.General.ExportLimitOfLines.DefaultValue);
+
+            var simpleImportOptions = appBuilder.ApplicationServices.GetService<IOptions<ImportOptions>>().Value;
+
+            settingsManager.SetValue(ModuleConstants.Settings.General.ImportLimitOfLines.Name,
+                simpleImportOptions.LimitOfLines ?? ModuleConstants.Settings.General.ImportLimitOfLines.DefaultValue);
+
+            settingsManager.SetValue(ModuleConstants.Settings.General.ImportFileMaxSize.Name,
+                simpleImportOptions.FileMaxSize ?? ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue);
 
             // register permissions
             var permissionsProvider = appBuilder.ApplicationServices.GetRequiredService<IPermissionsRegistrar>();

@@ -16,7 +16,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
     [Route("api/pricing/import")]
     [Authorize(ModuleConstants.Security.Permissions.ImportAccess)]
     [ApiController]
-    public class SimpleImportController : ControllerBase
+    public class ImportController : ControllerBase
     {
         private readonly IUserNameResolver _userNameResolver;
         private readonly IBlobStorageProvider _blobStorageProvider;
@@ -24,7 +24,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
         private readonly ICsvPagedPriceDataSourceFactory _csvPagedPriceDataSourceFactory;
         private readonly ICsvPriceDataValidator _csvPriceDataValidator;
 
-        public SimpleImportController(IUserNameResolver userNameResolver, IBlobStorageProvider blobStorageProvider, ICsvPriceDataValidator csvPriceDataValidator,
+        public ImportController(IUserNameResolver userNameResolver, IBlobStorageProvider blobStorageProvider, ICsvPriceDataValidator csvPriceDataValidator,
             IPushNotificationManager pushNotificationManager, ICsvPagedPriceDataSourceFactory csvPagedPriceDataSourceFactory)
         {
             _userNameResolver = userNameResolver;

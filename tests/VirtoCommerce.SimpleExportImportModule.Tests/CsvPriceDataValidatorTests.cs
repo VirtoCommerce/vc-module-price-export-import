@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Moq;
 using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.Platform.Core.Settings;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Data.Services;
 using Xunit;
@@ -40,7 +41,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .ReturnsAsync((BlobInfo)null);
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -56,11 +59,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize + 1 };
+            var blobInfo = new BlobInfo() { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue * ModuleConstants.MByte + 1 };
             blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(blobInfo));
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -75,17 +80,15 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task Validate_FileWithoutError_ReturnEmptyErrors()
         {
             // Arrange
-            var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
-
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
-            blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(blobInfo));
+            var blobStorageProviderMoq = GetBlobStorageProviderMoq();
 
             var stream = TestHelper.GetStream(CsvFileContentWithoutError);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -94,21 +97,30 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.Empty(result.Errors);
         }
 
+        private static Mock<IBlobStorageProvider> GetBlobStorageProviderMoq()
+        {
+            var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
+
+            var blobInfo = new BlobInfo()
+            { Size = (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue * ModuleConstants.MByte };
+            blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult(blobInfo));
+            return blobStorageProviderMoq;
+        }
+
         [Fact]
         public async Task Validate_WongDelimiter_ReturnErrorCode()
         {
             // Arrange
-            var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
-
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
-            blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(blobInfo));
+            var blobStorageProviderMoq = GetBlobStorageProviderMoq();
 
             var stream = TestHelper.GetStream(CsvFileWithWrongDelimiter);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -123,17 +135,15 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task Validate_WrongHeader_ReturnErrorCode()
         {
             // Arrange
-            var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
-
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
-            blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(blobInfo));
+            var blobStorageProviderMoq = GetBlobStorageProviderMoq();
 
             var stream = TestHelper.GetStream(CsvFileWithWrongHeader);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -147,18 +157,16 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task Validate_ExceedingLineLimits_ReturnErrorCode()
         {
             // Arrange
-            var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
+            var blobStorageProviderMoq = GetBlobStorageProviderMoq();
 
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
-            blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(blobInfo));
-
-            var records = TestHelper.GetArrayOfSameRecords(CsvRecord, ModuleConstants.Settings.ImportLimitOfLines + 1);
+            var records = TestHelper.GetArrayOfSameRecords(CsvRecord,  (int)ModuleConstants.Settings.General.ImportLimitOfLines.DefaultValue + 1);
             var stream = TestHelper.GetStream(TestHelper.GetCsv(records, CsvHeader));
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -175,17 +183,15 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task Validate_NoData_ReturnErrorCode(string csv)
         {
             // Arrange
-            var blobStorageProviderMoq = new Mock<IBlobStorageProvider>();
-
-            var blobInfo = new BlobInfo() { Size = ModuleConstants.Settings.FileMaxSize };
-            blobStorageProviderMoq.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(blobInfo));
+            var blobStorageProviderMoq = GetBlobStorageProviderMoq();
 
             var stream = TestHelper.GetStream(csv);
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object);
+            var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
+
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -194,5 +200,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.Single(result.Errors);
             Assert.True(result.Errors[0].ErrorCode == ModuleConstants.ValidationErrors.NoData);
         }
+
     }
 }
