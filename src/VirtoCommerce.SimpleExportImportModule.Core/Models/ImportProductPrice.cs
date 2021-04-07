@@ -12,5 +12,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Models
         public CatalogProduct Product { get; set; }
 
         public Price Price { get; set; }
+
+        public string RawRecord { get; set; }
     }
 }
