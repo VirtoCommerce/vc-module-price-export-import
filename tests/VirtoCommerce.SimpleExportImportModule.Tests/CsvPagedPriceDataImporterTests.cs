@@ -156,7 +156,14 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             }
 
             var validRows = new[] { "SKU1;1;10.99;9.99", "SKU2;1;10.99;9" };
-            var invalidRows = new[] { "\"X\"XX\";Y;Y;Y", "\"XXX\";1;Text;3" };
+            var invalidRows = new[]
+            {
+                "\"X\"XX\";Y;Y;Y",
+                "\"XXX\";1;Text;3",
+                "XXX;2;;3",
+                //"XXX;2;3;"
+                //"XXX;2;3"
+            };
 
             var errorReporterStream = new MemoryStream();
 
@@ -165,21 +172,22 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             var errorsForAssertion = new List<ImportError>();
 
             importReporterMock.Setup(x => x.WriteAsync(It.IsAny<ImportError>()))
-                .Callback<ImportError>(error => errorsForAssertion.Add(error)).Returns(Task.CompletedTask);
+                .Callback<ImportError>(error => errorsForAssertion.Add(error))
+                .Returns(Task.CompletedTask);
 
             importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
                 .Returns(importReporterMock.Object);
 
             var allRows = validRows.Union(invalidRows).ToArray();
 
-            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, allRows, errorReporterStream));
+            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, allRows, errorReporterStream), importReporterFactoryMock.Object);
 
             // Act
             await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
 
             // Assert
             var errorProgressInfo = progressInfos.LastOrDefault();
-            Assert.Equal(4, errorProgressInfo?.ProcessedCount);
+            Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
             Assert.Equal(0, errorProgressInfo?.CreatedCount);
             Assert.Equal(0, errorProgressInfo?.UpdatedCount);
             Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ErrorCount);
@@ -195,18 +203,24 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             }
         }
 
-        [Fact]
-        public async Task ImportAsync_MissedColumns_WillReportError()
+        [Theory]
+        [InlineData("SKU1;1;10.99")]
+        [InlineData("SKU1;1")]
+        [InlineData("SKU1")]
+        public async Task ImportAsync_MissedColumns_WillReportError(string row)
         {
             // Arrange
             var request = CreateImportDataRequest();
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
+
             void ProgressCallback(ImportProgressInfo progressInfo)
             {
                 progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
-            var invalidRows = new[] { "1;9;10" };
+
+            var validRows = new[] { "SKU1;1;10.99;9.99", "SKU2;1;10.99;9" };
+            var invalidRows = new[] { row };
             var errorReporterStream = new MemoryStream();
 
             var importReporterFactoryMock = new Mock<ICsvPriceImportReporterFactory>();
@@ -219,17 +233,18 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
                 .Returns(importReporterMock.Object);
 
-            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, invalidRows, errorReporterStream));
+            var allRows = validRows.Union(invalidRows).ToArray();
+            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, allRows, errorReporterStream), importReporterFactoryMock.Object);
 
             // Act
             await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
 
             // Assert
             var errorProgressInfo = progressInfos.LastOrDefault();
-            Assert.Equal(1, errorProgressInfo?.ProcessedCount);
+            Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
             Assert.Equal(0, errorProgressInfo?.CreatedCount);
             Assert.Equal(0, errorProgressInfo?.UpdatedCount);
-            Assert.Equal(1, errorProgressInfo?.ErrorCount);
+            Assert.Equal(validRows.Length + invalidRows.Length * 2, errorProgressInfo?.ErrorCount);
             Assert.NotNull(errorProgressInfo?.Description);
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
 

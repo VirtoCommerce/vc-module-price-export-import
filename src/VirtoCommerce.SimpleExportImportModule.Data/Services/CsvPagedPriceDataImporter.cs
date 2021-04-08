@@ -75,6 +75,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             configuration.ReadingExceptionOccurred = exception =>
             {
+
                 HandleBadDataError(progressCallback, importProgress, importReporter, exception.ReadingContext);
                 return false;
             };
