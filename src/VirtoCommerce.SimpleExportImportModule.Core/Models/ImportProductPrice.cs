@@ -14,5 +14,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Models
         public Price Price { get; set; }
 
         public string RawRecord { get; set; }
+
+        public int Row { get; set; }
     }
 }

@@ -84,15 +84,16 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 return false;
             }
 
-            var recordTuples = new List<(CsvPrice, string)>();
+            var recordTuples = new List<(CsvPrice, string, int)>();
 
             for (var i = 0; i < PageSize && _csvReader.Read(); i++)
             {
                 var csvRecord = _csvReader.GetRecord<CsvPrice>();
 
                 var rawRecord = _csvReader.Context.RawRecord;
+                var row = _csvReader.Context.Row;
 
-                var recordTuple = (csvRecord, rawRecord);
+                var recordTuple = (csvRecord, rawRecord, row);
                 recordTuples.Add(recordTuple);
 
             }
@@ -116,6 +117,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                   importProductPrice.Price.List = record.Item1.ListPrice;
                   importProductPrice.Price.Sale = record.Item1.SalePrice;
                   importProductPrice.RawRecord = record.Item2;
+                  importProductPrice.Row = record.Item3;
 
                   return importProductPrice;
               }).ToArray();

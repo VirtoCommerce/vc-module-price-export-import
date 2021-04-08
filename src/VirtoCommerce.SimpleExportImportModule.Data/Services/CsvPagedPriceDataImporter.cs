@@ -45,6 +45,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             cancellationToken.ThrowIfCancellationRequested();
 
+            var importErrorsContext = new ImportErrorsContext();
+
             var csvPriceDataValidationResult = await _csvPriceDataValidator.ValidateAsync(request.FileUrl);
 
             if (csvPriceDataValidationResult.Errors.Any())
@@ -75,16 +77,16 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             configuration.ReadingExceptionOccurred = exception =>
             {
+                if (!importErrorsContext.MissedColumnsRows.Contains(exception.ReadingContext.Row))
+                {
+                    HandleBadDataError(progressCallback, importProgress, importReporter, exception.ReadingContext).GetAwaiter().GetResult();
+                }
 
-                HandleBadDataError(progressCallback, importProgress, importReporter, exception.ReadingContext);
                 return false;
             };
 
-            //configuration.BadDataFound = context =>
-            //    HandleBadDataError(progressCallback, importProgress, importReporter, context);
-
             configuration.MissingFieldFound = (headerNames, index, context) =>
-                HandleMissedColumnError(progressCallback, importProgress, importReporter, context, headerNames);
+                HandleMissedColumnError(progressCallback, importProgress, importReporter, context, importErrorsContext, headerNames);
 
             try
             {
@@ -97,7 +99,10 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var importProductPrices = dataSource.Items.Select(importProductPrice =>
+                    var importProductPrices = dataSource.Items
+                        // expect records that was parsed but have missed columns
+                        .Where(importProductPrice => !importErrorsContext.MissedColumnsRows.Contains(importProductPrice.Row))
+                        .Select(importProductPrice =>
                     {
                         importProductPrice.Price.PricelistId = request.PricelistId;
                         return importProductPrice;
@@ -212,7 +217,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             HandleError(progressCallback, importProgress);
         }
 
-        private static async void HandleMissedColumnError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, string[] headerNames)
+        private static async void HandleMissedColumnError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errosContex, string[] headerNames)
         {
             string error;
 
@@ -224,6 +229,10 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             //{
             //    error = $"Columns {String.Join(',', headerNames)} are required";
             //}
+
+            //context.ReaderConfiguration.ShouldSkipRecord = record => record.Join();
+
+            errosContex.MissedColumnsRows.Add(context.Row);
 
             error = "Missed columns";
 
