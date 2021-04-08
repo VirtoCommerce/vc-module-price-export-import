@@ -77,9 +77,18 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             configuration.ReadingExceptionOccurred = exception =>
             {
-                if (!importErrorsContext.MissedColumnsRows.Contains(exception.ReadingContext.Row))
+                var context = exception.ReadingContext;
+                if (!importErrorsContext.MissedColumnsRows.Contains(context.Row))
                 {
-                    HandleBadDataError(progressCallback, importProgress, importReporter, exception.ReadingContext).GetAwaiter().GetResult();
+                    if (context.Field == "")
+                    {
+                        RequiredValueError(progressCallback, importProgress, importReporter, context);
+                    }
+                    else
+                    {
+                        HandleBadDataError(progressCallback, importProgress, importReporter, context);
+                    }
+
                 }
 
                 return false;
@@ -217,9 +226,23 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             HandleError(progressCallback, importProgress);
         }
 
+        private static async Task RequiredValueError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context)
+        {
+            var fieldName = context.HeaderRecord[context.CurrentIndex];
+            var importError = new ImportError { Error = $"Column {fieldName} is required", RawRow = context.RawRecord };
+            await reporter.WriteAsync(importError);
+            HandleError(progressCallback, importProgress);
+        }
+
         private static async void HandleMissedColumnError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errosContex, string[] headerNames)
         {
             string error;
+
+            var headerColumns = context.HeaderRecord;
+
+            var recordFields = context.Record;
+
+
 
             //if (headerNames.Length == 1)
             //{

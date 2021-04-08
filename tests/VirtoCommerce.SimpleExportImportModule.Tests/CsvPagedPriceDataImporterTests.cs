@@ -23,6 +23,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
     public class CsvPagedPriceDataImporterTests
     {
         private const string CsvHeader = "SKU;Min quantity;List price;Sale price";
+        private const string CsvHeader2 = "SKU;Min quantity;Currency;List price;Sale price;Created by;Modified By";
         private static readonly string[] CsvRecords = { "TestSku1;1;100;99", "TestSku2;1;10;9.99", ";10;9;" };
 
         [Fact]
@@ -208,6 +209,57 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         [InlineData("SKU1;1")]
         [InlineData("SKU1")]
         public async Task ImportAsync_MissedColumns_WillReportError(string row)
+        {
+            // Arrange
+            var request = CreateImportDataRequest();
+            var cancellationTokenWrapper = GetCancellationTokenWrapper();
+            var progressInfos = new List<ImportProgressInfo>();
+
+            void ProgressCallback(ImportProgressInfo progressInfo)
+            {
+                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
+            }
+
+            var validRows = new[] { "SKU1;1;10.99;9.99", "SKU2;1;10.99;9" };
+            var invalidRows = new[] { row };
+            var errorReporterStream = new MemoryStream();
+
+            var importReporterFactoryMock = new Mock<ICsvPriceImportReporterFactory>();
+            var importReporterMock = new Mock<ICsvPriceImportReporter>();
+            ImportError errorForAssertion = null;
+
+            importReporterMock.Setup(x => x.WriteAsync(It.IsAny<ImportError>()))
+                .Callback<ImportError>(error => errorForAssertion = error);
+
+            importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
+                .Returns(importReporterMock.Object);
+
+            var allRows = validRows.Union(invalidRows).ToArray();
+            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, allRows, errorReporterStream), importReporterFactoryMock.Object);
+
+            // Act
+            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+
+            // Assert
+            var errorProgressInfo = progressInfos.LastOrDefault();
+            Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
+            Assert.Equal(0, errorProgressInfo?.CreatedCount);
+            Assert.Equal(0, errorProgressInfo?.UpdatedCount);
+            Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ErrorCount);
+            Assert.NotNull(errorProgressInfo?.Description);
+            Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
+
+            importReporterMock.Verify(x => x.WriteAsync(It.IsAny<ImportError>()), Times.Once());
+
+            Assert.Equal("Missed columns", errorForAssertion.Error);
+            Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
+        }
+
+        [Theory]
+        [InlineData("SKU1;1;10.99")]
+        [InlineData("SKU1;1")]
+        [InlineData("SKU1")]
+        public async Task ImportAsync_MissedColumnsWithLeftColumns_WillReportError(string row)
         {
             // Arrange
             var request = CreateImportDataRequest();
