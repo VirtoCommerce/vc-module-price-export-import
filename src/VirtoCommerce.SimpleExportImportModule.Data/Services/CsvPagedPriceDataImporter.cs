@@ -118,7 +118,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                                 throw new ArgumentException("Import mode has invalid value", nameof(request));
                         }
 
-                        await _pricingService.SavePricesAsync(createdPrices.ToArray());
+                        await _pricingService.SavePricesAsync(createdPrices.Concat(updatedPrices).ToArray());
 
                         importProgress.CreatedCount += createdPrices.Count;
                         importProgress.UpdatedCount += updatedPrices.Count;
