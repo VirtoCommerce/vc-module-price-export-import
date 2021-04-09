@@ -6,9 +6,10 @@ using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
 {
-    public sealed class ImportProductPriceNotExistsValidator: AbstractValidator<ImportProductPrice>
+    public sealed class ImportProductPriceExistsValidator: AbstractValidator<ImportProductPrice>
     {
-        public ImportProductPriceNotExistsValidator()
+
+        public ImportProductPriceExistsValidator()
         {
             AttachValidators();
         }
@@ -22,9 +23,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
                     var exist = existingPrices.Any(existingPrice =>
                         existingPrice.ProductId == price.ProductId &&
                         existingPrice.MinQuantity == price.Price.MinQuantity);
-                    return !exist;
+                    return exist;
                 })
-                .WithErrorCode(ModuleConstants.ValidationErrors.AlreadyExistsError)
+                .WithErrorCode(ModuleConstants.ValidationErrors.NotExistsError)
                 .WithState(importProductPrice => new ImportValidationState
                 {
                     InvalidImportProductPrice = importProductPrice

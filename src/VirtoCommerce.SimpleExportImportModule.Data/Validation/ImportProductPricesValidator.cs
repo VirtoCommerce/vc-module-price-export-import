@@ -1,6 +1,4 @@
-using System.Linq;
 using FluentValidation;
-using VirtoCommerce.PricingModule.Core.Model.Search;
 using VirtoCommerce.PricingModule.Core.Services;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
@@ -18,25 +16,24 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
 
         private void AttachValidators()
         {
-            RuleForEach(importProductPrices => importProductPrices).SetValidator(importProductPrices =>
+            RuleSet(nameof(ImportMode.CreateOnly), () =>
             {
-                var duplicates = importProductPrices
-                    .GroupBy(importProductPrice => new { importProductPrice.Sku, importProductPrice.Price.MinQuantity })
-                    .SelectMany(group => group.Skip(1));
-                return new ImportProductPriceIsNotDuplicateValidator(duplicates);
+                RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesDuplicatesValidator(ImportMode.CreateOnly), "default");
+                RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesExistenceValidator(_pricingSearchService, true), "default");
             });
-            RuleForEach(importProductPrices => importProductPrices).SetValidator(importProductPrices =>
+            RuleSet(nameof(ImportMode.UpdateOnly), () =>
             {
-                var productIds = importProductPrices.Select(importProductPrice => importProductPrice.ProductId).ToArray();
-                var pricelistIds = importProductPrices.Select(importProductPrice => importProductPrice.Price.PricelistId).ToArray();
-                var existingPrices = _pricingSearchService.SearchPricesAsync(new PricesSearchCriteria
-                {
-                    ProductIds = productIds,
-                    PriceListIds = pricelistIds
-                }).GetAwaiter().GetResult().Results;
-                return new ImportProductPriceNotExistsValidator(existingPrices);
+                RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesDuplicatesValidator(ImportMode.UpdateOnly), "default");
+                RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesExistenceValidator(_pricingSearchService), "default");
             });
-            RuleForEach(importProductPrices => importProductPrices).SetValidator(importProductPrice => new ImportProductPriceProductExistsValidator());
+            RuleSet(nameof(ImportMode.CreateAndUpdate), () =>
+            {
+                RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesDuplicatesValidator(ImportMode.CreateAndUpdate), "default");
+            });
+            RuleSet($"{nameof(ImportMode.CreateOnly)},{nameof(ImportMode.UpdateOnly)},{nameof(ImportMode.CreateAndUpdate)}", () =>
+            {
+                RuleForEach(importProductPrices => importProductPrices).SetValidator(importProductPrice => new ImportProductPriceProductExistsValidator(), "default");
+            });
         }
     }
 }

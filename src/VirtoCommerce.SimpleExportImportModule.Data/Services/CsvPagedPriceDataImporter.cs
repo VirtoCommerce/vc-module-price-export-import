@@ -11,20 +11,24 @@ using VirtoCommerce.PricingModule.Core.Services;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
+using VirtoCommerce.SimpleExportImportModule.Data.Validation;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 {
     public sealed class CsvPagedPriceDataImporter : ICsvPagedPriceDataImporter
     {
         private readonly IPricingService _pricingService;
+        private readonly IPricingSearchService _pricingSearchService;
         private readonly ICsvPagedPriceDataSourceFactory _dataSourceFactory;
         private readonly IValidator<ImportProductPrice[]> _importProductPricesValidator;
         private readonly IBlobStorageProvider _blobStorageProvider;
         private readonly ICsvPriceDataValidator _csvPriceDataValidator;
 
-        public CsvPagedPriceDataImporter(IPricingService pricingService, ICsvPagedPriceDataSourceFactory dataSourceFactory, IValidator<ImportProductPrice[]> importProductPricesValidator, IBlobStorageProvider blobStorageProvider, ICsvPriceDataValidator csvPriceDataValidator)
+        public CsvPagedPriceDataImporter(IBlobStorageProvider blobStorageProvider, IPricingService pricingService, IPricingSearchService pricingSearchService,
+            ICsvPriceDataValidator csvPriceDataValidator, ICsvPagedPriceDataSourceFactory dataSourceFactory, IValidator<ImportProductPrice[]> importProductPricesValidator)
         {
             _pricingService = pricingService;
+            _pricingSearchService = pricingSearchService;
             _dataSourceFactory = dataSourceFactory;
             _importProductPricesValidator = importProductPricesValidator;
             _blobStorageProvider = blobStorageProvider;
@@ -48,7 +52,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             await using var stream = _blobStorageProvider.OpenRead(request.FileUrl);
 
             cancellationToken.ThrowIfCancellationRequested();
-
+            
             var importProgress = new ImportProgressInfo { ProcessedCount = 0, CreatedCount = 0, UpdatedCount = 0, Description = "Import has started" };
 
             var dataSource = _dataSourceFactory.Create(stream, ModuleConstants.Settings.PageSize, new ImportConfiguration
@@ -72,6 +76,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 importProgress.Description = "Fetching...";
                 progressCallback(importProgress);
 
+                var importProductPricesNotExistValidator = new ImportProductPricesExistenceValidator(_pricingSearchService, true);
+
                 while (await dataSource.FetchAsync())
                 {
                     cancellationToken.ThrowIfCancellationRequested();
@@ -84,20 +90,30 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
                     try
                     {
-                        var validationResult = await _importProductPricesValidator.ValidateAsync(importProductPrices);
                         var createdPrices = new List<Price>();
+                        var updatedPrices = new List<Price>();
+
+                        var validationResult = await _importProductPricesValidator.ValidateAsync(importProductPrices, ruleSet: request.ImportMode.ToString());
+
+                        var invalidImportProductPrices = validationResult.Errors.Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
+                        importProgress.ErrorCount += invalidImportProductPrices.Length;
+                        importProductPrices = importProductPrices.Except(invalidImportProductPrices).ToArray();
+
                         switch (request.ImportMode)
                         {
-                            case ImportMode.CreateAndUpdate:
-                                throw new NotImplementedException();
                             case ImportMode.CreateOnly:
-                                var invalidImportProductPrices = validationResult.Errors.Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
-                                importProgress.ErrorCount += invalidImportProductPrices.Length;
-                                importProductPrices = importProductPrices.Except(invalidImportProductPrices).ToArray();
                                 createdPrices.AddRange(importProductPrices.Select(importProductPrice => importProductPrice.Price));
                                 break;
                             case ImportMode.UpdateOnly:
-                                throw new NotImplementedException();
+                                updatedPrices.AddRange(importProductPrices.Select(importProductPrice => importProductPrice.Price));
+                                break;
+                            case ImportMode.CreateAndUpdate:
+                                var importProductPriceNotExistValidationResult = await importProductPricesNotExistValidator.ValidateAsync(importProductPrices);
+                                var importProductPricesToCreate = importProductPriceNotExistValidationResult.Errors.Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
+                                var importProductPricesToUpdate = importProductPrices.Except(importProductPricesToCreate).ToArray();
+                                createdPrices.AddRange(importProductPricesToCreate.Select(importProductPrice => importProductPrice.Price));
+                                updatedPrices.AddRange(importProductPricesToUpdate.Select(importProductPrice => importProductPrice.Price));
+                                break;
                             default:
                                 throw new ArgumentException("Import mode has invalid value", nameof(request));
                         }
@@ -105,6 +121,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                         await _pricingService.SavePricesAsync(createdPrices.ToArray());
 
                         importProgress.CreatedCount += createdPrices.Count;
+                        importProgress.UpdatedCount += updatedPrices.Count;
                     }
                     catch (Exception e)
                     {
