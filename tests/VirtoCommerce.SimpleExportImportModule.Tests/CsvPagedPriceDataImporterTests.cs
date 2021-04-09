@@ -322,7 +322,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
         private static ICsvPriceDataValidator GetPriceDataValidator(IBlobStorageProvider blobStorageProvider)
         {
-            return new CsvPriceDataValidator(blobStorageProvider);
+            return new CsvPriceDataValidator(blobStorageProvider, TestHelper.GetSettingsManagerMoq().Object);
         }
 
         private static ImportProductPricesValidator GetImportProductPricesValidator(IPricingSearchService pricingSearchService)
