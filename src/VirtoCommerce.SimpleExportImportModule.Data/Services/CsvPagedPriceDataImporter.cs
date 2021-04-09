@@ -80,7 +80,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 var context = exception.ReadingContext;
                 if (!importErrorsContext.MissedColumnsRows.Contains(context.Row))
                 {
-                    if (context.Field == "")
+                    var fieldSourceValue = context.Record[context.CurrentIndex];
+
+                    if (fieldSourceValue == "")
                     {
                         RequiredValueError(progressCallback, importProgress, importReporter, context);
                     }
@@ -92,6 +94,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 }
 
                 return false;
+            };
+
+            configuration.BadDataFound = context =>
+            {
+                HandleBadDataError(progressCallback, importProgress, importReporter, context);
             };
 
             configuration.MissingFieldFound = (headerNames, index, context) =>
@@ -219,14 +226,14 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             progressCallback(importProgress);
         }
 
-        private static async Task HandleBadDataError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context)
+        private static async void HandleBadDataError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context)
         {
             var importError = new ImportError { Error = "This row has invalid data", RawRow = context.RawRecord };
             await reporter.WriteAsync(importError);
             HandleError(progressCallback, importProgress);
         }
 
-        private static async Task RequiredValueError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context)
+        private static async void RequiredValueError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context)
         {
             var fieldName = context.HeaderRecord[context.CurrentIndex];
             var importError = new ImportError { Error = $"Column {fieldName} is required", RawRow = context.RawRecord };
