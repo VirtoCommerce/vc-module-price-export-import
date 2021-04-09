@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using FluentValidation;
 using Moq;
 using VirtoCommerce.PricingModule.Core.Model;
 using VirtoCommerce.PricingModule.Core.Model.Search;
@@ -13,8 +14,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
     [Trait("Category", "CI")]
     public class ImportProductPriceValidationTests
     {
-        private static readonly ImportProductPrice[] Prices = new[]
-        {
+        private static readonly ImportProductPrice[] Prices = {
             new ImportProductPrice
             {
                 ProductId = "TestId1",
@@ -36,13 +36,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         };
 
         [Fact]
-        public async Task FetchAsync_AfterGetTotalCount_WillStartReadingFromTheStart()
+        public async Task ValidateAsync_AlreadyExistsOnCreate_WillFail()
         {
             // Arrange
             var validator = GetValidator();
 
             // Act
-            var validationResult = await validator.ValidateAsync(Prices);
+            var validationResult = await validator.ValidateAsync(Prices, ruleSet: ImportMode.CreateOnly.ToString());
 
             // Assert
             Assert.Single(validationResult.Errors, validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.AlreadyExistsError);
@@ -58,7 +58,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                     {
                         new Price { ProductId = "TestId2", MinQuantity = 1 },
                     },
-                    TotalCount = 2
+                    TotalCount = 1
                 }));
             return pricingSearchServiceMock.Object;
         }
