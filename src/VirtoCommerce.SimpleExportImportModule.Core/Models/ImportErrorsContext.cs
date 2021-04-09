@@ -4,6 +4,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 {
     public sealed class ImportErrorsContext
     {
-        public IList<int> MissedColumnsRows { get; set; } = new List<int>();
+        public IList<int> ErrorsRows { get; set; } = new List<int>();
     }
 }
