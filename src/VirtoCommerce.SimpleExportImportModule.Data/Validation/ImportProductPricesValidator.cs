@@ -18,17 +18,17 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
         {
             RuleSet(nameof(ImportMode.CreateOnly), () =>
             {
-                RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesDuplicatesValidator(ImportMode.CreateOnly), "default");
+                RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesAreNotDuplicatesValidator(ImportMode.CreateOnly), "default");
                 RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesExistenceValidator(_pricingSearchService, true), "default");
             });
             RuleSet(nameof(ImportMode.UpdateOnly), () =>
             {
-                RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesDuplicatesValidator(ImportMode.UpdateOnly), "default");
+                RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesAreNotDuplicatesValidator(ImportMode.UpdateOnly), "default");
                 RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesExistenceValidator(_pricingSearchService), "default");
             });
             RuleSet(nameof(ImportMode.CreateAndUpdate), () =>
             {
-                RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesDuplicatesValidator(ImportMode.CreateAndUpdate), "default");
+                RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesAreNotDuplicatesValidator(ImportMode.CreateAndUpdate), "default");
             });
             RuleSet($"{nameof(ImportMode.CreateOnly)},{nameof(ImportMode.UpdateOnly)},{nameof(ImportMode.CreateAndUpdate)}", () =>
             {

@@ -5,11 +5,11 @@ using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
 {
-    public sealed class ImportProductPriceDuplicateValidator: AbstractValidator<ImportProductPrice>
+    public sealed class ImportProductPriceIsNotDuplicateValidator: AbstractValidator<ImportProductPrice>
     {
         public const string Duplicates = nameof(Duplicates);
 
-        public ImportProductPriceDuplicateValidator()
+        public ImportProductPriceIsNotDuplicateValidator()
         {
             AttachValidators();
         }
