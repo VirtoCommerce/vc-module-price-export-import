@@ -198,7 +198,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
 
         [Theory]
-        [InlineData("\"X\"XX\";1;1;9")] // Case with the not escaped quote
         [InlineData("XXX;\"9;10.9;9")]
         [InlineData("\"XXX\";2;\"9;9.9")]
         public async Task ImportAsync_BadDataFoundDuringImport_WillReportError(string row)
@@ -246,15 +245,67 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             importReporterMock.Verify(x => x.WriteAsync(It.IsAny<ImportError>()), Times.Once);
 
-            Assert.Equal($"This row has invalid data", errorForAssertion.Error);
+            Assert.Equal($"This row has invalid data. Quotes should be closed", errorForAssertion.Error);
+            Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
+        }
+
+        [Theory]
+        [InlineData("\"X\"XX\";1;1;9")]
+
+        public async Task ImportAsync_NotEscapedQuoteInDataDuringImport_WillReportError(string row)
+        {
+            // Arrange
+            var request = CreateImportDataRequest();
+            var cancellationTokenWrapper = GetCancellationTokenWrapper();
+            var progressInfos = new List<ImportProgressInfo>();
+            void ProgressCallback(ImportProgressInfo progressInfo)
+            {
+                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
+            }
+
+            var validRows = new[] { "SKU1;1;10.99;9.99", "SKU2;1;10.99;9" };
+            var invalidRows = new[] { row };
+
+            var errorReporterStream = new MemoryStream();
+
+            var importReporterFactoryMock = new Mock<ICsvPriceImportReporterFactory>();
+            var importReporterMock = new Mock<ICsvPriceImportReporter>();
+            ImportError errorForAssertion = null;
+
+            importReporterMock.Setup(x => x.WriteAsync(It.IsAny<ImportError>()))
+                .Callback<ImportError>(error => errorForAssertion = error)
+                .Returns(Task.CompletedTask);
+
+            importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
+                .Returns(importReporterMock.Object);
+
+            var allRows = validRows.Union(invalidRows).ToArray();
+
+            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, allRows, errorReporterStream), importReporterFactoryMock.Object);
+
+            // Act
+            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+
+            // Assert
+            var errorProgressInfo = progressInfos.LastOrDefault();
+            Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
+            Assert.Equal(0, errorProgressInfo?.CreatedCount);
+            Assert.Equal(0, errorProgressInfo?.UpdatedCount);
+            Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ErrorCount);
+            Assert.NotNull(errorProgressInfo?.Description);
+            Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
+
+            importReporterMock.Verify(x => x.WriteAsync(It.IsAny<ImportError>()), Times.Once);
+
+            Assert.Equal($"This row has invalid data. The data after field with not escaped quote was lost", errorForAssertion.Error);
             //Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
         }
 
         [Theory]
-        [InlineData("SKU1;1;10.99")]
-        [InlineData("SKU1;1")]
-        [InlineData("SKU1")]
-        public async Task ImportAsync_MissedColumns_WillReportError(string row)
+        [InlineData("SKU1;1;10.99", "Sale price")]
+        [InlineData("SKU1;1", "List price, Sale price")]
+        [InlineData("SKU1", "Min quantity, List price, Sale price")]
+        public async Task ImportAsync_MissedColumns_WillReportError(string row, string missingColumns)
         {
             // Arrange
             var request = CreateImportDataRequest();
@@ -297,7 +348,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             importReporterMock.Verify(x => x.WriteAsync(It.IsAny<ImportError>()), Times.Once());
 
-            Assert.Equal("Missed columns", errorForAssertion.Error);
+            Assert.Equal($"This row has next missing columns: {missingColumns}", errorForAssertion.Error);
             Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
         }
 

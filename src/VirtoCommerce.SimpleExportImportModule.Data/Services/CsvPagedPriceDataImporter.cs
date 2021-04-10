@@ -83,7 +83,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                     var fieldSourceValue = context.Record[context.CurrentIndex];
                     if (context.HeaderRecord.Length != context.Record.Length)
                     {
-                        HandleBadDataError(progressCallback, importProgress, importReporter, context, errorsContext);
+                        HandleNotClosedQuoteError(progressCallback, importProgress, importReporter, context, errorsContext);
                     }
                     else if (fieldSourceValue == "")
                     {
@@ -231,7 +231,15 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
         private static async void HandleBadDataError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
-            var importError = new ImportError { Error = "This row has invalid data", RawRow = context.RawRecord };
+            var importError = new ImportError { Error = "This row has invalid data. The data after field with not escaped quote was lost", RawRow = context.RawRecord };
+            await reporter.WriteAsync(importError);
+            errorsContext.ErrorsRows.Add(context.Row);
+            HandleError(progressCallback, importProgress);
+        }
+
+        private static async void HandleNotClosedQuoteError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
+        {
+            var importError = new ImportError { Error = "This row has invalid data. Quotes should be closed", RawRow = context.RawRecord };
             await reporter.WriteAsync(importError);
             errorsContext.ErrorsRows.Add(context.Row);
             HandleError(progressCallback, importProgress);
@@ -263,20 +271,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var recordFields = context.Record;
 
+            var missedColumns = headerColumns.Skip(recordFields.Length).ToArray();
 
-
-            //if (headerNames.Length == 1)
-            //{
-            //    error = $"Column {headerNames.First()} is required";
-            //}
-            //else
-            //{
-            //    error = $"Columns {String.Join(',', headerNames)} are required";
-            //}
-
-            //context.ReaderConfiguration.ShouldSkipRecord = record => record.Join();
-
-            error = "Missed columns";
+            error = $"This row has next missing columns: {String.Join(", ", missedColumns)}";
 
             var importError = new ImportError { Error = error, RawRow = context.RawRecord };
             await reporter.WriteAsync(importError);
