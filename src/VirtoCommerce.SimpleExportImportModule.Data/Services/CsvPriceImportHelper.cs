@@ -16,5 +16,15 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             return requiredColumns;
         }
+
+        public static string[] GetImportPriceRequiredValueColumns()
+        {
+            var requiredColumns = typeof(CsvPrice).GetProperties().Where(x => Nullable.GetUnderlyingType(x.PropertyType) == null)
+                .Select(p =>
+                    ((NameAttribute)Attribute.GetCustomAttribute(p, typeof(NameAttribute)))?.Names.First() ??
+                    p.Name).ToArray();
+
+            return requiredColumns;
+        }
     }
 }
