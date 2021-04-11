@@ -119,7 +119,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                     cancellationToken.ThrowIfCancellationRequested();
 
                     var importProductPrices = dataSource.Items
-                        // expect records that was parsed but have missed columns
+                        // expect records that was parsed with errors
                         .Where(importProductPrice => !errorsContext.ErrorsRows.Contains(importProductPrice.Row))
                         .Select(importProductPrice =>
                     {
