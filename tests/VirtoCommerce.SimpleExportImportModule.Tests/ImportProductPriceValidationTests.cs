@@ -42,6 +42,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                 Sku = "TestSku1",
                 Price = new Price { MinQuantity = 1, List = 20m, Sale = 19m }
             },
+            new ImportProductPrice
+            {
+                //ProductId = null,
+                //Product = new CatalogProduct { Id = "TestId1" },
+                Sku = "",
+                Price = new Price { MinQuantity = 1, List = 20m, Sale = 19m }
+            }
         };
 
         [Fact]
@@ -114,7 +121,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Assert
             var errors = validationResult.Errors.Where(validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.NotExistsError).ToArray();
             Assert.NotNull(errors);
-            Assert.Equal(3, errors.Length);
+            Assert.Equal(4, errors.Length);
         }
 
         [Theory]
@@ -132,7 +139,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Assert
             var errors = validationResult.Errors.Where(validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.ProductMissingError).ToArray();
             Assert.NotNull(errors);
-            Assert.Equal(3, errors.Length);
+            Assert.Equal(4, errors.Length);
         }
 
         [Fact]
@@ -146,6 +153,19 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             // Assert
             Assert.Equal(3, validationResult.Errors.Count(validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.NegativeNumbers));
+        }
+
+        [Fact]
+        public async Task ValidateAsync_SkuNotEmpty_WillFail()
+        {
+            // Arrange
+            var validator = GetValidator();
+
+            // Act
+            var validationResult = await validator.ValidateAsync(Prices, ruleSet: ImportMode.CreateOnly.ToString());
+
+            // Assert
+            Assert.Equal(1, validationResult.Errors.Count(validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.SkuIsEmpty));
         }
 
         private static IPricingSearchService GetPricingSearchService()
