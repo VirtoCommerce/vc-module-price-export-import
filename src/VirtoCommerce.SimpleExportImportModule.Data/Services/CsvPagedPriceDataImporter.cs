@@ -63,7 +63,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             var importReporter = _importReporterFactory.Create(importReporterStream, csvConfiguration);
 
             cancellationToken.ThrowIfCancellationRequested();
-            
+
             var importProgress = new ImportProgressInfo { ProcessedCount = 0, CreatedCount = 0, UpdatedCount = 0, Description = "Import has started" };
 
             var configuration = new ImportConfiguration();
@@ -135,6 +135,20 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                         var validationResult = await _importProductPricesValidator.ValidateAsync(importProductPrices, ruleSet: request.ImportMode.ToString());
 
                         var invalidImportProductPrices = validationResult.Errors.Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
+
+                        var errorsInfos = validationResult.Errors.Select(x => new { Message = x.ErrorMessage, ImportProductPrice = (x.CustomState as ImportValidationState)?.InvalidImportProductPrice }).ToArray();
+
+                        var errorsGroups = errorsInfos.GroupBy(x => x.ImportProductPrice);
+
+                        foreach (var g in errorsGroups)
+                        {
+                            var importPrice = g.Key;
+
+                            var errorMessages = string.Join(" ", g.Select(x => x.Message).ToArray());
+
+                            //reporter.WriteAsync()
+                        }
+
                         importProgress.ErrorCount += invalidImportProductPrices.Length;
                         importProductPrices = importProductPrices.Except(invalidImportProductPrices).ToArray();
 
