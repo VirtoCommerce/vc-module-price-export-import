@@ -76,7 +76,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 importProgress.Description = "Fetching...";
                 progressCallback(importProgress);
 
-                var importProductPricesNotExistValidator = new ImportProductPricesExistenceValidator(_pricingSearchService, true);
+                var importProductPricesNotExistValidator = new ImportProductPricesExistenceValidator(_pricingSearchService, ImportProductPricesExistenceValidationMode.NotExists);
 
                 while (await dataSource.FetchAsync())
                 {

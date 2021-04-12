@@ -5,8 +5,10 @@ using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
 {
-    public class ImportProductPricesAreNotDuplicatesValidator: AbstractValidator<ImportProductPrice[]>
+    public sealed class ImportProductPricesAreNotDuplicatesValidator: AbstractValidator<ImportProductPrice[]>
     {
+        internal const string Duplicates = nameof(Duplicates);
+
         private readonly ImportMode _importMode;
 
         public ImportProductPricesAreNotDuplicatesValidator(ImportMode importMode)
@@ -27,7 +29,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
             var duplicates = importProductPrices.GroupBy(importProductPrice => new { importProductPrice.Sku, importProductPrice.Price.MinQuantity })
                 .SelectMany(group => importMode == ImportMode.CreateOnly ? group.Skip(1) : group.Take(group.Count() - 1))
                 .ToArray();
-            context.ParentContext.RootContextData[ImportProductPriceIsNotDuplicateValidator.Duplicates] = duplicates;
+            context.ParentContext.RootContextData[Duplicates] = duplicates;
         }
     }
 }

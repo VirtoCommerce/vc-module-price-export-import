@@ -9,24 +9,28 @@ using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
 {
-    public class ImportProductPricesExistenceValidator: AbstractValidator<ImportProductPrice[]>
+    public sealed class ImportProductPricesExistenceValidator : AbstractValidator<ImportProductPrice[]>
     {
-        public const string ExistingPrices = nameof(ExistingPrices);
+        internal const string ExistingPrices = nameof(ExistingPrices);
 
         private readonly IPricingSearchService _pricingSearchService;
-        private readonly bool _not;
+        private readonly ImportProductPricesExistenceValidationMode _mode;
 
-        public ImportProductPricesExistenceValidator(IPricingSearchService pricingSearchService, bool not = false)
+        public ImportProductPricesExistenceValidator(IPricingSearchService pricingSearchService, ImportProductPricesExistenceValidationMode mode)
         {
             _pricingSearchService = pricingSearchService;
-            _not = not;
+            _mode = mode;
             AttachValidators();
         }
-        public void AttachValidators()
+
+        private void AttachValidators()
         {
             RuleFor(importProductPrices => importProductPrices)
                 .CustomAsync(LoadExistingPricesAsync)
-                .ForEach(rule => rule.SetValidator(_ => _not ? (AbstractValidator<ImportProductPrice>) new ImportProductPriceNotExistsValidator() : new ImportProductPriceExistsValidator()));
+                .ForEach(rule => rule.SetValidator(_ =>
+                    _mode == ImportProductPricesExistenceValidationMode.NotExists
+                        ? (AbstractValidator<ImportProductPrice>) new ImportProductPriceNotExistsValidator()
+                        : new ImportProductPriceExistsValidator()));
         }
 
         private async Task LoadExistingPricesAsync(ImportProductPrice[] importProductPrices, CustomContext context, CancellationToken cancellationToken)

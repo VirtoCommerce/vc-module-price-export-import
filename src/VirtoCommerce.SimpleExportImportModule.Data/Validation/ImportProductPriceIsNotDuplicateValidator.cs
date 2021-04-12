@@ -7,8 +7,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
 {
     public sealed class ImportProductPriceIsNotDuplicateValidator: AbstractValidator<ImportProductPrice>
     {
-        public const string Duplicates = nameof(Duplicates);
-
         public ImportProductPriceIsNotDuplicateValidator()
         {
             AttachValidators();
@@ -19,7 +17,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
             RuleFor(price => price)
                 .Must((_, price, context) =>
                 {
-                    var duplicates = (ImportProductPrice[])context.ParentContext.RootContextData[Duplicates];
+                    var duplicates = (ImportProductPrice[])context.ParentContext.RootContextData[ImportProductPricesAreNotDuplicatesValidator.Duplicates];
                     return !duplicates.Contains(price);
                 })
                 .WithErrorCode(ModuleConstants.ValidationErrors.DuplicateError)
