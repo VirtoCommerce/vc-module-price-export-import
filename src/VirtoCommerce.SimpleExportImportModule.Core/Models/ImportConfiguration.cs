@@ -19,5 +19,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Models
         public override Action<ReadingContext> BadDataFound { get; set; } = null;
 
         public override Action<string[], int, ReadingContext> MissingFieldFound { get; set; } = null;
+
+        public override bool IgnoreQuotes { get; set; } = true;
     }
 }
