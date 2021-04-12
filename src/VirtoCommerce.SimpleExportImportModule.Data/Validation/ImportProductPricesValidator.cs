@@ -32,6 +32,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
                 () => { RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesAreNotDuplicatesValidator(ImportMode.CreateAndUpdate), "default"); });
             RuleSet($"{nameof(ImportMode.CreateOnly)},{nameof(ImportMode.UpdateOnly)},{nameof(ImportMode.CreateAndUpdate)}", () =>
             {
+                RuleForEach(importProductPrices => importProductPrices).SetValidator(importProductPrice => new ImportProductPriceSkuNotEmptyValidator(), "default");
                 RuleForEach(importProductPrices => importProductPrices).SetValidator(importProductPrice => new ImportProductPriceProductExistsValidator(), "default");
                 RuleForEach(importProductPrice => importProductPrice).SetValidator(_ => new ImportProductPriceNumbersValidator(), "default");
             });
