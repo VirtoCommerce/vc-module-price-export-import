@@ -5,7 +5,7 @@ using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
 {
-    public sealed class ImportProductPriceIsNotDuplicateValidator: AbstractValidator<ImportProductPrice>
+    public sealed class ImportProductPriceIsNotDuplicateValidator : AbstractValidator<ImportProductPrice>
     {
         public ImportProductPriceIsNotDuplicateValidator()
         {
@@ -17,14 +17,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
             RuleFor(price => price)
                 .Must((_, price, context) =>
                 {
-                    var duplicates = (ImportProductPrice[])context.ParentContext.RootContextData[ImportProductPricesAreNotDuplicatesValidator.Duplicates];
+                    var duplicates = (ImportProductPrice[]) context.ParentContext.RootContextData[ImportProductPricesAreNotDuplicatesValidator.Duplicates];
                     return !duplicates.Contains(price);
                 })
                 .WithErrorCode(ModuleConstants.ValidationErrors.DuplicateError)
-                .WithState(importProductPrice => new ImportValidationState
-                {
-                    InvalidImportProductPrice = importProductPrice
-                });
+                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice });
         }
     }
 }
