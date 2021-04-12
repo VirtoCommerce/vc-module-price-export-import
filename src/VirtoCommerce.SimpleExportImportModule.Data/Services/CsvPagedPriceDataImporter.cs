@@ -146,7 +146,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
                             var errorMessages = string.Join(" ", g.Select(x => x.Message).ToArray());
 
-                            //reporter.WriteAsync()
+                            var importError = new ImportError { Error = errorMessages, RawRow = importPrice.RawRecord };
+
+                            await importReporter.WriteAsync(importError);
                         }
 
                         importProgress.ErrorCount += invalidImportProductPrices.Length;
