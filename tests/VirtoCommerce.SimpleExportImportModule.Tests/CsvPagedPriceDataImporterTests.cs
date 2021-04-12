@@ -71,7 +71,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             void ProgressCallback(ImportProgressInfo progressInfo)
             {
-                progressInfos.Add((ImportProgressInfo) progressInfo.Clone());
+                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
@@ -99,7 +99,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             void ProgressCallback(ImportProgressInfo progressInfo)
             {
-                progressInfos.Add((ImportProgressInfo) progressInfo.Clone());
+                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
@@ -122,7 +122,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             void ProgressCallback(ImportProgressInfo progressInfo)
             {
-                progressInfos.Add((ImportProgressInfo) progressInfo.Clone());
+                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
             var invalidRows = new[] { "XXX;Y;Y;Y" };
@@ -158,7 +158,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                     cancellationTokenSource.Cancel();
                 }
 
-                progressInfos.Add((ImportProgressInfo) progressInfo.Clone());
+                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
@@ -186,7 +186,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             void ProgressCallback(ImportProgressInfo progressInfo)
             {
-                progressInfos.Add((ImportProgressInfo) progressInfo.Clone());
+                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, new[] { CsvRecords.First() }));
@@ -215,7 +215,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             void ProgressCallback(ImportProgressInfo progressInfo)
             {
-                progressInfos.Add((ImportProgressInfo) progressInfo.Clone());
+                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
@@ -243,7 +243,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             void ProgressCallback(ImportProgressInfo progressInfo)
             {
-                progressInfos.Add((ImportProgressInfo) progressInfo.Clone());
+                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, new[] { CsvRecords[1] }));
@@ -272,7 +272,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             void ProgressCallback(ImportProgressInfo progressInfo)
             {
-                progressInfos.Add((ImportProgressInfo) progressInfo.Clone());
+                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords.Take(2).ToArray()));
