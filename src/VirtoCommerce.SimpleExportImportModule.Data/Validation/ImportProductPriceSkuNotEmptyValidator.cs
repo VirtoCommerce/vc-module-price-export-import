@@ -14,7 +14,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
         private void AttachValidators()
         {
             RuleFor(importProductPrice => importProductPrice.Sku).NotEmpty()
-                .WithErrorCode(ModuleConstants.ValidationErrors.SkuIsEmpty);
+                .WithErrorCode(ModuleConstants.ValidationErrors.SkuIsEmpty)
+                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice });
         }
     }
 }

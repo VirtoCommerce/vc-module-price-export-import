@@ -14,11 +14,14 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
         private void AttachValidators()
         {
             RuleFor(importProductPrice => importProductPrice.Price.MinQuantity).GreaterThan(0)
-                .WithErrorCode(ModuleConstants.ValidationErrors.NegativeNumbers);
+                .WithErrorCode(ModuleConstants.ValidationErrors.NegativeNumbers)
+                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice });
             RuleFor(importProductPrice => importProductPrice.Price.List).GreaterThanOrEqualTo(0)
-                .WithErrorCode(ModuleConstants.ValidationErrors.NegativeNumbers);
+                .WithErrorCode(ModuleConstants.ValidationErrors.NegativeNumbers)
+                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice });
             RuleFor(importProductPrice => importProductPrice.Price.Sale).GreaterThanOrEqualTo(0).When(importProductPrice => importProductPrice.Price.Sale != null)
-                .WithErrorCode(ModuleConstants.ValidationErrors.NegativeNumbers);
+                .WithErrorCode(ModuleConstants.ValidationErrors.NegativeNumbers)
+                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice });
         }
     }
 }
