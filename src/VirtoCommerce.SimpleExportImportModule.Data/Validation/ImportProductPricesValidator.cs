@@ -4,7 +4,7 @@ using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
 {
-    public sealed class ImportProductPricesValidator: AbstractValidator<ImportProductPrice[]>
+    public sealed class ImportProductPricesValidator : AbstractValidator<ImportProductPrice[]>
     {
         private readonly IPricingSearchService _pricingSearchService;
 
@@ -28,10 +28,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
                 RuleFor(importProductPrices => importProductPrices)
                     .SetValidator(_ => new ImportProductPricesExistenceValidator(_pricingSearchService, ImportProductPricesExistenceValidationMode.Exists), "default");
             });
-            RuleSet(nameof(ImportMode.CreateAndUpdate), () =>
-            {
-                RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesAreNotDuplicatesValidator(ImportMode.CreateAndUpdate), "default");
-            });
+            RuleSet(nameof(ImportMode.CreateAndUpdate),
+                () => { RuleFor(importProductPrices => importProductPrices).SetValidator(_ => new ImportProductPricesAreNotDuplicatesValidator(ImportMode.CreateAndUpdate), "default"); });
             RuleSet($"{nameof(ImportMode.CreateOnly)},{nameof(ImportMode.UpdateOnly)},{nameof(ImportMode.CreateAndUpdate)}", () =>
             {
                 RuleForEach(importProductPrices => importProductPrices).SetValidator(importProductPrice => new ImportProductPriceProductExistsValidator(), "default");

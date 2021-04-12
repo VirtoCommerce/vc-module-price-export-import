@@ -5,7 +5,7 @@ using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
 {
-    public sealed class ImportProductPricesAreNotDuplicatesValidator: AbstractValidator<ImportProductPrice[]>
+    public sealed class ImportProductPricesAreNotDuplicatesValidator : AbstractValidator<ImportProductPrice[]>
     {
         internal const string Duplicates = nameof(Duplicates);
 
@@ -17,7 +17,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
             AttachValidators();
         }
 
-        public void AttachValidators()
+        private void AttachValidators()
         {
             RuleFor(importProductPrices => importProductPrices)
                 .Custom((importProductPrices, context) => GetDuplicates(importProductPrices, context, _importMode))

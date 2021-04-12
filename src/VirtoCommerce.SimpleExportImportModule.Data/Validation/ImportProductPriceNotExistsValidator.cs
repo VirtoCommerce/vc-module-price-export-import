@@ -6,7 +6,7 @@ using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
 {
-    public sealed class ImportProductPriceNotExistsValidator: AbstractValidator<ImportProductPrice>
+    public sealed class ImportProductPriceNotExistsValidator : AbstractValidator<ImportProductPrice>
     {
         public ImportProductPriceNotExistsValidator()
         {
@@ -25,10 +25,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
                     return !exist;
                 })
                 .WithErrorCode(ModuleConstants.ValidationErrors.AlreadyExistsError)
-                .WithState(importProductPrice => new ImportValidationState
-                {
-                    InvalidImportProductPrice = importProductPrice
-                });
+                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice });
         }
     }
 }
