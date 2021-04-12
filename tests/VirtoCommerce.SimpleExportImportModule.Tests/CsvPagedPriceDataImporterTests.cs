@@ -550,7 +550,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_UpdateValidPrices_WillReportSuccess()
         {
             // Arrange
-            var request = new ImportDataRequest { ImportMode = ImportMode.UpdateOnly, PricelistId = "TestId" };
+            var request = CreateImportDataRequest(ImportMode.UpdateOnly);
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
 
@@ -579,7 +579,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_CreateAndUpdateValidPrices_WillReportSuccess()
         {
             // Arrange
-            var request = new ImportDataRequest { ImportMode = ImportMode.CreateAndUpdate, PricelistId = "TestId" };
+            var request = CreateImportDataRequest(ImportMode.CreateAndUpdate);
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
 
@@ -604,9 +604,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.DoesNotContain("error", successProgressInfo.Description);
         }
 
-        private static ImportDataRequest CreateImportDataRequest()
+        private static ImportDataRequest CreateImportDataRequest(ImportMode importMode = ImportMode.CreateOnly)
         {
-            return new ImportDataRequest { FileUrl = "https://localhost/test_url.csv", ImportMode = ImportMode.CreateOnly, PricelistId = "TestId" };
+            return new ImportDataRequest { FileUrl = "https://localhost/test_url.csv", ImportMode = importMode, PricelistId = "TestId" };
         }
 
         private static CancellationTokenWrapper GetCancellationTokenWrapper()
@@ -657,6 +657,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
         private static CsvPagedPriceDataImporter GetCsvPagedPriceDataImporter(IBlobStorageProvider blobStorageProvider, ICsvPriceImportReporterFactory importReporterFactory = null)
         {
+            var pricingSearchService = GetPricingSearchService();
             importReporterFactory ??= new CsvPriceImportReporterFactory();
             return new CsvPagedPriceDataImporter(blobStorageProvider, GetPricingService(), pricingSearchService,
                 GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(), GetImportProductPricesValidator(pricingSearchService), importReporterFactory);
