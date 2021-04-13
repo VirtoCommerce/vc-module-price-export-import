@@ -7,6 +7,7 @@ using FluentValidation;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.PricingModule.Core.Model;
+using VirtoCommerce.PricingModule.Core.Model.Search;
 using VirtoCommerce.PricingModule.Core.Services;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
@@ -52,7 +53,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             await using var stream = _blobStorageProvider.OpenRead(request.FileUrl);
 
             cancellationToken.ThrowIfCancellationRequested();
-            
+
             var importProgress = new ImportProgressInfo { ProcessedCount = 0, CreatedCount = 0, UpdatedCount = 0, Description = "Import has started" };
 
             var dataSource = _dataSourceFactory.Create(stream, ModuleConstants.Settings.PageSize, new ImportConfiguration
@@ -105,14 +106,16 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                                 createdPrices.AddRange(importProductPrices.Select(importProductPrice => importProductPrice.Price));
                                 break;
                             case ImportMode.UpdateOnly:
-                                updatedPrices.AddRange(importProductPrices.Select(importProductPrice => importProductPrice.Price));
+                                var existingPrices = await GetAndPatchExistingPrices(request, importProductPrices);
+                                updatedPrices.AddRange(existingPrices);
                                 break;
                             case ImportMode.CreateAndUpdate:
                                 var importProductPriceNotExistValidationResult = await importProductPricesNotExistValidator.ValidateAsync(importProductPrices);
                                 var importProductPricesToCreate = importProductPriceNotExistValidationResult.Errors.Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
                                 var importProductPricesToUpdate = importProductPrices.Except(importProductPricesToCreate).ToArray();
                                 createdPrices.AddRange(importProductPricesToCreate.Select(importProductPrice => importProductPrice.Price));
-                                updatedPrices.AddRange(importProductPricesToUpdate.Select(importProductPrice => importProductPrice.Price));
+                                var existingPricesToUpdate = await GetAndPatchExistingPrices(request, importProductPricesToUpdate);
+                                updatedPrices.AddRange(existingPricesToUpdate);
                                 break;
                             default:
                                 throw new ArgumentException("Import mode has invalid value", nameof(request));
@@ -149,6 +152,29 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 importProgress.Description = $"{completedMessage}: {string.Format(importDescription, importProgress.ProcessedCount, importProgress.TotalCount)}";
                 progressCallback(importProgress);
             }
+        }
+
+        private async Task<Price[]> GetAndPatchExistingPrices(ImportDataRequest request, ImportProductPrice[] importProductPrices)
+        {
+            var updateProductIds = importProductPrices.Select(x => x.ProductId).ToArray();
+            var existingPricesSearchResult = await _pricingSearchService.SearchPricesAsync(
+                new PricesSearchCriteria { ProductIds = updateProductIds, PriceListIds = new[] { request.PricelistId } });
+            var existingPrices = existingPricesSearchResult.Results.ToArray();
+
+            foreach (var existingPrice in existingPrices)
+            {
+                var priceForUpdating = importProductPrices
+                    .FirstOrDefault(x =>
+                        x.ProductId == existingPrice.ProductId &&
+                        x.Price.MinQuantity == existingPrice.MinQuantity);
+                if (priceForUpdating != null)
+                {
+                    existingPrice.Sale = priceForUpdating.Price.Sale;
+                    existingPrice.List = priceForUpdating.Price.List;
+                }
+            }
+
+            return existingPrices;
         }
 
         private static void ValidateParameters(ImportDataRequest request, Action<ImportProgressInfo> progressCallback, ICancellationToken cancellationToken)
