@@ -1,6 +1,6 @@
 namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 {
-    public class ImportValidationState
+    public sealed class ImportValidationState
     {
         public ImportProductPrice InvalidImportProductPrice { get; set; }
 
