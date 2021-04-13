@@ -77,7 +77,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 importProgress.Description = "Fetching...";
                 progressCallback(importProgress);
 
-                var importProductPricesNotExistValidator = new ImportProductPricesExistenceValidator(_pricingSearchService, ImportProductPricesExistenceValidationMode.NotExists);
+                var importProductPricesExistValidator = new ImportProductPricesExistenceValidator(_pricingSearchService, ImportProductPricesExistenceValidationMode.Exists);
 
                 while (await dataSource.FetchAsync())
                 {
@@ -110,8 +110,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                                 updatedPrices.AddRange(existingPrices);
                                 break;
                             case ImportMode.CreateAndUpdate:
-                                var importProductPriceNotExistValidationResult = await importProductPricesNotExistValidator.ValidateAsync(importProductPrices);
-                                var importProductPricesToCreate = importProductPriceNotExistValidationResult.Errors.Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
+                                var importProductPriceNotExistValidationResult = await importProductPricesExistValidator.ValidateAsync(importProductPrices);
+
+                                var importProductPricesToCreate = importProductPriceNotExistValidationResult.Errors
+                                    .Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
+
                                 var importProductPricesToUpdate = importProductPrices.Except(importProductPricesToCreate).ToArray();
                                 createdPrices.AddRange(importProductPricesToCreate.Select(importProductPrice => importProductPrice.Price));
                                 var existingPricesToUpdate = await GetAndPatchExistingPrices(request, importProductPricesToUpdate);
@@ -121,7 +124,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                                 throw new ArgumentException("Import mode has invalid value", nameof(request));
                         }
 
-                        await _pricingService.SavePricesAsync(createdPrices.Concat(updatedPrices).ToArray());
+                        var allChangingPrices = createdPrices.Concat(updatedPrices).ToArray();
+                        await _pricingService.SavePricesAsync(allChangingPrices);
 
                         importProgress.CreatedCount += createdPrices.Count;
                         importProgress.UpdatedCount += updatedPrices.Count;
