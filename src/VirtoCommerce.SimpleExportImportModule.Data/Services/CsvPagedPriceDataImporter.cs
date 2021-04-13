@@ -251,7 +251,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
         private static async Task HandleBadDataError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
-            var importError = new ImportError { Error = "This row has invalid data. The data after field with not escaped quote was lost", RawRow = context.RawRecord };
+            var importError = new ImportError { Error = "This row has invalid data. The data after field with not escaped quote was lost.", RawRow = context.RawRecord };
             await reporter.WriteAsync(importError);
             errorsContext.ErrorsRows.Add(context.Row);
             HandleError(progressCallback, importProgress);
@@ -259,7 +259,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
         private static async Task HandleNotClosedQuoteError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
-            var importError = new ImportError { Error = "This row has invalid data. Quotes should be closed", RawRow = context.RawRecord };
+            var importError = new ImportError { Error = "This row has invalid data. Quotes should be closed.", RawRow = context.RawRecord };
             await reporter.WriteAsync(importError);
             errorsContext.ErrorsRows.Add(context.Row);
             HandleError(progressCallback, importProgress);
@@ -268,7 +268,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         private static async Task HandleWrongValueError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
             var invalidFieldName = context.HeaderRecord[context.CurrentIndex];
-            var importError = new ImportError { Error = $"This row has invalid value in the column {invalidFieldName}", RawRow = context.RawRecord };
+            var importError = new ImportError { Error = $"This row has invalid value in the column {invalidFieldName}.", RawRow = context.RawRecord };
             await reporter.WriteAsync(importError);
             errorsContext.ErrorsRows.Add(context.Row);
             HandleError(progressCallback, importProgress);
@@ -290,11 +290,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 }
             }
 
-            var importError = new ImportError { Error = $"The required value in column {fieldName} is missing", RawRow = context.RawRecord };
+            var importError = new ImportError { Error = $"The required value in column {fieldName} is missing.", RawRow = context.RawRecord };
 
             if (missedValueColumns.Count > 1)
             {
-                importError.Error = $"The required values in columns: {string.Join(", ", missedValueColumns)} - are missing";
+                importError.Error = $"The required values in columns: {string.Join(", ", missedValueColumns)} - are missing.";
             }
 
             await reporter.WriteAsync(importError);
@@ -312,7 +312,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var missedColumns = headerColumns.Skip(recordFields.Length).ToArray();
 
-            error = $"This row has next missing columns: {string.Join(", ", missedColumns)}";
+            error = $"This row has next missing columns: {string.Join(", ", missedColumns)}.";
 
             var importError = new ImportError { Error = error, RawRow = context.RawRecord };
             await reporter.WriteAsync(importError);
