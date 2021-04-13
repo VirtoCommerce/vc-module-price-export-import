@@ -31,7 +31,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_InvalidColumnValueDuringImport_WillReportError(string row, string invalidFieldName)
         {
             // Arrange
-            var request = CreateImportDataRequest();
+            var request = TestHelper.CreateImportDataRequest();
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
             void ProgressCallback(ImportProgressInfo progressInfo)
@@ -39,7 +39,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                 progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
-            var validRows = new[] { "SKU1;1;10.99;9.99", "SKU2;1;10.99;9" };
             var invalidRows = new[] { row };
 
             var errorReporterStream = new MemoryStream();
@@ -65,9 +64,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Assert
             var errorProgressInfo = progressInfos.LastOrDefault();
             Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
-            Assert.Equal(0, errorProgressInfo?.CreatedCount);
+            Assert.Equal(2, errorProgressInfo?.CreatedCount);
             Assert.Equal(0, errorProgressInfo?.UpdatedCount);
-            Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ErrorCount);
+            Assert.Equal(invalidRows.Length, errorProgressInfo?.ErrorCount);
             Assert.NotNull(errorProgressInfo?.Description);
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
 
@@ -84,7 +83,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_BadDataFoundDuringImport_WillReportError(string row)
         {
             // Arrange
-            var request = CreateImportDataRequest(ImportMode.CreateAndUpdate);
+            var request = TestHelper.CreateImportDataRequest(ImportMode.CreateAndUpdate);
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
             void ProgressCallback(ImportProgressInfo progressInfo)
@@ -116,7 +115,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             // Assert
             var skuNotExistErrorsCount = validRows.Length;
-            var allErrorsCount = skuNotExistErrorsCount + invalidRows.Length;
 
             var errorProgressInfo = progressInfos.LastOrDefault();
             Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
@@ -138,7 +136,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_NotEscapedQuoteInDataDuringImport_WillReportError(string row)
         {
             // Arrange
-            var request = CreateImportDataRequest();
+            var request = TestHelper.CreateImportDataRequest();
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
             void ProgressCallback(ImportProgressInfo progressInfo)
@@ -171,9 +169,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Assert
             var errorProgressInfo = progressInfos.LastOrDefault();
             Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
-            Assert.Equal(0, errorProgressInfo?.CreatedCount);
+            Assert.Equal(validRows.Length, errorProgressInfo?.CreatedCount);
             Assert.Equal(0, errorProgressInfo?.UpdatedCount);
-            Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ErrorCount);
+            Assert.Equal(invalidRows.Length, errorProgressInfo?.ErrorCount);
             Assert.NotNull(errorProgressInfo?.Description);
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
 
@@ -189,7 +187,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_MissedColumns_WillReportError(string row, string missingColumns)
         {
             // Arrange
-            var request = CreateImportDataRequest();
+            var request = TestHelper.CreateImportDataRequest();
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
 
@@ -198,7 +196,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                 progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
-            var validRows = new[] { "SKU1;1;10.99;9.99", "SKU2;1;10.99;9" };
             var invalidRows = new[] { row };
             var errorReporterStream = new MemoryStream();
 
@@ -221,9 +218,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Assert
             var errorProgressInfo = progressInfos.LastOrDefault();
             Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
-            Assert.Equal(0, errorProgressInfo?.CreatedCount);
+            Assert.Equal(validRows.Length, errorProgressInfo?.CreatedCount);
             Assert.Equal(0, errorProgressInfo?.UpdatedCount);
-            Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ErrorCount);
+            Assert.Equal(invalidRows.Length, errorProgressInfo?.ErrorCount);
             Assert.NotNull(errorProgressInfo?.Description);
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
 
@@ -239,7 +236,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_SeveralRequiredValueMissed_WillReportError(string row, string missedValueColumns)
         {
             // Arrange
-            var request = CreateImportDataRequest();
+            var request = TestHelper.CreateImportDataRequest();
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
 
@@ -248,7 +245,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                 progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
-            var validRows = new[] { "SKU1;1;10.99;9.99", "SKU2;1;10.99;9" };
             var invalidRows = new[] { row };
             var errorReporterStream = new MemoryStream();
 
@@ -271,9 +267,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Assert
             var errorProgressInfo = progressInfos.LastOrDefault();
             Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
-            Assert.Equal(0, errorProgressInfo?.CreatedCount);
+            Assert.Equal(validRows.Length, errorProgressInfo?.CreatedCount);
             Assert.Equal(0, errorProgressInfo?.UpdatedCount);
-            Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ErrorCount);
+            Assert.Equal(invalidRows.Length, errorProgressInfo?.ErrorCount);
             Assert.NotNull(errorProgressInfo?.Description);
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
 
@@ -290,7 +286,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_OneRequiredValueMissed_WillReportError(string row, string missingValueColumn)
         {
             // Arrange
-            var request = CreateImportDataRequest();
+            var request = TestHelper.CreateImportDataRequest();
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
 
@@ -299,7 +295,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                 progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
-            var validRows = new[] { "SKU1;1;10.99;9.99", "SKU2;1;10.99;9" };
             var invalidRows = new[] { row };
             var errorReporterStream = new MemoryStream();
 
@@ -322,9 +317,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Assert
             var errorProgressInfo = progressInfos.LastOrDefault();
             Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
-            Assert.Equal(0, errorProgressInfo?.CreatedCount);
+            Assert.Equal(validRows.Length, errorProgressInfo?.CreatedCount);
             Assert.Equal(0, errorProgressInfo?.UpdatedCount);
-            Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ErrorCount);
+            Assert.Equal(invalidRows.Length, errorProgressInfo?.ErrorCount);
             Assert.NotNull(errorProgressInfo?.Description);
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
 
@@ -334,11 +329,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
         }
 
-
-        private static ImportDataRequest CreateImportDataRequest(ImportMode importMode = ImportMode.CreateOnly)
-        {
-            return new ImportDataRequest { FileUrl = "https://localhost/test_url.csv", ImportMode = importMode, PricelistId = "TestId" };
-        }
 
         private static CancellationTokenWrapper GetCancellationTokenWrapper()
         {
