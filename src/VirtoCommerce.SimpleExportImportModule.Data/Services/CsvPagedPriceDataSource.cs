@@ -88,7 +88,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             CurrentPageNumber++;
 
             var skus = records.Select(x => x.Sku).ToArray();
-            var products = await _productSearchService.SearchProductsAsync(new ProductSearchCriteria { Skus = skus });
+            var products = await _productSearchService.SearchProductsAsync(new ProductSearchCriteria { Skus = skus, SearchInVariations = true });
 
             Items = records.Select(record =>
             {
