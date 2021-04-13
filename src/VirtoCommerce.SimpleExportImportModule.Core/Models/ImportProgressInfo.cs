@@ -3,7 +3,7 @@ using VirtoCommerce.Platform.Core.Common;
 
 namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 {
-    public sealed class ImportProgressInfo: ValueObject
+    public sealed class ImportProgressInfo : ValueObject
     {
         public ImportProgressInfo()
         {
@@ -11,7 +11,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Models
         }
 
         public string Description { get; set; }
-        
+
         public int ProcessedCount { get; set; }
 
         public int CreatedCount { get; set; }
@@ -21,6 +21,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Models
         public int TotalCount { get; set; }
 
         public int ErrorCount { get; set; }
+
+        public string ReportFileUrl { get; set; }
 
         public ICollection<string> Errors { get; set; }
     }

@@ -56,7 +56,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             await using var stream = _blobStorageProvider.OpenRead(request.FileUrl);
 
-            await using var importReporterStream = _blobStorageProvider.OpenWrite(GetReportFileName(request.FileUrl));
+            var reportFileUrl = GetReportFileUrl(request.FileUrl);
+
+            await using var importReporterStream = _blobStorageProvider.OpenWrite(reportFileUrl);
 
             var csvConfiguration = new ImportConfiguration();
 
@@ -202,12 +204,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             {
                 var completedMessage = importProgress.ErrorCount > 0 ? "Import completed with errors" : "Import completed";
                 importProgress.Description = $"{completedMessage}: {string.Format(importDescription, importProgress.ProcessedCount, importProgress.TotalCount)}";
+                importProgress.ReportFileUrl = reportFileUrl;
                 progressCallback(importProgress);
 
             }
         }
 
-        private static string GetReportFileName(string fileUrl)
+        private static string GetReportFileUrl(string fileUrl)
         {
             var uri = new Uri(fileUrl);
             var fileName = uri.Segments.Last();
