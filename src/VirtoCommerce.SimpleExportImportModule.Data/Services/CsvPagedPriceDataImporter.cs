@@ -87,15 +87,15 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                     var fieldSourceValue = context.Record[context.CurrentIndex];
                     if (context.HeaderRecord.Length != context.Record.Length)
                     {
-                        HandleNotClosedQuoteError(progressCallback, importProgress, importReporter, context, errorsContext);
+                        HandleNotClosedQuoteError(progressCallback, importProgress, importReporter, context, errorsContext).GetAwaiter().GetResult();
                     }
                     else if (fieldSourceValue == "")
                     {
-                        HandleRequiredValueError(progressCallback, importProgress, importReporter, context, errorsContext);
+                        HandleRequiredValueError(progressCallback, importProgress, importReporter, context, errorsContext).GetAwaiter().GetResult();
                     }
                     else
                     {
-                        HandleWrongValueError(progressCallback, importProgress, importReporter, context, errorsContext);
+                        HandleWrongValueError(progressCallback, importProgress, importReporter, context, errorsContext).GetAwaiter().GetResult();
                     }
 
                 }
@@ -103,13 +103,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 return false;
             };
 
-            configuration.BadDataFound = context =>
+            configuration.BadDataFound = async context =>
             {
-                HandleBadDataError(progressCallback, importProgress, importReporter, context, errorsContext);
+                await HandleBadDataError(progressCallback, importProgress, importReporter, context, errorsContext);
             };
 
-            configuration.MissingFieldFound = (headerNames, index, context) =>
-                HandleMissedColumnError(progressCallback, importProgress, importReporter, context, errorsContext, headerNames);
+            configuration.MissingFieldFound = async (headerNames, index, context) =>
+                await HandleMissedColumnError(progressCallback, importProgress, importReporter, context, errorsContext, headerNames);
 
             try
             {
@@ -249,7 +249,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             progressCallback(importProgress);
         }
 
-        private static async void HandleBadDataError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
+        private static async Task HandleBadDataError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
             var importError = new ImportError { Error = "This row has invalid data. The data after field with not escaped quote was lost", RawRow = context.RawRecord };
             await reporter.WriteAsync(importError);
@@ -257,7 +257,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             HandleError(progressCallback, importProgress);
         }
 
-        private static async void HandleNotClosedQuoteError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
+        private static async Task HandleNotClosedQuoteError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
             var importError = new ImportError { Error = "This row has invalid data. Quotes should be closed", RawRow = context.RawRecord };
             await reporter.WriteAsync(importError);
@@ -265,7 +265,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             HandleError(progressCallback, importProgress);
         }
 
-        private static async void HandleWrongValueError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
+        private static async Task HandleWrongValueError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
             var invalidFieldName = context.HeaderRecord[context.CurrentIndex];
             var importError = new ImportError { Error = $"This row has invalid value in the column {invalidFieldName}", RawRow = context.RawRecord };
@@ -274,7 +274,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             HandleError(progressCallback, importProgress);
         }
 
-        private static async void HandleRequiredValueError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
+        private static async Task HandleRequiredValueError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
             var fieldName = context.HeaderRecord[context.CurrentIndex];
 
@@ -302,7 +302,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             HandleError(progressCallback, importProgress);
         }
 
-        private static async void HandleMissedColumnError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext, string[] headerNames)
+        private static async Task HandleMissedColumnError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext, string[] headerNames)
         {
             string error;
 
