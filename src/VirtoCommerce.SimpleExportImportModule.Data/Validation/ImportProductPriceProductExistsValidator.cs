@@ -18,10 +18,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
                 {
                     RuleFor(importProductPrice => importProductPrice.Product).NotNull()
                         .WithErrorCode(ModuleConstants.ValidationErrors.ProductMissingError)
-                        .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice });
+                        .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice })
+                        .WithMessage("SKU doesn’t exists in the related catalog");
                 })
                 .WithErrorCode(ModuleConstants.ValidationErrors.ProductMissingError)
-                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice });
+                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice })
+                .WithMessage("SKU doesn’t exists in the related catalog");
         }
     }
 }
