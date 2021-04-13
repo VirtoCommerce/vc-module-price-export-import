@@ -1,6 +1,6 @@
 angular.module('virtoCommerce.simpleExportImportModule')
-.controller('virtoCommerce.simpleExportImportModule.importProcessingController', ['$scope', 'virtoCommerce.simpleExportImportModule.import',
-    function ($scope, importResources) {
+.controller('virtoCommerce.simpleExportImportModule.importProcessingController', ['$scope', 'virtoCommerce.simpleExportImportModule.import', 'platformWebApp.assets.api', 'platformWebApp.bladeNavigationService',
+    function ($scope, importResources, assetsApi, bladeNavigationService) {
         var blade = $scope.blade;
         blade.isLoading = false;
 
@@ -20,5 +20,16 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 importResources.cancel({ jobId: blade.notification.jobId });
             }
         }];
+
+        $scope.bladeClose = () => {
+            if (blade.notification.reportUrl) {
+                assetsApi.remove({urls: [blade.notification.reportUrl]},
+                    () => { },
+                    (error) => bladeNavigationService.setError('Error ' + error.status, blade)
+                );
+            }
+
+            bladeNavigationService.closeBlade(blade);
+        }
 
     }]);
