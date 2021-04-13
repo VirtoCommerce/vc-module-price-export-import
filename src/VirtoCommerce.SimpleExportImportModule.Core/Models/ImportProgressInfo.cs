@@ -22,7 +22,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 
         public int ErrorCount { get; set; }
 
-        public string ReportFileUrl { get; set; }
+        public string ReportUrl { get; set; }
 
         public ICollection<string> Errors { get; set; }
     }

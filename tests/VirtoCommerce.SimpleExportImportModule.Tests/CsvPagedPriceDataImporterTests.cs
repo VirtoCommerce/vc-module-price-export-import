@@ -660,7 +660,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             var pricingSearchService = GetPricingSearchService();
             importReporterFactory ??= new CsvPriceImportReporterFactory();
             return new CsvPagedPriceDataImporter(blobStorageProvider, GetPricingService(), pricingSearchService,
-                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(), GetImportProductPricesValidator(pricingSearchService), importReporterFactory);
+                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(), GetImportProductPricesValidator(pricingSearchService), importReporterFactory, null);
         }
     }
 }

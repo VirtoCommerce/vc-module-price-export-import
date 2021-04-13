@@ -25,9 +25,10 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         private readonly IBlobStorageProvider _blobStorageProvider;
         private readonly ICsvPriceDataValidator _csvPriceDataValidator;
         private readonly ICsvPriceImportReporterFactory _importReporterFactory;
+        private readonly IBlobUrlResolver _blobUrlResolver;
 
         public CsvPagedPriceDataImporter(IBlobStorageProvider blobStorageProvider, IPricingService pricingService, IPricingSearchService pricingSearchService,
-            ICsvPriceDataValidator csvPriceDataValidator, ICsvPagedPriceDataSourceFactory dataSourceFactory, IValidator<ImportProductPrice[]> importProductPricesValidator, ICsvPriceImportReporterFactory importReporterFactory)
+            ICsvPriceDataValidator csvPriceDataValidator, ICsvPagedPriceDataSourceFactory dataSourceFactory, IValidator<ImportProductPrice[]> importProductPricesValidator, ICsvPriceImportReporterFactory importReporterFactory, IBlobUrlResolver blobUrlResolver)
         {
             _pricingService = pricingService;
             _pricingSearchService = pricingSearchService;
@@ -36,6 +37,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             _blobStorageProvider = blobStorageProvider;
             _csvPriceDataValidator = csvPriceDataValidator;
             _importReporterFactory = importReporterFactory;
+            _blobUrlResolver = blobUrlResolver;
         }
 
         public async Task ImportAsync(ImportDataRequest request, Action<ImportProgressInfo> progressCallback, ICancellationToken cancellationToken)
@@ -62,7 +64,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var csvConfiguration = new ImportConfiguration();
 
-            var importReporter = _importReporterFactory.Create(importReporterStream, csvConfiguration);
+            using var importReporter = _importReporterFactory.Create(importReporterStream, csvConfiguration);
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -204,20 +206,19 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             {
                 var completedMessage = importProgress.ErrorCount > 0 ? "Import completed with errors" : "Import completed";
                 importProgress.Description = $"{completedMessage}: {string.Format(importDescription, importProgress.ProcessedCount, importProgress.TotalCount)}";
-                importProgress.ReportFileUrl = reportFileUrl;
+                importProgress.ReportUrl = _blobUrlResolver.GetAbsoluteUrl(reportFileUrl);
                 progressCallback(importProgress);
 
             }
         }
 
-        private static string GetReportFileUrl(string fileUrl)
+        private static string GetReportFileUrl(string filePath)
         {
-            var uri = new Uri(fileUrl);
-            var fileName = uri.Segments.Last();
+            var fileName = Path.GetFileName(filePath);
             var fileExtension = Path.GetExtension(fileName);
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-            var reportFileName = $"{fileNameWithoutExtension}_report.{fileExtension}";
-            var result = fileUrl.Replace(fileName, reportFileName);
+            var reportFileName = $"{fileNameWithoutExtension}_report{fileExtension}";
+            var result = filePath.Replace(fileName, reportFileName);
 
             return result;
         }
