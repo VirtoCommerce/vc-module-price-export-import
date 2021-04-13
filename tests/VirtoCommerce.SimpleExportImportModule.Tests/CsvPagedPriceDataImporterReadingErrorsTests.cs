@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,127 +19,11 @@ using Xunit;
 namespace VirtoCommerce.SimpleExportImportModule.Tests
 {
     [Trait("Category", "CI")]
-    public class CsvPagedPriceDataImporterTests
+    public class CsvPagedPriceDataImporterReadingErrorsTests
     {
         private const string CsvHeader = "SKU;Min quantity;List price;Sale price";
-        private static readonly string[] CsvRecords = { "TestSku1;1;100;99", "TestSku2;1;10;9.99", ";10;9;" };
-
-        [Fact]
-        public async Task ImportAsync_CancelledBeforeStart_WillThrowException()
-        {
-            static async Task ImportAsync()
-            {
-                // Arrange
-                var request = CreateImportDataRequest();
-                var cancellationToken = new CancellationToken(true);
-                var cancellationTokenWrapper = new CancellationTokenWrapper(cancellationToken);
-                var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
-
-                // Act
-                await importer.ImportAsync(request, ProgressCallbackMock, cancellationTokenWrapper);
-            }
-
-            // Assert
-            await Assert.ThrowsAsync<OperationCanceledException>(ImportAsync);
-        }
-
-        [Fact]
-        public async Task ImportAsync_WithFailedFileValidation_WillThrowException()
-        {
-            static async Task ImportAsync()
-            {
-                // Arrange
-                var request = CreateImportDataRequest();
-                var cancellationTokenWrapper = GetCancellationTokenWrapper();
-                var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(null, CsvRecords));
-
-                // Act
-                await importer.ImportAsync(request, ProgressCallbackMock, cancellationTokenWrapper);
-            }
-
-            // Assert
-            await Assert.ThrowsAsync<InvalidDataException>(ImportAsync);
-        }
-
-        [Fact]
-        public async Task ImportAsync_BeforeImport_WillReportProgressWithTotalCount()
-        {
-            // Arrange
-            var request = CreateImportDataRequest();
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
-            var progressInfos = new List<ImportProgressInfo>();
-
-            void ProgressCallback(ImportProgressInfo progressInfo)
-            {
-                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
-            }
-
-            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
-
-            // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
-
-            // Assert
-            var startProgressInfo = progressInfos.FirstOrDefault();
-            Assert.Equal(0, startProgressInfo?.ProcessedCount);
-            Assert.Equal(0, startProgressInfo?.CreatedCount);
-            Assert.Equal(0, startProgressInfo?.UpdatedCount);
-            Assert.Equal(0, startProgressInfo?.ErrorCount);
-            Assert.Equal("Import has started", startProgressInfo?.Description);
-            Assert.Equal(3, startProgressInfo?.TotalCount);
-        }
-
-        [Fact]
-        public async Task ImportAsync_StartImport_WillReportStartOfReading()
-        {
-            // Arrange
-            var request = CreateImportDataRequest();
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
-            var progressInfos = new List<ImportProgressInfo>();
-
-            void ProgressCallback(ImportProgressInfo progressInfo)
-            {
-                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
-            }
-
-            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
-
-            // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
-
-            // Assert
-            var startProgressInfo = progressInfos[1];
-            Assert.Equal("Fetching...", startProgressInfo?.Description);
-        }
-
-        [Fact]
-        public async Task ImportAsync_ExceptionDuringImport_WillReportError()
-        {
-            // Arrange
-            var request = CreateImportDataRequest();
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
-            var progressInfos = new List<ImportProgressInfo>();
-
-            void ProgressCallback(ImportProgressInfo progressInfo)
-            {
-                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
-            }
-
-            var invalidRows = new[] { "XXX;Y;Y;Y" };
-            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, invalidRows));
-
-            // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
-
-            // Assert
-            var errorProgressInfo = progressInfos.LastOrDefault();
-            Assert.Equal(1, errorProgressInfo?.ProcessedCount);
-            Assert.Equal(0, errorProgressInfo?.CreatedCount);
-            Assert.Equal(0, errorProgressInfo?.UpdatedCount);
-            Assert.Equal(1, errorProgressInfo?.ErrorCount);
-            Assert.NotNull(errorProgressInfo?.Description);
-            Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
-        }
+        //private static readonly string[] CsvRecords = { "TestSku1;1;100;99", "TestSku2;1;10;9.99", ";10;9;" };
+        private static readonly string[] validRows = { "TestSku1;2;10.99;9.99", "TestSku2;2;10.99;9" };
 
         [Theory]
         [InlineData("XXX;Text;10.9;Text", "Min quantity")]
@@ -202,7 +85,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         public async Task ImportAsync_BadDataFoundDuringImport_WillReportError(string row)
         {
             // Arrange
-            var request = CreateImportDataRequest();
+            var request = CreateImportDataRequest(ImportMode.CreateAndUpdate);
             var cancellationTokenWrapper = GetCancellationTokenWrapper();
             var progressInfos = new List<ImportProgressInfo>();
             void ProgressCallback(ImportProgressInfo progressInfo)
@@ -210,7 +93,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                 progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
-            var validRows = new[] { "TestSku1;1;10.99;9.99", "TestSku2;1;10.99;9" };
             var invalidRows = new[] { row };
 
             var errorReporterStream = new MemoryStream();
@@ -240,12 +122,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             var errorProgressInfo = progressInfos.LastOrDefault();
             Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
             Assert.Equal(0, errorProgressInfo?.CreatedCount);
-            Assert.Equal(0, errorProgressInfo?.UpdatedCount);
-            Assert.Equal(allErrorsCount, errorProgressInfo?.ErrorCount);
+            Assert.Equal(validRows.Length, errorProgressInfo?.UpdatedCount);
+            Assert.Equal(invalidRows.Length, errorProgressInfo?.ErrorCount);
             Assert.NotNull(errorProgressInfo?.Description);
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
 
-            importReporterMock.Verify(x => x.WriteAsync(It.IsAny<ImportError>()), Times.Exactly(allErrorsCount));
+            importReporterMock.Verify(x => x.WriteAsync(It.IsAny<ImportError>()), Times.Once);
 
             Assert.Equal($"This row has invalid data. Quotes should be closed.", errorForAssertion.Error);
             Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
@@ -265,7 +147,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                 progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
-            var validRows = new[] { "SKU1;1;10.99;9.99", "SKU2;1;10.99;9" };
             var invalidRows = new[] { row };
 
             var errorReporterStream = new MemoryStream();
@@ -455,156 +336,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         }
 
 
-        [Fact]
-        public async Task ImportAsync_IfImportCancelled_WillStop()
-        {
-            // Arrange
-            var request = CreateImportDataRequest();
-            var cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = cancellationTokenSource.Token;
-            var cancellationTokenWrapper = new CancellationTokenWrapper(cancellationToken);
-            var progressInfos = new List<ImportProgressInfo>();
-
-            void ProgressCallback(ImportProgressInfo progressInfo)
-            {
-                if (progressInfo.Description == "Fetching...")
-                {
-                    cancellationTokenSource.Cancel();
-                }
-
-                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
-            }
-
-            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
-
-            // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
-
-            // Assert
-            var errorProgressInfo = progressInfos.LastOrDefault();
-            Assert.Equal(0, errorProgressInfo?.ProcessedCount);
-            Assert.Equal(0, errorProgressInfo?.CreatedCount);
-            Assert.Equal(0, errorProgressInfo?.UpdatedCount);
-            Assert.Equal(1, errorProgressInfo?.ErrorCount);
-            Assert.NotNull(errorProgressInfo?.Description);
-            Assert.StartsWith("Import completed with errors", errorProgressInfo.Description);
-        }
-
-        [Fact]
-        public async Task ImportAsync_CreateValidPrices_WillReportSuccess()
-        {
-            // Arrange
-            var request = CreateImportDataRequest();
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
-            var progressInfos = new List<ImportProgressInfo>();
-
-            void ProgressCallback(ImportProgressInfo progressInfo)
-            {
-                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
-            }
-
-            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, new[] { CsvRecords.First() }));
-
-            // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
-
-            // Assert
-            var successProgressInfo = progressInfos.LastOrDefault();
-            Assert.Equal(1, successProgressInfo?.ProcessedCount);
-            Assert.Equal(1, successProgressInfo?.CreatedCount);
-            Assert.Equal(0, successProgressInfo?.UpdatedCount);
-            Assert.Equal(0, successProgressInfo?.ErrorCount);
-            Assert.NotNull(successProgressInfo?.Description);
-            Assert.StartsWith("Import completed", successProgressInfo.Description);
-            Assert.DoesNotContain("error", successProgressInfo.Description);
-        }
-
-        [Fact]
-        public async Task ImportAsync_CreateInvalidPrices_WillIgnore()
-        {
-            // Arrange
-            var request = CreateImportDataRequest();
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
-            var progressInfos = new List<ImportProgressInfo>();
-
-            void ProgressCallback(ImportProgressInfo progressInfo)
-            {
-                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
-            }
-
-            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
-
-            // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
-
-            // Assert
-            var successProgressInfo = progressInfos.LastOrDefault();
-            Assert.Equal(3, successProgressInfo?.ProcessedCount);
-            Assert.Equal(1, successProgressInfo?.CreatedCount);
-            Assert.Equal(0, successProgressInfo?.UpdatedCount);
-            Assert.Equal(2, successProgressInfo?.ErrorCount);
-            Assert.NotNull(successProgressInfo?.Description);
-            Assert.StartsWith("Import completed with errors", successProgressInfo.Description);
-        }
-
-        [Fact]
-        public async Task ImportAsync_UpdateValidPrices_WillReportSuccess()
-        {
-            // Arrange
-            var request = CreateImportDataRequest(ImportMode.UpdateOnly);
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
-            var progressInfos = new List<ImportProgressInfo>();
-
-            void ProgressCallback(ImportProgressInfo progressInfo)
-            {
-                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
-            }
-
-            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, new[] { CsvRecords[1] }));
-
-            // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
-
-            // Assert
-            var successProgressInfo = progressInfos.LastOrDefault();
-            Assert.Equal(1, successProgressInfo?.ProcessedCount);
-            Assert.Equal(0, successProgressInfo?.CreatedCount);
-            Assert.Equal(1, successProgressInfo?.UpdatedCount);
-            Assert.Equal(0, successProgressInfo?.ErrorCount);
-            Assert.NotNull(successProgressInfo?.Description);
-            Assert.StartsWith("Import completed", successProgressInfo.Description);
-            Assert.DoesNotContain("error", successProgressInfo.Description);
-        }
-
-        [Fact]
-        public async Task ImportAsync_CreateAndUpdateValidPrices_WillReportSuccess()
-        {
-            // Arrange
-            var request = CreateImportDataRequest(ImportMode.CreateAndUpdate);
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
-            var progressInfos = new List<ImportProgressInfo>();
-
-            void ProgressCallback(ImportProgressInfo progressInfo)
-            {
-                progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
-            }
-
-            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords.Take(2).ToArray()));
-
-            // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
-
-            // Assert
-            var successProgressInfo = progressInfos.LastOrDefault();
-            Assert.Equal(2, successProgressInfo?.ProcessedCount);
-            Assert.Equal(1, successProgressInfo?.CreatedCount);
-            Assert.Equal(1, successProgressInfo?.UpdatedCount);
-            Assert.Equal(0, successProgressInfo?.ErrorCount);
-            Assert.NotNull(successProgressInfo?.Description);
-            Assert.StartsWith("Import completed", successProgressInfo.Description);
-            Assert.DoesNotContain("error", successProgressInfo.Description);
-        }
-
         private static ImportDataRequest CreateImportDataRequest(ImportMode importMode = ImportMode.CreateOnly)
         {
             return new ImportDataRequest { FileUrl = "https://localhost/test_url.csv", ImportMode = importMode, PricelistId = "TestId" };
@@ -638,15 +369,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             return pricingServiceMock.Object;
         }
 
-        private static IPricingSearchService GetPricingSearchService()
-        {
-            var pricingSearchServiceMock = new Mock<IPricingSearchService>();
-            pricingSearchServiceMock.Setup(x => x.SearchPricesAsync(It.IsAny<PricesSearchCriteria>()))
-                .Returns(() => Task.FromResult(new PriceSearchResult { TotalCount = 1, Results = new List<Price> { new Price { PricelistId = "TestId", ProductId = "TestId2", MinQuantity = 1 }, } }));
-            return pricingSearchServiceMock.Object;
-        }
 
-        private static IPricingSearchService GetPricingSearchService2()
+        private static IPricingSearchService GetPricingSearchService()
         {
             var pricingSearchServiceMock = new Mock<IPricingSearchService>();
             pricingSearchServiceMock.Setup(x => x.SearchPricesAsync(It.IsAny<PricesSearchCriteria>()))
@@ -678,7 +402,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             var blobUrlResolverMock = new Mock<IBlobUrlResolver>();
             blobUrlResolverMock.Setup(x => x.GetAbsoluteUrl(It.IsAny<string>())).Returns("test_path.csv");
 
-            var pricingSearchService = GetPricingSearchService2();
+            var pricingSearchService = GetPricingSearchService();
             importReporterFactory ??= new CsvPriceImportReporterFactory();
             return new CsvPagedPriceDataImporter(blobStorageProvider, GetPricingService(), pricingSearchService,
                 GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(), GetImportProductPricesValidator(pricingSearchService), importReporterFactory, blobUrlResolverMock.Object);
