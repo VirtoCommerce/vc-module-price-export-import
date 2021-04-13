@@ -50,14 +50,6 @@ angular.module('virtoCommerce.simpleExportImportModule')
                     })
                 },
                 permission: blade.importPermission
-            },
-            {
-                name: "simpleExportImport.commands.upload-new",
-                icon: 'fa fa-download',
-                canExecuteMethod: () => true ,
-                executeMethod: () => {
-                },
-                permission: blade.importPermission
             }
         ];
 
