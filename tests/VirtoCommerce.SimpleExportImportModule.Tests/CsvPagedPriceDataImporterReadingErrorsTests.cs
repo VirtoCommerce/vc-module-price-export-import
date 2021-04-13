@@ -22,7 +22,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
     public class CsvPagedPriceDataImporterReadingErrorsTests
     {
         private const string CsvHeader = "SKU;Min quantity;List price;Sale price";
-        //private static readonly string[] CsvRecords = { "TestSku1;1;100;99", "TestSku2;1;10;9.99", ";10;9;" };
         private static readonly string[] validRows = { "TestSku1;2;10.99;9.99", "TestSku2;2;10.99;9" };
 
         [Theory]
