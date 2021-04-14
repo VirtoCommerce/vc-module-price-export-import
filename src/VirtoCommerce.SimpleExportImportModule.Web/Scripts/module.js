@@ -12,7 +12,7 @@ angular.module(moduleName, [])
                 featureManagerSubscriber.onLoginStatusChanged('SimpleExportImport', () => {
 
                     widgetService.registerWidget({
-                        isVisible: function (blade) { return blade.controller === 'virtoCommerce.pricingModule.pricelistDetailController' && authService.checkPermission('pricing:read'); },
+                        isVisible: function (blade) { return blade.controller === 'virtoCommerce.pricingModule.pricelistDetailController' && !blade.isNew && authService.checkPermission('pricing:read'); },
                         controller: 'virtoCommerce.simpleExportImportModule.pricesWidgetController',
                         template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/widgets/pricesWidget.tpl.html'
                     }, 'pricelistDetail');
