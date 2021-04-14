@@ -1,7 +1,5 @@
-using System;
 using System.IO;
 using System.Threading.Tasks;
-using CsvHelper;
 using CsvHelper.Configuration;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
@@ -23,14 +21,26 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
         public async Task WriteAsync(ImportError importError)
         {
-            var line = $"{importError.Error}{_configuration.Delimiter}{importError.RawRow}";
-            await _streamWriter.WriteLineAsync(line);
+            await _streamWriter.WriteLineAsync(GetLine(importError));
+        }
+
+        public void Write(ImportError importError)
+        {
+            _streamWriter.WriteLine(GetLine(importError));
         }
 
         public void Dispose()
         {
             _streamWriter.Dispose();
             _stream.Dispose();
+        }
+
+
+        private string GetLine(ImportError importError)
+        {
+            var result = $"{importError.Error}{_configuration.Delimiter}{importError.RawRow}";
+
+            return result;
         }
     }
 }

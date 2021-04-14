@@ -6,6 +6,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Services
 {
     public interface ICsvPriceImportReporter : IDisposable
     {
-        Task WriteAsync(ImportError error); 
+        Task WriteAsync(ImportError error);
+        void Write(ImportError error);
     }
 }
