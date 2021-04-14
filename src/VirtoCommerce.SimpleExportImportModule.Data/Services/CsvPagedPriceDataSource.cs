@@ -86,7 +86,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var recordTuples = new List<(CsvPrice, string, int)>();
 
-            for (var i = 0; i < PageSize && _csvReader.Read(); i++)
+            for (var i = 0; i < PageSize && await _csvReader.ReadAsync(); i++)
             {
                 var csvRecord = _csvReader.GetRecord<CsvPrice>();
 
