@@ -47,9 +47,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             var importReporterMock = new Mock<ICsvPriceImportReporter>();
             ImportError errorForAssertion = null;
 
-            importReporterMock.Setup(x => x.WriteAsync(It.IsAny<ImportError>()))
-                .Callback<ImportError>(error => errorForAssertion = error)
-                .Returns(Task.CompletedTask);
+            importReporterMock.Setup(x => x.Write(It.IsAny<ImportError>()))
+                .Callback<ImportError>(error => errorForAssertion = error);
 
             importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
                 .Returns(importReporterMock.Object);
@@ -70,7 +69,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.NotNull(errorProgressInfo?.Description);
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
 
-            importReporterMock.Verify(x => x.WriteAsync(It.IsAny<ImportError>()), Times.Once);
+            importReporterMock.Verify(x => x.Write(It.IsAny<ImportError>()), Times.Once);
 
             Assert.Equal($"This row has invalid value in the column {invalidFieldName}.", errorForAssertion.Error);
             Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
@@ -99,9 +98,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             var importReporterMock = new Mock<ICsvPriceImportReporter>();
             ImportError errorForAssertion = null;
 
-            importReporterMock.Setup(x => x.WriteAsync(It.IsAny<ImportError>()))
-                .Callback<ImportError>(error => errorForAssertion = error)
-                .Returns(Task.CompletedTask);
+            importReporterMock.Setup(x => x.Write(It.IsAny<ImportError>()))
+                .Callback<ImportError>(error => errorForAssertion = error);
 
             importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
                 .Returns(importReporterMock.Object);
@@ -124,7 +122,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.NotNull(errorProgressInfo?.Description);
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
 
-            importReporterMock.Verify(x => x.WriteAsync(It.IsAny<ImportError>()), Times.Once);
+            importReporterMock.Verify(x => x.Write(It.IsAny<ImportError>()), Times.Once);
 
             Assert.Equal($"This row has invalid data. Quotes should be closed.", errorForAssertion.Error);
             Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
@@ -252,7 +250,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             var importReporterMock = new Mock<ICsvPriceImportReporter>();
             ImportError errorForAssertion = null;
 
-            importReporterMock.Setup(x => x.WriteAsync(It.IsAny<ImportError>()))
+            importReporterMock.Setup(x => x.Write(It.IsAny<ImportError>()))
                 .Callback<ImportError>(error => errorForAssertion = error);
 
             importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
@@ -273,7 +271,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.NotNull(errorProgressInfo?.Description);
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
 
-            importReporterMock.Verify(x => x.WriteAsync(It.IsAny<ImportError>()), Times.Once());
+            importReporterMock.Verify(x => x.Write(It.IsAny<ImportError>()), Times.Once());
 
             Assert.Equal($"The required values in columns: {missedValueColumns} - are missing.", errorForAssertion.Error);
             Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
@@ -302,7 +300,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             var importReporterMock = new Mock<ICsvPriceImportReporter>();
             ImportError errorForAssertion = null;
 
-            importReporterMock.Setup(x => x.WriteAsync(It.IsAny<ImportError>()))
+            importReporterMock.Setup(x => x.Write(It.IsAny<ImportError>()))
                 .Callback<ImportError>(error => errorForAssertion = error);
 
             importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
@@ -323,7 +321,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.NotNull(errorProgressInfo?.Description);
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);
 
-            importReporterMock.Verify(x => x.WriteAsync(It.IsAny<ImportError>()), Times.Once());
+            importReporterMock.Verify(x => x.Write(It.IsAny<ImportError>()), Times.Once());
 
             Assert.Equal($"The required value in column {missingValueColumn} is missing.", errorForAssertion.Error);
             Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
