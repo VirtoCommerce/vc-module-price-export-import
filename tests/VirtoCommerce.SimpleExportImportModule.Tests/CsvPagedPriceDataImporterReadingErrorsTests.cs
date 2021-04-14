@@ -72,7 +72,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             importReporterMock.Verify(x => x.Write(It.IsAny<ImportError>()), Times.Once);
 
             Assert.Equal($"This row has invalid value in the column {invalidFieldName}.", errorForAssertion.Error);
-            Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
+            Assert.Equal($"{invalidRows.First()}", errorForAssertion.RawRow.TrimEnd());
         }
 
 
@@ -125,7 +125,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             importReporterMock.Verify(x => x.Write(It.IsAny<ImportError>()), Times.Once);
 
             Assert.Equal($"This row has invalid data. Quotes should be closed.", errorForAssertion.Error);
-            Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
+            Assert.Equal($"{invalidRows.First()}", errorForAssertion.RawRow.TrimEnd());
         }
 
         [Theory]
@@ -225,7 +225,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             importReporterMock.Verify(x => x.WriteAsync(It.IsAny<ImportError>()), Times.Once());
 
             Assert.Equal($"This row has next missing columns: {missingColumns}.", errorForAssertion.Error);
-            Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
+            Assert.Equal($"{invalidRows.First()}", errorForAssertion.RawRow.TrimEnd());
         }
 
         [Theory]
@@ -274,7 +274,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             importReporterMock.Verify(x => x.Write(It.IsAny<ImportError>()), Times.Once());
 
             Assert.Equal($"The required values in columns: {missedValueColumns} - are missing.", errorForAssertion.Error);
-            Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
+            Assert.Equal($"{invalidRows.First()}", errorForAssertion.RawRow.TrimEnd());
         }
 
         [Theory]
@@ -324,7 +324,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             importReporterMock.Verify(x => x.Write(It.IsAny<ImportError>()), Times.Once());
 
             Assert.Equal($"The required value in column {missingValueColumn} is missing.", errorForAssertion.Error);
-            Assert.Equal($"{invalidRows.First()}\r\n", errorForAssertion.RawRow);
+            Assert.Equal($"{invalidRows.First()}", errorForAssertion.RawRow.TrimEnd());
         }
 
 
