@@ -116,8 +116,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             var errorProgressInfo = progressInfos.LastOrDefault();
             Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
-            Assert.Equal(0, errorProgressInfo?.CreatedCount);
-            Assert.Equal(validRows.Length, errorProgressInfo?.UpdatedCount);
+            Assert.Equal(validRows.Length, errorProgressInfo?.CreatedCount);
+            Assert.Equal(0, errorProgressInfo?.UpdatedCount);
             Assert.Equal(invalidRows.Length, errorProgressInfo?.ErrorCount);
             Assert.NotNull(errorProgressInfo?.Description);
             Assert.StartsWith("Import completed with errors", errorProgressInfo?.Description);

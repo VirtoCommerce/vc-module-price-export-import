@@ -99,7 +99,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             }
 
             var skus = recordTuples.Where(x => x.Item1 != null).Select(x => x.Item1.Sku).ToArray();
-            var products = await _productSearchService.SearchProductsAsync(new ProductSearchCriteria { Skus = skus });
+            var products = await _productSearchService.SearchProductsAsync(new ProductSearchCriteria { Skus = skus, SearchInVariations = true });
 
             Items = recordTuples.Where(x => x.Item1 != null).Select(record =>
               {

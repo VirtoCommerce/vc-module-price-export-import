@@ -8,6 +8,7 @@ using FluentValidation;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.PricingModule.Core.Model;
+using VirtoCommerce.PricingModule.Core.Model.Search;
 using VirtoCommerce.PricingModule.Core.Services;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
@@ -116,7 +117,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 importProgress.Description = "Fetching...";
                 progressCallback(importProgress);
 
-                var importProductPricesNotExistValidator = new ImportProductPricesExistenceValidator(_pricingSearchService, ImportProductPricesExistenceValidationMode.NotExists);
+                var importProductPricesExistValidator = new ImportProductPricesExistenceValidator(_pricingSearchService, ImportProductPricesExistenceValidationMode.Exists);
 
                 while (await dataSource.FetchAsync())
                 {
@@ -164,20 +165,26 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                                 createdPrices.AddRange(importProductPrices.Select(importProductPrice => importProductPrice.Price));
                                 break;
                             case ImportMode.UpdateOnly:
-                                updatedPrices.AddRange(importProductPrices.Select(importProductPrice => importProductPrice.Price));
+                                var existingPrices = await GetAndPatchExistingPrices(request, importProductPrices);
+                                updatedPrices.AddRange(existingPrices);
                                 break;
                             case ImportMode.CreateAndUpdate:
-                                var importProductPriceNotExistValidationResult = await importProductPricesNotExistValidator.ValidateAsync(importProductPrices);
-                                var importProductPricesToCreate = importProductPriceNotExistValidationResult.Errors.Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
+                                var importProductPriceNotExistValidationResult = await importProductPricesExistValidator.ValidateAsync(importProductPrices);
+
+                                var importProductPricesToCreate = importProductPriceNotExistValidationResult.Errors
+                                    .Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
+
                                 var importProductPricesToUpdate = importProductPrices.Except(importProductPricesToCreate).ToArray();
                                 createdPrices.AddRange(importProductPricesToCreate.Select(importProductPrice => importProductPrice.Price));
-                                updatedPrices.AddRange(importProductPricesToUpdate.Select(importProductPrice => importProductPrice.Price));
+                                var existingPricesToUpdate = await GetAndPatchExistingPrices(request, importProductPricesToUpdate);
+                                updatedPrices.AddRange(existingPricesToUpdate);
                                 break;
                             default:
                                 throw new ArgumentException("Import mode has invalid value", nameof(request));
                         }
 
-                        await _pricingService.SavePricesAsync(createdPrices.Concat(updatedPrices).ToArray());
+                        var allChangingPrices = createdPrices.Concat(updatedPrices).ToArray();
+                        await _pricingService.SavePricesAsync(allChangingPrices);
 
                         importProgress.CreatedCount += createdPrices.Count;
                         importProgress.UpdatedCount += updatedPrices.Count;
@@ -210,6 +217,32 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 progressCallback(importProgress);
 
             }
+        }
+
+        private async Task<Price[]> GetAndPatchExistingPrices(ImportDataRequest request, ImportProductPrice[] importProductPrices)
+        {
+            var updateProductIds = importProductPrices.Select(x => x.ProductId).ToArray();
+            var existingPricesSearchResult = await _pricingSearchService.SearchPricesAsync(
+                new PricesSearchCriteria { ProductIds = updateProductIds, PriceListIds = new[] { request.PricelistId } });
+            var existingPrices = existingPricesSearchResult
+                .Results
+                .Where(x => importProductPrices.Select(i => i.Price).Any(p => p.MinQuantity == x.MinQuantity && p.ProductId == x.ProductId))
+                .ToArray();
+
+            foreach (var existingPrice in existingPrices)
+            {
+                var priceForUpdating = importProductPrices
+                    .FirstOrDefault(x =>
+                        x.ProductId == existingPrice.ProductId &&
+                        x.Price.MinQuantity == existingPrice.MinQuantity);
+                if (priceForUpdating != null)
+                {
+                    existingPrice.Sale = priceForUpdating.Price.Sale;
+                    existingPrice.List = priceForUpdating.Price.List;
+                }
+            }
+
+            return existingPrices;
         }
 
         private static string GetReportFileUrl(string filePath)
