@@ -82,22 +82,22 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             configuration.ReadingExceptionOccurred = exception =>
             {
                 var context = exception.ReadingContext;
+
                 if (!errorsContext.ErrorsRows.Contains(context.Row))
                 {
                     var fieldSourceValue = context.Record[context.CurrentIndex];
                     if (context.HeaderRecord.Length != context.Record.Length)
                     {
-                        HandleNotClosedQuoteError(progressCallback, importProgress, importReporter, context, errorsContext).GetAwaiter().GetResult();
+                        HandleNotClosedQuoteError(progressCallback, importProgress, importReporter, context, errorsContext);
                     }
                     else if (fieldSourceValue == "")
                     {
-                        HandleRequiredValueError(progressCallback, importProgress, importReporter, context, errorsContext).GetAwaiter().GetResult();
+                        HandleRequiredValueError(progressCallback, importProgress, importReporter, context, errorsContext);
                     }
                     else
                     {
-                        HandleWrongValueError(progressCallback, importProgress, importReporter, context, errorsContext).GetAwaiter().GetResult();
+                        HandleWrongValueError(progressCallback, importProgress, importReporter, context, errorsContext);
                     }
-
                 }
 
                 return false;
@@ -229,10 +229,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             {
                 throw new ArgumentNullException(nameof(request));
             }
+
             if (progressCallback == null)
             {
                 throw new ArgumentNullException(nameof(progressCallback));
             }
+
             if (cancellationToken == null)
             {
                 throw new ArgumentNullException(nameof(cancellationToken));
@@ -245,6 +247,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             {
                 importProgress.Errors.Add(error);
             }
+
             importProgress.ErrorCount++;
             progressCallback(importProgress);
         }
@@ -252,29 +255,35 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         private static async Task HandleBadDataError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
             var importError = new ImportError { Error = "This row has invalid data. The data after field with not escaped quote was lost.", RawRow = context.RawRecord };
+
             await reporter.WriteAsync(importError);
+
             errorsContext.ErrorsRows.Add(context.Row);
             HandleError(progressCallback, importProgress);
         }
 
-        private static async Task HandleNotClosedQuoteError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
+        private static void HandleNotClosedQuoteError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
             var importError = new ImportError { Error = "This row has invalid data. Quotes should be closed.", RawRow = context.RawRecord };
-            await reporter.WriteAsync(importError);
+
+            reporter.Write(importError);
+
             errorsContext.ErrorsRows.Add(context.Row);
             HandleError(progressCallback, importProgress);
         }
 
-        private static async Task HandleWrongValueError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
+        private static void HandleWrongValueError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
             var invalidFieldName = context.HeaderRecord[context.CurrentIndex];
             var importError = new ImportError { Error = $"This row has invalid value in the column {invalidFieldName}.", RawRow = context.RawRecord };
-            await reporter.WriteAsync(importError);
+
+            reporter.Write(importError);
+
             errorsContext.ErrorsRows.Add(context.Row);
             HandleError(progressCallback, importProgress);
         }
 
-        private static async Task HandleRequiredValueError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
+        private static void HandleRequiredValueError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
             var fieldName = context.HeaderRecord[context.CurrentIndex];
 
@@ -282,7 +291,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var missedValueColumns = new List<string>();
 
-            for (int i = 0; i < context.HeaderRecord.Length; i++)
+            for (var i = 0; i < context.HeaderRecord.Length; i++)
             {
                 if (requiredFields.Contains(context.HeaderRecord[i], StringComparer.InvariantCultureIgnoreCase) && context.Record[i].IsNullOrEmpty())
                 {
@@ -297,25 +306,26 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 importError.Error = $"The required values in columns: {string.Join(", ", missedValueColumns)} - are missing.";
             }
 
-            await reporter.WriteAsync(importError);
+            reporter.Write(importError);
+
             errorsContext.ErrorsRows.Add(context.Row);
             HandleError(progressCallback, importProgress);
         }
 
         private static async Task HandleMissedColumnError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext, string[] headerNames)
         {
-            string error;
-
             var headerColumns = context.HeaderRecord;
 
             var recordFields = context.Record;
 
             var missedColumns = headerColumns.Skip(recordFields.Length).ToArray();
 
-            error = $"This row has next missing columns: {string.Join(", ", missedColumns)}.";
+            var error = $"This row has next missing columns: {string.Join(", ", missedColumns)}.";
 
             var importError = new ImportError { Error = error, RawRow = context.RawRecord };
+
             await reporter.WriteAsync(importError);
+
             errorsContext.ErrorsRows.Add(context.Row);
             HandleError(progressCallback, importProgress);
         }
