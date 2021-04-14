@@ -51,5 +51,3 @@ jobs:
         workflow: Module deployment
         token: ${{ secrets.REPO_TOKEN }}
         inputs: '{ "blobUrl": "${{ steps.artifactLink.outputs.artifactUrl }}", "moduleId": "${{ env.ARTIFACT_KEY}}", "artifactVersion": "PR-${{ github.event.pull_request.number }}"}'
-
-
