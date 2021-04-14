@@ -275,7 +275,20 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                 progressInfos.Add((ImportProgressInfo)progressInfo.Clone());
             }
 
-            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords.Take(2).ToArray()));
+            var pricingSearchService = new Mock<IPricingSearchService>();
+            pricingSearchService
+                .Setup(x => x.SearchPricesAsync(It.IsAny<PricesSearchCriteria>()))
+                .ReturnsAsync(new PriceSearchResult
+                {
+                    TotalCount = 2,
+                    Results = new List<Price>
+                    {
+                        new Price { MinQuantity = 1, PricelistId = "TestId", ProductId = "TestId2", },
+                        new Price { MinQuantity = 2, PricelistId = "TestId", ProductId = "TestId2", },
+                    }
+                });
+
+            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords.Take(2).ToArray()), pricingSearchService.Object);
 
             // Act
             await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
@@ -305,23 +318,30 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
         {
             var blobStorageProviderMock = new Mock<IBlobStorageProvider>();
             blobStorageProviderMock.Setup(x => x.OpenRead(It.IsAny<string>())).Returns(() => TestHelper.GetStream(TestHelper.GetCsv(records, header)));
-            blobStorageProviderMock.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
-                .Returns(() => Task.FromResult(new BlobInfo { Size = TestHelper.GetStream(TestHelper.GetCsv(records, header)).Length }));
+
+            blobStorageProviderMock
+                .Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
+                .ReturnsAsync(new BlobInfo { Size = TestHelper.GetStream(TestHelper.GetCsv(records, header)).Length });
+
             return blobStorageProviderMock.Object;
         }
 
         private static IPricingService GetPricingService()
         {
             var pricingServiceMock = new Mock<IPricingService>();
+
             pricingServiceMock.Setup(x => x.SavePricesAsync(It.IsAny<Price[]>()));
+
             return pricingServiceMock.Object;
         }
 
         private static IPricingSearchService GetPricingSearchService()
         {
             var pricingSearchServiceMock = new Mock<IPricingSearchService>();
+
             pricingSearchServiceMock.Setup(x => x.SearchPricesAsync(It.IsAny<PricesSearchCriteria>()))
-                .Returns(() => Task.FromResult(new PriceSearchResult { TotalCount = 1, Results = new List<Price> { new Price { PricelistId = "TestId", ProductId = "TestId2", MinQuantity = 1 }, } }));
+                .ReturnsAsync(new PriceSearchResult { TotalCount = 1, Results = new List<Price> { new Price { PricelistId = "TestId", ProductId = "TestId2", MinQuantity = 1 }, } });
+
             return pricingSearchServiceMock.Object;
         }
 
@@ -335,11 +355,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             return new ImportProductPricesValidator(pricingSearchService);
         }
 
-        private static CsvPagedPriceDataImporter GetCsvPagedPriceDataImporter(IBlobStorageProvider blobStorageProvider)
+        private static CsvPagedPriceDataImporter GetCsvPagedPriceDataImporter(IBlobStorageProvider blobStorageProvider, IPricingSearchService pricingSearchService = null)
         {
-            var pricingSearchService = GetPricingSearchService();
+            pricingSearchService ??= GetPricingSearchService();
+
             return new CsvPagedPriceDataImporter(blobStorageProvider, GetPricingService(), pricingSearchService,
-                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(), GetImportProductPricesValidator(pricingSearchService));
+                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(), GetImportProductPricesValidator(GetPricingSearchService()));
         }
     }
 }
