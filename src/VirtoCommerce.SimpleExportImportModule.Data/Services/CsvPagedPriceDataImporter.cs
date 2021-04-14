@@ -144,11 +144,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
                         var errorsGroups = errorsInfos.GroupBy(x => x.ImportProductPrice);
 
-                        foreach (var g in errorsGroups)
+                        foreach (var group in errorsGroups)
                         {
-                            var importPrice = g.Key;
+                            var importPrice = group.Key;
 
-                            var errorMessages = string.Join(" ", g.Select(x => x.Message).ToArray());
+                            var errorMessages = string.Join(" ", group.Select(x => x.Message).ToArray());
 
                             var importError = new ImportError { Error = errorMessages, RawRow = importPrice.RawRecord };
 
