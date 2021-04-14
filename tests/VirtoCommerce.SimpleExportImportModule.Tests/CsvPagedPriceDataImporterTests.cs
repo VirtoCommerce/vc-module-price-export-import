@@ -288,7 +288,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                     }
                 });
 
-            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords.Take(2).ToArray()), pricingSearchService.Object);
+            var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords.Take(2).ToArray()), null, pricingSearchService.Object);
 
             // Act
             await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
@@ -304,7 +304,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             Assert.DoesNotContain("error", successProgressInfo.Description);
         }
 
-        
+
         private static CancellationTokenWrapper GetCancellationTokenWrapper()
         {
             return new CancellationTokenWrapper(new CancellationToken());
@@ -322,7 +322,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobStorageProviderMock.Setup(x => x.OpenRead(It.IsAny<string>())).Returns(() => TestHelper.GetStream(TestHelper.GetCsv(records, header)));
             blobStorageProviderMock.Setup(x => x.OpenWrite(It.IsAny<string>())).Returns(() => errorReporterMemoryStream);
             blobStorageProviderMock.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
-                .ReturnAsync(new BlobInfo { Size = TestHelper.GetStream(TestHelper.GetCsv(records, header)).Length });
+                .ReturnsAsync(new BlobInfo { Size = TestHelper.GetStream(TestHelper.GetCsv(records, header)).Length });
             return blobStorageProviderMock.Object;
         }
 
@@ -361,7 +361,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
             var blobUrlResolverMock = new Mock<IBlobUrlResolver>();
             blobUrlResolverMock.Setup(x => x.GetAbsoluteUrl(It.IsAny<string>())).Returns("test_path.csv");
-            
+
             importReporterFactory ??= new CsvPriceImportReporterFactory();
             return new CsvPagedPriceDataImporter(blobStorageProvider, GetPricingService(), pricingSearchService,
                 GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(), GetImportProductPricesValidator(pricingSearchService), importReporterFactory, blobUrlResolverMock.Object);
