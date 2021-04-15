@@ -43,7 +43,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
         public string GetHeaderRaw()
         {
-            string result = null;
+            var result = string.Empty;
 
             var streamPosition = _stream.Position;
             _stream.Seek(0, SeekOrigin.Begin);
