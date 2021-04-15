@@ -237,7 +237,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         {
             var updateProductIds = importProductPrices.Select(x => x.ProductId).ToArray();
             var existingPricesSearchResult = await _pricingSearchService.SearchPricesAsync(
-                new PricesSearchCriteria { ProductIds = updateProductIds, PriceListIds = new[] { request.PricelistId } });
+                new PricesSearchCriteria { ProductIds = updateProductIds, PriceListIds = new[] { request.PricelistId }, Take = int.MaxValue });
             var existingPrices = existingPricesSearchResult
                 .Results
                 .Where(x => importProductPrices.Select(i => i.Price).Any(p => p.MinQuantity == x.MinQuantity && p.ProductId == x.ProductId))
