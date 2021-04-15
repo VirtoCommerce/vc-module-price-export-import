@@ -228,12 +228,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 var completedMessage = importProgress.ErrorCount > 0 ? "Import completed with errors" : "Import completed";
                 importProgress.Description = $"{completedMessage}: {string.Format(importDescription, importProgress.ProcessedCount, importProgress.TotalCount)}";
 
+                var reportHasRecords = importReporter.RecordsWasWritten;
+
                 // Need to dispose importer manually, because we need flush buffer and potentially remove empty report
                 importReporter.Dispose();
 
-                var reportFileSize = (await _blobStorageProvider.GetBlobInfoAsync(reportFileUrl)).Size;
-
-                if (reportFileSize > 0)
+                if (reportHasRecords)
                 {
                     importProgress.ReportUrl = _blobUrlResolver.GetAbsoluteUrl(reportFileUrl);
                 }

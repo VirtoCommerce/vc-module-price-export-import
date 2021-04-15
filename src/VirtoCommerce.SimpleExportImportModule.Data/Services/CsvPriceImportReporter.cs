@@ -12,6 +12,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         private readonly StreamWriter _streamWriter;
         private const string ErrorsColumnName = "Error description";
 
+        public bool RecordsWasWritten { get; set; }
+
         public CsvPriceImportReporter(Stream stream, Configuration configuration)
         {
             _streamWriter = new StreamWriter(stream);
@@ -20,11 +22,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
         public async Task WriteAsync(ImportError error)
         {
+            RecordsWasWritten = true;
             await _streamWriter.WriteLineAsync(GetLine(error));
         }
 
         public void Write(ImportError error)
         {
+            RecordsWasWritten = true;
             _streamWriter.WriteLine(GetLine(error));
         }
 
