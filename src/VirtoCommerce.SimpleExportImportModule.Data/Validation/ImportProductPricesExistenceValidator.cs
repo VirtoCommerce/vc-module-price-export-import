@@ -29,7 +29,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
                 .CustomAsync(LoadExistingPricesAsync)
                 .ForEach(rule => rule.SetValidator(_ =>
                     _mode == ImportProductPricesExistenceValidationMode.NotExists
-                        ? (AbstractValidator<ImportProductPrice>) new ImportProductPriceNotExistsValidator()
+                        ? (AbstractValidator<ImportProductPrice>)new ImportProductPriceNotExistsValidator()
                         : new ImportProductPriceExistsValidator()));
         }
 
@@ -37,7 +37,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
         {
             var productIds = importProductPrices.Select(importProductPrice => importProductPrice.ProductId).ToArray();
             var priceListIds = importProductPrices.Select(importProductPrice => importProductPrice.Price.PricelistId).ToArray();
-            var existingPricesSearchResult = await _pricingSearchService.SearchPricesAsync(new PricesSearchCriteria { ProductIds = productIds, PriceListIds = priceListIds });
+            var existingPricesSearchResult = await _pricingSearchService.SearchPricesAsync(new PricesSearchCriteria { ProductIds = productIds, PriceListIds = priceListIds, Take = int.MaxValue });
             var existingPrices = existingPricesSearchResult.Results.ToArray();
             context.ParentContext.RootContextData[ExistingPrices] = existingPrices;
         }
