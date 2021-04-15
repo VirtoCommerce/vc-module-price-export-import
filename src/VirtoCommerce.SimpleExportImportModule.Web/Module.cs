@@ -37,6 +37,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
             serviceCollection.AddTransient<ICsvPagedPriceDataSourceFactory, CsvPagedPriceDataSourceFactory>();
             serviceCollection.AddTransient<ICsvPriceDataValidator, CsvPriceDataValidator>();
             serviceCollection.AddTransient<ICsvPagedPriceDataImporter, CsvPagedPriceDataImporter>();
+            serviceCollection.AddTransient<ICsvPriceImportReporterFactory, CsvPriceImportReporterFactory>();
 
             serviceCollection.AddTransient<IValidator<ImportProductPrice[]>, ImportProductPricesValidator>();
 

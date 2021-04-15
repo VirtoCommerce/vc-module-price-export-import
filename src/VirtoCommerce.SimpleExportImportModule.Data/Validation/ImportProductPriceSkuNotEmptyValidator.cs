@@ -15,7 +15,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
         {
             RuleFor(importProductPrice => importProductPrice.Sku).NotEmpty()
                 .WithErrorCode(ModuleConstants.ValidationErrors.SkuIsEmpty)
-                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice, FieldName = "SKU" });
+                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice, FieldName = "SKU" })
+                .WithMessage("SKU should not be empty.");
         }
     }
 }

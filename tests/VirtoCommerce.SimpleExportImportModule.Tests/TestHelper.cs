@@ -8,6 +8,7 @@ using VirtoCommerce.CatalogModule.Core.Model.Search;
 using VirtoCommerce.CatalogModule.Core.Search;
 using VirtoCommerce.Platform.Core.Settings;
 using VirtoCommerce.SimpleExportImportModule.Core;
+using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Data.Services;
 
 namespace VirtoCommerce.SimpleExportImportModule.Tests
@@ -93,5 +94,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                 { Value = ModuleConstants.Settings.General.ImportLimitOfLines.DefaultValue });
             return settingsManagerMoq;
         }
+
+        public static ImportDataRequest CreateImportDataRequest(ImportMode importMode = ImportMode.CreateOnly)
+        {
+            return new ImportDataRequest { FileUrl = "https://localhost/test_url.csv", ImportMode = importMode, PricelistId = "TestId" };
+        }
+
     }
 }

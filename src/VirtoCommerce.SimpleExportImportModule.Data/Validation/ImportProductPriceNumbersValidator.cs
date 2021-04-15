@@ -15,13 +15,16 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
         {
             RuleFor(importProductPrice => importProductPrice.Price.MinQuantity).GreaterThan(0)
                 .WithErrorCode(ModuleConstants.ValidationErrors.NegativeNumbers)
-                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice, FieldName = "Min quantity" });
+                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice, FieldName = "Min quantity" })
+                .WithMessage("This row should has a positive value in the column 'Min quantity'.");
             RuleFor(importProductPrice => importProductPrice.Price.List).GreaterThanOrEqualTo(0)
                 .WithErrorCode(ModuleConstants.ValidationErrors.NegativeNumbers)
-                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice, FieldName = "List price" });
+                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice, FieldName = "List price" })
+                .WithMessage("This row should has a positive value in the column 'List price'.");
             RuleFor(importProductPrice => importProductPrice.Price.Sale).GreaterThanOrEqualTo(0).When(importProductPrice => importProductPrice.Price.Sale != null)
                 .WithErrorCode(ModuleConstants.ValidationErrors.NegativeNumbers)
-                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice, FieldName = "Sale price" });
+                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice, FieldName = "Sale price" })
+                .WithMessage("This row should has a positive value in the column 'Sale price'.");
         }
     }
 }

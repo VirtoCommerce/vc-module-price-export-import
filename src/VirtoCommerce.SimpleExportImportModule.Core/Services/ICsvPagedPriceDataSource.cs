@@ -10,6 +10,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Services
 
         int PageSize { get; }
 
+        string GetHeaderRaw();
+
         int GetTotalCount();
 
         Task<bool> FetchAsync();

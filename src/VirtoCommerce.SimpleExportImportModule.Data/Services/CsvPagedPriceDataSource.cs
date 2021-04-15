@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,6 +40,33 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         public int CurrentPageNumber { get; private set; }
 
         public int PageSize { get; }
+
+        public string GetHeaderRaw()
+        {
+            var result = string.Empty;
+
+            var streamPosition = _stream.Position;
+            _stream.Seek(0, SeekOrigin.Begin);
+
+            using var streamReader = new StreamReader(_stream, leaveOpen: true);
+            using var csvReader = new CsvReader(streamReader, _configuration, true);
+
+            try
+            {
+                csvReader.Read();
+                csvReader.ReadHeader();
+                csvReader.ValidateHeader<CsvPrice>();
+
+                result = string.Join(csvReader.Configuration.Delimiter, csvReader.Context.HeaderRecord);
+
+            }
+            finally
+            {
+                _stream.Seek(streamPosition, SeekOrigin.Begin);
+            }
+
+            return result;
+        }
 
         public int GetTotalCount()
         {
@@ -83,30 +111,45 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 return false;
             }
 
-            // CSV Reader can only move forward, i.e. Skip will not work: after reading N items we can read only next N items
-            var records = _csvReader.GetRecords<CsvPrice>().Take(PageSize).ToArray();
-            CurrentPageNumber++;
+            var recordTuples = new List<(CsvPrice, string, int)>();
 
-            var skus = records.Select(x => x.Sku).ToArray();
-            var products = await _productSearchService.SearchProductsAsync(new ProductSearchCriteria { Skus = skus, SearchInVariations = true });
-
-            Items = records.Select(record =>
+            for (var i = 0; i < PageSize && await _csvReader.ReadAsync(); i++)
             {
-                var product = products.Results.FirstOrDefault(p => p.Code == record.Sku);
+                var csvRecord = _csvReader.GetRecord<CsvPrice>();
 
-                var importProductPrice = new ImportProductPrice
-                {
-                    ProductId = product?.Id,
-                    Sku = record.Sku,
-                    Product = product,
-                    Price = AbstractTypeFactory<Price>.TryCreateInstance()
-                };
-                importProductPrice.Price.ProductId = product?.Id;
-                importProductPrice.Price.MinQuantity = record.MinQuantity;
-                importProductPrice.Price.List = record.ListPrice;
-                importProductPrice.Price.Sale = record.SalePrice;
-                return importProductPrice;
-            }).ToArray();
+                var rawRecord = _csvReader.Context.RawRecord;
+                var row = _csvReader.Context.Row;
+
+                var recordTuple = (csvRecord, rawRecord, row);
+                recordTuples.Add(recordTuple);
+
+            }
+
+            var skus = recordTuples.Where(x => x.Item1 != null).Select(x => x.Item1.Sku).ToArray();
+            var products = await _productSearchService.SearchProductsAsync(new ProductSearchCriteria { Skus = skus, SearchInVariations = true, Take = skus.Length });
+
+            Items = recordTuples.Where(x => x.Item1 != null).Select(record =>
+              {
+                  var product = products.Results.FirstOrDefault(p => p.Code == record.Item1.Sku);
+
+                  var importProductPrice = new ImportProductPrice
+                  {
+                      ProductId = product?.Id,
+                      Sku = record.Item1.Sku,
+                      Product = product,
+                      Price = AbstractTypeFactory<Price>.TryCreateInstance()
+                  };
+                  importProductPrice.Price.ProductId = product?.Id;
+                  importProductPrice.Price.MinQuantity = record.Item1.MinQuantity;
+                  importProductPrice.Price.List = record.Item1.ListPrice;
+                  importProductPrice.Price.Sale = record.Item1.SalePrice;
+                  importProductPrice.RawRecord = record.Item2;
+                  importProductPrice.Row = record.Item3;
+
+                  return importProductPrice;
+              }).ToArray();
+
+            CurrentPageNumber++;
 
             return true;
         }
