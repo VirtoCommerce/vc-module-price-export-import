@@ -61,6 +61,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var reportFileUrl = GetReportFileUrl(request.FileUrl);
 
+            var reportBlob = await _blobStorageProvider.GetBlobInfoAsync(reportFileUrl);
+
+            if (reportBlob != null)
+            {
+                await _blobStorageProvider.RemoveAsync(new[] { reportFileUrl });
+            }
+
             await using var importReporterStream = _blobStorageProvider.OpenWrite(reportFileUrl);
 
             var csvConfiguration = new ImportConfiguration();
