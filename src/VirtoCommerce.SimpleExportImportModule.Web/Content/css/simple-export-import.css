@@ -117,14 +117,13 @@
 
 .simple-export-import .radio-label {
     font: normal 13px Roboto;
-    color: #96989C;
+    color: #96989c;
     margin-right: 1rem;
 }
 
 .simple-export-import .mr-auto {
     margin-right: auto;
 }
-
 
 .simple-export-import .h-100 {
     height: 100%;
@@ -139,7 +138,7 @@
 }
 
 .simple-export-import .bl-1 {
-    border-left: 1px solid #E3E7EC;
+    border-left: 1px solid #e3e7ec;
 }
 
 .simple-export-import .cancel-btn {
@@ -157,4 +156,21 @@
 .simple-export-import.modal-warning {
     background: #fcb040 !important;
     color: #fff !important;
+}
+
+.simple-export-import.preview-warning-block {
+    background: #fff7e9;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+}
+
+.simple-export-import .triangle-warning-icon {
+    color: #ffad0d;
+    font-size: 20px;
+}
+
+.simple-export-import .preview-warning-text {
+    font-size: 13px;
+    color: #9c825b;
 }

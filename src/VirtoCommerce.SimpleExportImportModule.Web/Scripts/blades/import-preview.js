@@ -16,11 +16,13 @@ angular.module('virtoCommerce.simpleExportImportModule')
 
         blade.refresh = () => {
             blade.isLoading = true;
+            $scope.showUnparsedRowsWarning = false;
 
             importResources.preview({ fileUrl: blade.csvFileUrl}, (data) => {
                 blade.currentEntities = data.results;
                 blade.totalCount = data.totalCount;
                 $scope.pageSettings.totalItems = 10;
+                getInvalidRowsCount(blade);
                 blade.isLoading = false;
             }, (error) => { bladeNavigationService.setError('Error ' + error.status, blade); });
         };
@@ -58,5 +60,14 @@ angular.module('virtoCommerce.simpleExportImportModule')
             $scope.gridOptions = gridOptions;
             bladeUtils.initializePagination($scope);
         };
+
+        function getInvalidRowsCount(blade) {
+            $scope.previewCount = _.min([blade.totalCount, $scope.pageSettings.totalItems]);
+
+            if (blade.currentEntities.length < $scope.previewCount) {
+                $scope.unparsedRowsCount = $scope.previewCount - blade.currentEntities.length;
+                $scope.showUnparsedRowsWarning = true;
+            }
+        }
 
     }]);
