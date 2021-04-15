@@ -41,6 +41,33 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
         public int PageSize { get; }
 
+        public string GetHeaderRaw()
+        {
+            string result = null;
+
+            var streamPosition = _stream.Position;
+            _stream.Seek(0, SeekOrigin.Begin);
+
+            using var streamReader = new StreamReader(_stream, leaveOpen: true);
+            using var csvReader = new CsvReader(streamReader, _configuration, true);
+
+            try
+            {
+                csvReader.Read();
+                csvReader.ReadHeader();
+                csvReader.ValidateHeader<CsvPrice>();
+
+                result = string.Join(csvReader.Configuration.Delimiter, csvReader.Context.HeaderRecord);
+
+            }
+            finally
+            {
+                _stream.Seek(streamPosition, SeekOrigin.Begin);
+            }
+
+            return result;
+        }
+
         public int GetTotalCount()
         {
             if (_totalCount != null)

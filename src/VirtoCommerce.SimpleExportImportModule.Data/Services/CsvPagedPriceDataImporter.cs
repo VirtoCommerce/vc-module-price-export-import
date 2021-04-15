@@ -75,6 +75,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var dataSource = _dataSourceFactory.Create(stream, ModuleConstants.Settings.PageSize, configuration);
 
+            var headerRaw = dataSource.GetHeaderRaw();
+
+            if (!headerRaw.IsNullOrEmpty())
+            {
+                importReporter.WriteHeader(headerRaw);
+            }
+
             importProgress.TotalCount = dataSource.GetTotalCount();
             progressCallback(importProgress);
 

@@ -11,6 +11,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         private readonly Stream _stream;
         private readonly Configuration _configuration;
         private readonly StreamWriter _streamWriter;
+        private const string ErrorsColumnName = "Error description";
 
         public CsvPriceImportReporter(Stream stream, Configuration configuration)
         {
@@ -19,14 +20,14 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             _configuration = configuration;
         }
 
-        public async Task WriteAsync(ImportError importError)
+        public async Task WriteAsync(ImportError error)
         {
-            await _streamWriter.WriteLineAsync(GetLine(importError));
+            await _streamWriter.WriteLineAsync(GetLine(error));
         }
 
-        public void Write(ImportError importError)
+        public void Write(ImportError error)
         {
-            _streamWriter.WriteLine(GetLine(importError));
+            _streamWriter.WriteLine(GetLine(error));
         }
 
         public void Dispose()
@@ -40,6 +41,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             var result = $"{importError.Error}{_configuration.Delimiter}{importError.RawRow.TrimEnd()}";
 
             return result;
+        }
+
+        public void WriteHeader(string header)
+        {
+            _streamWriter.WriteLine($"{ErrorsColumnName}{_configuration.Delimiter}{header}");
         }
     }
 }
