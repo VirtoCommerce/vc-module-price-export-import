@@ -38,6 +38,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             _streamWriter.Dispose();
         }
 
+
         private string GetLine(ImportError importError)
         {
             var result = $"{importError.Error}{_configuration.Delimiter}{importError.RawRow.TrimEnd()}";
