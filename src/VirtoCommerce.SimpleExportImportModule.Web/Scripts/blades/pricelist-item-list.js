@@ -341,6 +341,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
                     if (confirm) {
                         exportDataRequest.providerConfig = {};
                         exportDataRequest.providerConfig.delimiter = blade.csvExportDelimiter;
+                        exportDataRequest.providerConfig.type = 'CsvProviderConfiguration';
                         exportDataRequest.providerName = blade.csvExportProvider;
                         exportDataRequest.dataQuery.includedProperties = blade.csvPropertyInfos;
                         delete exportDataRequest.dataQuery.skip;
