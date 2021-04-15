@@ -213,16 +213,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             {
                 var completedMessage = importProgress.ErrorCount > 0 ? "Import completed with errors" : "Import completed";
                 importProgress.Description = $"{completedMessage}: {string.Format(importDescription, importProgress.ProcessedCount, importProgress.TotalCount)}";
-                var size = (await _blobStorageProvider.GetBlobInfoAsync(reportFileUrl)).Size;
-
-                if (size > 0)
-                {
-                    importProgress.ReportUrl = _blobUrlResolver.GetAbsoluteUrl(reportFileUrl);
-                }
-                else
-                {
-                    await _blobStorageProvider.RemoveAsync(new[] { reportFileUrl });
-                }
+                importProgress.ReportUrl = _blobUrlResolver.GetAbsoluteUrl(reportFileUrl);
 
                 progressCallback(importProgress);
 
