@@ -4,6 +4,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Models
     {
         public string Error { get; set; }
 
-        public int? RecordNumber { get; set; }
+        public string RawRow { get; set; }
     }
 }

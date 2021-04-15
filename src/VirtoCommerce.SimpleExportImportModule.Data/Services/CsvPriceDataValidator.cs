@@ -5,13 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
-using CsvHelper.Configuration.Attributes;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Settings;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
-using VirtoCommerce.SimpleExportImportModule.Data.Models;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 {
@@ -49,7 +47,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             else
             {
                 var stream = _blobStorageProvider.OpenRead(fileUrl);
-                var csvConfiguration = new ImportConfiguration();
+                var csvConfiguration = new ImportConfiguration()
+                {
+                    BadDataFound = null,
+                    MissingFieldFound = null
+                };
 
                 await ValidateDelimiterAndDataExists(stream, csvConfiguration, errorsList);
 
@@ -130,10 +132,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var existedColumns = csvReader.Context.HeaderRecord;
 
-            var requiredColumns = typeof(CsvPrice).GetProperties()
-                .Select(p =>
-                    ((NameAttribute)Attribute.GetCustomAttribute(p, typeof(NameAttribute)))?.Names.First() ??
-                    p.Name).ToArray();
+            var requiredColumns = CsvPriceImportHelper.GetImportPriceRequiredColumns();
 
             var missedColumns = requiredColumns.Except(existedColumns).ToArray();
 

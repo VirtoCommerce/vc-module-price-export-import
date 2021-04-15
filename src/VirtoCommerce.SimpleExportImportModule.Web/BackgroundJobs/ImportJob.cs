@@ -21,7 +21,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.BackgroundJobs
         {
             _dataImporter = dataImporter;
             _pushNotificationManager = pushNotificationManager;
-
         }
 
         public async Task ImportBackgroundAsync(ImportDataRequest request, ImportPushNotification pushNotification, IJobCancellationToken jobCancellationToken, PerformContext context)
@@ -49,6 +48,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.BackgroundJobs
             {
                 pushNotification.Description = "Import finished";
                 pushNotification.Finished = DateTime.UtcNow;
+
                 await _pushNotificationManager.SendAsync(pushNotification);
             }
         }

@@ -13,6 +13,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Helpers
                 target.TotalCount = source.TotalCount;
                 target.ErrorCount = source.ErrorCount;
                 target.Errors = source.Errors;
+                target.ReportUrl = source.ReportUrl;
             }
         
     }

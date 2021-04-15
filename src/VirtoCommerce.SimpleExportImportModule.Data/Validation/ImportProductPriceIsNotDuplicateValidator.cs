@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using VirtoCommerce.SimpleExportImportModule.Core;
@@ -6,25 +5,24 @@ using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
 {
-    public sealed class ImportProductPriceIsNotDuplicateValidator: AbstractValidator<ImportProductPrice>
+    public sealed class ImportProductPriceIsNotDuplicateValidator : AbstractValidator<ImportProductPrice>
     {
-        private readonly IEnumerable<ImportProductPrice> _duplicates;
-
-        public ImportProductPriceIsNotDuplicateValidator(IEnumerable<ImportProductPrice> duplicates)
+        public ImportProductPriceIsNotDuplicateValidator()
         {
-            _duplicates = duplicates;
             AttachValidators();
         }
 
         private void AttachValidators()
         {
             RuleFor(price => price)
-                .Must(price => !_duplicates.Contains(price))
-                .WithErrorCode(ModuleConstants.ValidationErrors.DuplicateError)
-                .WithState(importProductPrice => new ImportValidationState
+                .Must((_, price, context) =>
                 {
-                    InvalidImportProductPrice = importProductPrice
-                });
+                    var duplicates = (ImportProductPrice[])context.ParentContext.RootContextData[ImportProductPricesAreNotDuplicatesValidator.Duplicates];
+                    return !duplicates.Contains(price);
+                })
+                .WithErrorCode(ModuleConstants.ValidationErrors.DuplicateError)
+                .WithState(importProductPrice => new ImportValidationState { InvalidImportProductPrice = importProductPrice })
+                .WithMessage("This price is a duplicate.");
         }
     }
 }
