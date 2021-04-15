@@ -8,14 +8,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 {
     public sealed class CsvPriceImportReporter : ICsvPriceImportReporter
     {
-        private readonly Stream _stream;
         private readonly Configuration _configuration;
         private readonly StreamWriter _streamWriter;
         private const string ErrorsColumnName = "Error description";
 
         public CsvPriceImportReporter(Stream stream, Configuration configuration)
         {
-            _stream = stream;
             _streamWriter = new StreamWriter(stream);
             _configuration = configuration;
         }
