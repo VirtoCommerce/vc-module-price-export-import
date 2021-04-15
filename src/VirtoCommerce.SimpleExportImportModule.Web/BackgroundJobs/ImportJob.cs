@@ -51,13 +51,13 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.BackgroundJobs
             {
                 pushNotification.Description = "Import finished";
                 pushNotification.Finished = DateTime.UtcNow;
-                var size = (await _blobStorageProvider.GetBlobInfoAsync(pushNotification.ReportUrl)).Size;
+                //var size = (await _blobStorageProvider.GetBlobInfoAsync(pushNotification.ReportUrl)).Size;
 
-                if (size == 0)
-                {
-                    await _blobStorageProvider.RemoveAsync(new[] { pushNotification.ReportUrl });
-                    pushNotification.ReportUrl = null;
-                }
+                //if (size == 0)
+                //{
+                //    await _blobStorageProvider.RemoveAsync(new[] { pushNotification.ReportUrl });
+                //    pushNotification.ReportUrl = null;
+                //}
 
                 await _pushNotificationManager.SendAsync(pushNotification);
             }
