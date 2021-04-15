@@ -28,22 +28,21 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             _streamWriter.WriteLine(GetLine(error));
         }
 
+        public void WriteHeader(string header)
+        {
+            _streamWriter.WriteLine($"{ErrorsColumnName}{_configuration.Delimiter}{header}");
+        }
+
         public void Dispose()
         {
             _streamWriter.Dispose();
         }
-
 
         private string GetLine(ImportError importError)
         {
             var result = $"{importError.Error}{_configuration.Delimiter}{importError.RawRow.TrimEnd()}";
 
             return result;
-        }
-
-        public void WriteHeader(string header)
-        {
-            _streamWriter.WriteLine($"{ErrorsColumnName}{_configuration.Delimiter}{header}");
         }
     }
 }
