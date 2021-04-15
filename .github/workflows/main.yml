@@ -113,11 +113,3 @@ jobs:
         with:
           changelog: ${{ steps.changelog.outputs.changelog }}
         uses: VirtoCommerce/vc-github-actions/publish-github-release@master
-
-      - name: Invoke Module deployment workflow
-        if: ${{ github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master')}}
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: Module deployment
-          token: ${{ secrets.REPO_TOKEN }}
-          inputs: '{ "blobUrl": "${{ steps.blobRelease.outputs.packageUrl }}", "moduleId": "${{ steps.image.outputs.moduleId }}", "artifactVersion": "${{ steps.image.outputs.taggedVersion }}"}'
