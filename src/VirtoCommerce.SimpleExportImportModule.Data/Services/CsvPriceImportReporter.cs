@@ -32,13 +32,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         public void Dispose()
         {
             _streamWriter.Dispose();
-            _stream.Dispose();
         }
 
 
         private string GetLine(ImportError importError)
         {
-            var result = $"{importError.Error}{_configuration.Delimiter}{importError.RawRow}";
+            var result = $"{importError.Error}{_configuration.Delimiter}{importError.RawRow.TrimEnd()}";
 
             return result;
         }

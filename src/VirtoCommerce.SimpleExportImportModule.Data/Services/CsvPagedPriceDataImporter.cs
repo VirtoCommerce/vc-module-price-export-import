@@ -65,7 +65,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var csvConfiguration = new ImportConfiguration();
 
-            using var importReporter = _importReporterFactory.Create(importReporterStream, csvConfiguration);
+            var importReporter = _importReporterFactory.Create(importReporterStream, csvConfiguration);
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -213,7 +213,20 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             {
                 var completedMessage = importProgress.ErrorCount > 0 ? "Import completed with errors" : "Import completed";
                 importProgress.Description = $"{completedMessage}: {string.Format(importDescription, importProgress.ProcessedCount, importProgress.TotalCount)}";
-                importProgress.ReportUrl = _blobUrlResolver.GetAbsoluteUrl(reportFileUrl);
+
+                // Need to dispose importer manually, because we need flush buffer and potentially remove empty report
+                importReporter.Dispose();
+
+                var reportFileSize = (await _blobStorageProvider.GetBlobInfoAsync(reportFileUrl)).Size;
+
+                if (reportFileSize > 0)
+                {
+                    importProgress.ReportUrl = _blobUrlResolver.GetAbsoluteUrl(reportFileUrl);
+                }
+                else
+                {
+                    await _blobStorageProvider.RemoveAsync(new[] { reportFileUrl });
+                }
 
                 progressCallback(importProgress);
 
