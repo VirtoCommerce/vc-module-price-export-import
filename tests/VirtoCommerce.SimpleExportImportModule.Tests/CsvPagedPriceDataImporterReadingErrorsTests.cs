@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CsvHelper.Configuration;
 using Moq;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
@@ -50,8 +49,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             importReporterMock.Setup(x => x.Write(It.IsAny<ImportError>()))
                 .Callback<ImportError>(error => errorForAssertion = error);
 
-            importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
-                .Returns(importReporterMock.Object);
+            importReporterFactoryMock.Setup(x => x.CreateAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(importReporterMock.Object);
 
             var allRows = validRows.Union(invalidRows).ToArray();
 
@@ -101,8 +100,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             importReporterMock.Setup(x => x.Write(It.IsAny<ImportError>()))
                 .Callback<ImportError>(error => errorForAssertion = error);
 
-            importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
-                .Returns(importReporterMock.Object);
+            importReporterFactoryMock.Setup(x => x.CreateAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(importReporterMock.Object);
 
             var allRows = validRows.Union(invalidRows).ToArray();
 
@@ -112,8 +111,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
 
             // Assert
-            var skuNotExistErrorsCount = validRows.Length;
-
             var errorProgressInfo = progressInfos.LastOrDefault();
             Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
             Assert.Equal(validRows.Length, errorProgressInfo?.CreatedCount);
@@ -154,8 +151,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
                 .Callback<ImportError>(error => errorForAssertion = error)
                 .Returns(Task.CompletedTask);
 
-            importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
-                .Returns(importReporterMock.Object);
+            importReporterFactoryMock.Setup(x => x.CreateAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(importReporterMock.Object);
 
             var allRows = validRows.Union(invalidRows).ToArray();
 
@@ -204,8 +201,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             importReporterMock.Setup(x => x.WriteAsync(It.IsAny<ImportError>()))
                 .Callback<ImportError>(error => errorForAssertion = error);
 
-            importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
-                .Returns(importReporterMock.Object);
+            importReporterFactoryMock.Setup(x => x.CreateAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(importReporterMock.Object);
 
             var allRows = validRows.Union(invalidRows).ToArray();
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, allRows, errorReporterStream), importReporterFactoryMock.Object);
@@ -253,8 +250,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             importReporterMock.Setup(x => x.Write(It.IsAny<ImportError>()))
                 .Callback<ImportError>(error => errorForAssertion = error);
 
-            importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
-                .Returns(importReporterMock.Object);
+            importReporterFactoryMock.Setup(x => x.CreateAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(importReporterMock.Object);
 
             var allRows = validRows.Union(invalidRows).ToArray();
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, allRows, errorReporterStream), importReporterFactoryMock.Object);
@@ -303,8 +300,8 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             importReporterMock.Setup(x => x.Write(It.IsAny<ImportError>()))
                 .Callback<ImportError>(error => errorForAssertion = error);
 
-            importReporterFactoryMock.Setup(x => x.Create(It.IsAny<Stream>(), It.IsAny<Configuration>()))
-                .Returns(importReporterMock.Object);
+            importReporterFactoryMock.Setup(x => x.CreateAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(importReporterMock.Object);
 
             var allRows = validRows.Union(invalidRows).ToArray();
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, allRows, errorReporterStream), importReporterFactoryMock.Object);
@@ -390,9 +387,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             blobUrlResolverMock.Setup(x => x.GetAbsoluteUrl(It.IsAny<string>())).Returns("test_path.csv");
 
             var pricingSearchService = GetPricingSearchService();
-            importReporterFactory ??= new CsvPriceImportReporterFactory();
+
+
+            importReporterFactory ??= new CsvPriceImportReporterFactory(blobStorageProvider);
             return new CsvPagedPriceDataImporter(blobStorageProvider, GetPricingService(), pricingSearchService,
-                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(), GetImportProductPricesValidator(pricingSearchService), importReporterFactory, blobUrlResolverMock.Object);
+                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(blobStorageProvider), GetImportProductPricesValidator(pricingSearchService), importReporterFactory, blobUrlResolverMock.Object);
         }
     }
 }
