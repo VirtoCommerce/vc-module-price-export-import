@@ -112,7 +112,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             };
 
             configuration.MissingFieldFound = async (headerNames, index, context) =>
-                await HandleMissedColumnError(progressCallback, importProgress, importReporter, context, errorsContext, headerNames);
+                await HandleMissedColumnError(progressCallback, importProgress, importReporter, context, errorsContext);
 
             try
             {
@@ -350,7 +350,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             HandleError(progressCallback, importProgress);
         }
 
-        private static async Task HandleMissedColumnError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext, string[] headerNames)
+        private static async Task HandleMissedColumnError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
             var headerColumns = context.HeaderRecord;
             var recordFields = context.Record;
