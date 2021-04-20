@@ -1,6 +1,6 @@
 using System.IO;
 using System.Threading.Tasks;
-using CsvHelper.Configuration;
+using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
 
@@ -8,44 +8,55 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 {
     public sealed class CsvPriceImportReporter : ICsvPriceImportReporter
     {
-        private readonly Configuration _configuration;
+        private readonly IBlobStorageProvider _blobStorageProvider;
+        private readonly string _reportFilePath;
+        private readonly string _delimiter;
         private readonly StreamWriter _streamWriter;
         private const string ErrorsColumnName = "Error description";
 
-        public bool RecordsWasWritten { get; set; }
+        public bool ReportIsNotEmpty { get; private set; } = false;
 
-        public CsvPriceImportReporter(Stream stream, Configuration configuration)
+        public CsvPriceImportReporter(string reportFilePath, IBlobStorageProvider blobStorageProvider, string delimiter)
         {
+            _reportFilePath = reportFilePath;
+            _delimiter = delimiter;
+            _blobStorageProvider = blobStorageProvider;
+            var stream = _blobStorageProvider.OpenWrite(reportFilePath);
             _streamWriter = new StreamWriter(stream);
-            _configuration = configuration;
         }
 
         public async Task WriteAsync(ImportError error)
         {
-            RecordsWasWritten = true;
+            ReportIsNotEmpty = true;
             await _streamWriter.WriteLineAsync(GetLine(error));
         }
 
         public void Write(ImportError error)
         {
-            RecordsWasWritten = true;
+            ReportIsNotEmpty = true;
             _streamWriter.WriteLine(GetLine(error));
         }
 
         public void WriteHeader(string header)
         {
-            _streamWriter.WriteLine($"{ErrorsColumnName}{_configuration.Delimiter}{header}");
+            _streamWriter.WriteLine($"{ErrorsColumnName}{_delimiter}{header}");
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
-            _streamWriter.Dispose();
+            await _streamWriter.FlushAsync();
+            _streamWriter.Close();
+
+            if (!ReportIsNotEmpty)
+            {
+                await _blobStorageProvider.RemoveAsync(new[] { _reportFilePath });
+            }
         }
 
 
         private string GetLine(ImportError importError)
         {
-            var result = $"{importError.Error}{_configuration.Delimiter}{importError.RawRow.TrimEnd()}";
+            var result = $"{importError.Error}{_delimiter}{importError.RawRow.TrimEnd()}";
 
             return result;
         }

@@ -4,9 +4,9 @@ using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
 namespace VirtoCommerce.SimpleExportImportModule.Core.Services
 {
-    public interface ICsvPriceImportReporter : IDisposable
+    public interface ICsvPriceImportReporter : IAsyncDisposable
     {
-        bool RecordsWasWritten { get; set; }
+        bool ReportIsNotEmpty { get; }
         void WriteHeader(string header);
         Task WriteAsync(ImportError error);
         void Write(ImportError error);

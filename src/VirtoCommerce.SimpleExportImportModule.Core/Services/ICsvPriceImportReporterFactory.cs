@@ -1,10 +1,9 @@
-using System.IO;
-using CsvHelper.Configuration;
+using System.Threading.Tasks;
 
 namespace VirtoCommerce.SimpleExportImportModule.Core.Services
 {
     public interface ICsvPriceImportReporterFactory
     {
-        ICsvPriceImportReporter Create(Stream stream, Configuration configuration = null);
+        Task<ICsvPriceImportReporter> CreateAsync(string reportFilePath, string delimiter);
     }
 }
