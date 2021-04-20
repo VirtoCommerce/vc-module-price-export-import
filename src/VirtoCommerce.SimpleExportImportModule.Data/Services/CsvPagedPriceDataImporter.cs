@@ -23,7 +23,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         private readonly IPricingSearchService _pricingSearchService;
         private readonly ICsvPagedPriceDataSourceFactory _dataSourceFactory;
         private readonly IValidator<ImportProductPrice[]> _importProductPricesValidator;
-        //private readonly IBlobStorageProvider _blobStorageProvider;
         private readonly ICsvPriceDataValidator _csvPriceDataValidator;
         private readonly ICsvPriceImportReporterFactory _importReporterFactory;
         private readonly IBlobUrlResolver _blobUrlResolver;
@@ -36,7 +35,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             _pricingSearchService = pricingSearchService;
             _dataSourceFactory = dataSourceFactory;
             _importProductPricesValidator = importProductPricesValidator;
-            //_blobStorageProvider = blobStorageProvider;
             _csvPriceDataValidator = csvPriceDataValidator;
             _importReporterFactory = importReporterFactory;
             _blobUrlResolver = blobUrlResolver;
@@ -58,11 +56,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 throw new InvalidDataException();
             }
 
-            //await using var stream = _blobStorageProvider.OpenRead(request.FileUrl);
-
             var reportFilePath = GetReportFilePath(request.FileUrl);
-
-            //await using var importReporterStream = _blobStorageProvider.OpenWrite(reportFileUrl);
 
             var configuration = new ImportConfiguration();
 

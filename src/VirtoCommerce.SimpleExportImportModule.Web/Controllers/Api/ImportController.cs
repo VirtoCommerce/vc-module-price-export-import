@@ -44,7 +44,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
                 Description = "Starting import task..."
             };
             await _pushNotificationManager.SendAsync(notification);
-            
+
             notification.JobId = BackgroundJob.Enqueue<ImportJob>(importJob => importJob.ImportBackgroundAsync(request, notification, JobCancellationToken.Null, null));
 
             return Ok(notification);
@@ -74,8 +74,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
                 return BadRequest("Blob with the such url does not exist.");
             }
 
-            await using var blobStream = _blobStorageProvider.OpenRead(request.FileUrl);
-            using var csvDataSource = _csvPagedPriceDataSourceFactory.Create(blobStream, 10);
+            using var csvDataSource = _csvPagedPriceDataSourceFactory.Create(request.FileUrl, 10);
 
             var result = new ImportDataPreview
             {
