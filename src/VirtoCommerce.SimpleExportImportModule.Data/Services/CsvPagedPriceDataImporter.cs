@@ -49,14 +49,14 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var errorsContext = new ImportErrorsContext();
 
-            var csvPriceDataValidationResult = await _csvPriceDataValidator.ValidateAsync(request.FileUrl);
+            var csvPriceDataValidationResult = await _csvPriceDataValidator.ValidateAsync(request.FilePath);
 
             if (csvPriceDataValidationResult.Errors.Any())
             {
                 throw new InvalidDataException();
             }
 
-            var reportFilePath = GetReportFilePath(request.FileUrl);
+            var reportFilePath = GetReportFilePath(request.FilePath);
 
             var configuration = new ImportConfiguration();
 
@@ -67,7 +67,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             var importProgress = new ImportProgressInfo { ProcessedCount = 0, CreatedCount = 0, UpdatedCount = 0, Description = "Import has started" };
 
 
-            using var dataSource = _dataSourceFactory.Create(request.FileUrl, ModuleConstants.Settings.PageSize, configuration);
+            using var dataSource = _dataSourceFactory.Create(request.FilePath, ModuleConstants.Settings.PageSize, configuration);
 
             var headerRaw = dataSource.GetHeaderRaw();
 

@@ -62,19 +62,19 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
         [Route("preview")]
         public async Task<ActionResult<ImportDataPreview>> GetImportPreview([FromBody] ImportDataPreviewRequest request)
         {
-            if (request.FileUrl.IsNullOrEmpty())
+            if (request.FilePath.IsNullOrEmpty())
             {
-                return BadRequest($"{nameof(request.FileUrl)} can not be null");
+                return BadRequest($"{nameof(request.FilePath)} can not be null");
             }
 
-            var blobInfo = await _blobStorageProvider.GetBlobInfoAsync(request.FileUrl);
+            var blobInfo = await _blobStorageProvider.GetBlobInfoAsync(request.FilePath);
 
             if (blobInfo == null)
             {
                 return BadRequest("Blob with the such url does not exist.");
             }
 
-            using var csvDataSource = _csvPagedPriceDataSourceFactory.Create(request.FileUrl, 10);
+            using var csvDataSource = _csvPagedPriceDataSourceFactory.Create(request.FilePath, 10);
 
             var result = new ImportDataPreview
             {
@@ -92,12 +92,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
         [Route("validate")]
         public async Task<ActionResult<ImportDataValidationResult>> Validate([FromBody] ImportDataValidationRequest request)
         {
-            if (request.FileUrl.IsNullOrEmpty())
+            if (request.FilePath.IsNullOrEmpty())
             {
-                return BadRequest($"{nameof(request.FileUrl)} can not be null or empty.");
+                return BadRequest($"{nameof(request.FilePath)} can not be null or empty.");
             }
 
-            var result = await _csvPriceDataValidator.ValidateAsync(request.FileUrl);
+            var result = await _csvPriceDataValidator.ValidateAsync(request.FilePath);
 
             return Ok(result);
         }

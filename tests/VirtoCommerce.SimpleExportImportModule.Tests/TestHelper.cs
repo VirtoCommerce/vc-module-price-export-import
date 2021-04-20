@@ -110,7 +110,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
         public static ImportDataRequest CreateImportDataRequest(ImportMode importMode = ImportMode.CreateOnly)
         {
-            return new ImportDataRequest { FileUrl = "https://localhost/test_url.csv", ImportMode = importMode, PricelistId = "TestId" };
+            return new ImportDataRequest { FilePath = "https://localhost/test_url.csv", ImportMode = importMode, PricelistId = "TestId" };
         }
 
     }

@@ -75,7 +75,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
             };
 
             uploader.onBeforeUploadItem = () => {
-                if (blade.csvFileUrl) {
+                if (blade.csvFilePath) {
                     $scope.tmpCsvInfo = {};
                     $scope.tmpCsvInfo.name = $scope.uploadedFile.name;
                     $scope.tmpCsvInfo.size = $scope.uploadedFile.size;
@@ -84,7 +84,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
             };
 
             uploader.onSuccessItem = (__, asset) => {
-                blade.csvFileUrl = asset[0].relativeUrl;
+                blade.csvFilePath = asset[0].relativeUrl;
 
                 if (!_.isEmpty($scope.tmpCsvInfo)) {
                     $scope.uploadedFile.name = $scope.tmpCsvInfo.name;
@@ -92,7 +92,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
                     $scope.tmpCsvInfo = {};
                 }
 
-                importResources.validate({ fileUrl: blade.csvFileUrl }, (data) => {
+                importResources.validate({ filePath: blade.csvFilePath }, (data) => {
                     $scope.csvValidationErrors = data.errors;
                     $scope.internalCsvError = !!$scope.csvValidationErrors.length;
                     $scope.showUploadResult = true;
@@ -125,7 +125,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
         $scope.showPreview = () => {
             var newBlade = {
                 id: 'simpleImportPreview',
-                csvFileUrl: blade.csvFileUrl,
+                csvFilePath: blade.csvFilePath,
                 priceListId: blade.priceListId,
                 headIcon: "fas fa-file-csv",
                 title: 'simpleExportImport.blades.import-preview.title',
@@ -154,7 +154,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
 
         function resetState() {
             $scope.uploadedFile = {};
-            blade.csvFileUrl = null;
+            blade.csvFilePath = null;
 
             $scope.showUploadResult = false;
             $scope.fileTypeError = false;

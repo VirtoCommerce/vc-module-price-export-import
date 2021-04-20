@@ -6,6 +6,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Core.Models
 
         public ImportMode ImportMode { get; set; }
 
-        public string FileUrl { get; set; }
+        public string FilePath { get; set; }
     }
 }
