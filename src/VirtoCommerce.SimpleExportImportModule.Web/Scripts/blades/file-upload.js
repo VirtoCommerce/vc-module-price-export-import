@@ -56,13 +56,12 @@ angular.module('virtoCommerce.simpleExportImportModule')
                         name: 'csvMaxSize',
                         fn: (item) => {
                             $scope.uploadedFile.name = item.name;
-                            if (item.size <= $scope.maxCsvSize) {
+                            let result = item.size <= $scope.maxCsvSize;
+                            $scope.csvMaxSizeError = !result;
+                            if (result) {
                                 $scope.uploadedFile.size = formatFileSize(item.size);
-                                return true;
-                            } else {
-                                $scope.csvMaxSizeError = true;
-                                return false;
                             }
+                            return result;
                         }
                     }]
             });
