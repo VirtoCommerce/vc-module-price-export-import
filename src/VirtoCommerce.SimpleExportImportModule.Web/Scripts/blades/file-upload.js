@@ -109,22 +109,18 @@ angular.module('virtoCommerce.simpleExportImportModule')
 
         $scope.bladeClose = () => {
             if (blade.csvFileUrl) {
-                $scope.deleteUploadedItem();
+                bladeNavigationService.showConfirmationIfNeeded(true, true, blade, () => { bladeNavigationService.closeBlade(blade, removeCsv); }, () => {}, "simpleExportImport.dialogs.csv-file-delete.title", "simpleExportImport.dialogs.csv-file-delete.subtitle");
+            } else {
+                bladeNavigationService.closeBlade(blade);
             }
-
-            bladeNavigationService.closeBlade(blade);
         }
 
         $scope.browse = () => {
             $timeout(() => $document[0].querySelector('#selectPriceCsv').click());
         }
 
-        $scope.deleteUploadedItem = (showConfirmation) => {
-            if (showConfirmation) {
-                bladeNavigationService.showConfirmationIfNeeded(true, true, blade, () => { bladeNavigationService.closeChildrenBlades(blade, removeCsv); }, () => {}, "simpleExportImport.dialogs.csv-file-delete.title", "simpleExportImport.dialogs.csv-file-delete.subtitle");
-            } else {
-                bladeNavigationService.closeChildrenBlades(blade, removeCsv);
-            }
+        $scope.deleteUploadedItem = () => {
+            bladeNavigationService.showConfirmationIfNeeded(true, true, blade, () => { bladeNavigationService.closeChildrenBlades(blade, removeCsv); }, () => {}, "simpleExportImport.dialogs.csv-file-delete.title", "simpleExportImport.dialogs.csv-file-delete.subtitle");
         }
 
         $scope.showPreview = () => {
