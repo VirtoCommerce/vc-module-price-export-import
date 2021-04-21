@@ -11,8 +11,8 @@
         <dependency id="VirtoCommerce.Export" version="3.11.0" />
     </dependencies>
 
-    <title>Simple export import module (preview)</title>
-    <description>This module adds the simple export and import functionality to VirtoCommerce platform.</description>
+    <title>Pricelist Export Import</title>
+    <description>This module adds prices export and import functionality using it for price management.</description>
     <authors>
         <author>Solution team</author>
     </authors>
@@ -21,9 +21,10 @@
     </owners>
 
     <projectUrl>https://github.com/VirtoCommerce/vc-module-simple-export-import</projectUrl>
+    <iconUrl>Modules/$(VirtoCommerce.SimpleExportImport)/Content/logo.png</iconUrl>
 
     <releaseNotes>First version.</releaseNotes>
-    <copyright>Copyright © 2021. All rights reserved</copyright>
+    <copyright>Copyright © 2011-2021 Virto Commerce. All rights reserved</copyright>
     <tags>extension module</tags>
 
     <assemblyFile>VirtoCommerce.SimpleExportImportModule.Web.dll</assemblyFile>
