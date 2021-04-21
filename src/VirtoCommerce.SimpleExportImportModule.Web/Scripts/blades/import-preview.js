@@ -22,7 +22,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 blade.currentEntities = data.results;
                 blade.totalCount = data.totalCount;
                 $scope.pageSettings.totalItems = 10;
-                getInvalidRowsCount(blade);
+                getInvalidRowsCount();
                 blade.isLoading = false;
             }, (error) => { bladeNavigationService.setError('Error ' + error.status, blade); });
         };
@@ -61,7 +61,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
             bladeUtils.initializePagination($scope);
         };
 
-        function getInvalidRowsCount(blade) {
+        function getInvalidRowsCount() {
             $scope.previewCount = _.min([blade.totalCount, $scope.pageSettings.totalItems]);
 
             if (blade.currentEntities.length < $scope.previewCount) {
