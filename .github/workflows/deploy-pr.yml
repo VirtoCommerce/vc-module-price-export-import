@@ -26,7 +26,7 @@ jobs:
 
     - name: Create deploy PR in QA
       if: github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy-qa') && !contains(github.event.pull_request.labels.*.name, 'deploy-demo')
-      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-414
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1275
       with:
         deployRepo: "vc-webstore-deploy"
         deployBranch: "qa"
@@ -36,7 +36,7 @@ jobs:
 
     - name: Create deploy PR in Demo
       if: github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy-demo')
-      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-414
+      uses: VirtoCommerce/vc-github-actions/create-deploy-pr@VDS-1275
       with:
         deployRepo: "vc-webstore-deploy"
         deployBranch: "master"
@@ -44,10 +44,10 @@ jobs:
         artifactUrl: "${{ steps.artifactLink.outputs.artifactUrl }}"
         taskNumber: "${{ steps.artifactLink.outputs.demoTaskNumber }}"
 
-    - name: Deploy to Dev
-      if: github.event.action == 'closed' && github.event.pull_request.merged == true
-      uses: benc-uk/workflow-dispatch@v1
-      with:
-        workflow: Module deployment
-        token: ${{ secrets.REPO_TOKEN }}
-        inputs: '{ "blobUrl": "${{ steps.artifactLink.outputs.artifactUrl }}", "moduleId": "${{ env.ARTIFACT_KEY}}", "artifactVersion": "PR-${{ github.event.pull_request.number }}"}'
+    # - name: Deploy to Dev
+    #   if: github.event.action == 'closed' && github.event.pull_request.merged == true
+    #   uses: benc-uk/workflow-dispatch@v1
+    #   with:
+    #     workflow: Module deployment
+    #     token: ${{ secrets.REPO_TOKEN }}
+    #     inputs: '{ "blobUrl": "${{ steps.artifactLink.outputs.artifactUrl }}", "moduleId": "${{ env.ARTIFACT_KEY}}", "artifactVersion": "PR-${{ github.event.pull_request.number }}"}'
