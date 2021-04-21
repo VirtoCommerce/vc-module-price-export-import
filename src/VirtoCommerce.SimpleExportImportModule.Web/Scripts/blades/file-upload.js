@@ -80,7 +80,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
                     $scope.tmpCsvInfo = {};
                     $scope.tmpCsvInfo.name = $scope.uploadedFile.name;
                     $scope.tmpCsvInfo.size = $scope.uploadedFile.size;
-                    $scope.deleteUploadedItem();
+                    removeCsv();
                 }
             };
 
