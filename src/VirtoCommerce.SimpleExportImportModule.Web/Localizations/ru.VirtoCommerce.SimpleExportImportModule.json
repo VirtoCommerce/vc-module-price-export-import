@@ -14,6 +14,10 @@
         "validation-error-subtitle-count": "{{count}} шт{{comma}}",
         "validation-error-subtitle-end": "вернитесь, чтобы выбрать другое количество",
         "export": "Экспорт"
+      },
+      "csv-file-delete": {
+        "title": "Удаление CSV",
+        "subtitle": "Вы действительно хотите удалить этот CSV файл?"
       }
     },
     "widgets": {

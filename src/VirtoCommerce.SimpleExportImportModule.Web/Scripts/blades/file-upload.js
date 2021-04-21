@@ -109,10 +109,10 @@ angular.module('virtoCommerce.simpleExportImportModule')
 
         $scope.bladeClose = () => {
             if (blade.csvFileUrl) {
-                $scope.deleteUploadedItem();
+                bladeNavigationService.showConfirmationIfNeeded(true, true, blade, () => { bladeNavigationService.closeBlade(blade, removeCsv); }, () => {}, "simpleExportImport.dialogs.csv-file-delete.title", "simpleExportImport.dialogs.csv-file-delete.subtitle");
+            } else {
+                bladeNavigationService.closeBlade(blade);
             }
-
-            bladeNavigationService.closeBlade(blade);
         }
 
         $scope.browse = () => {
@@ -120,12 +120,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
         }
 
         $scope.deleteUploadedItem = () => {
-            assetsApi.remove({urls: [blade.csvFileUrl]},
-                () => { },
-                (error) => bladeNavigationService.setError('Error ' + error.status, blade)
-            );
-
-            resetState();
+            bladeNavigationService.showConfirmationIfNeeded(true, true, blade, () => { bladeNavigationService.closeChildrenBlades(blade, removeCsv); }, () => {}, "simpleExportImport.dialogs.csv-file-delete.title", "simpleExportImport.dialogs.csv-file-delete.subtitle");
         }
 
         $scope.showPreview = () => {
@@ -147,6 +142,15 @@ angular.module('virtoCommerce.simpleExportImportModule')
             var translateKey = 'simpleExportImport.validation-errors.' + error.errorCode;
             var result = $translate.instant(translateKey, error.properties);
             return result === translateKey ? errorCode : result;
+        }
+
+        function removeCsv() {
+            assetsApi.remove({urls: [blade.csvFileUrl]},
+                () => { },
+                (error) => bladeNavigationService.setError('Error ' + error.status, blade)
+            );
+
+            resetState();
         }
 
         function resetState() {
