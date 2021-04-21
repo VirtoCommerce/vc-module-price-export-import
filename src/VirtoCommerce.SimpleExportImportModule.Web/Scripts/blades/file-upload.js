@@ -77,12 +77,21 @@ angular.module('virtoCommerce.simpleExportImportModule')
 
             uploader.onBeforeUploadItem = () => {
                 if (blade.csvFileUrl) {
+                    $scope.tmpCsvInfo = {};
+                    $scope.tmpCsvInfo.name = $scope.uploadedFile.name;
+                    $scope.tmpCsvInfo.size = $scope.uploadedFile.size;
                     $scope.deleteUploadedItem();
                 }
             };
 
-            uploader.onSuccessItem = (_, asset) => {
+            uploader.onSuccessItem = (__, asset) => {
                 blade.csvFileUrl = asset[0].relativeUrl;
+
+                if (!_.isEmpty($scope.tmpCsvInfo)) {
+                    $scope.uploadedFile.name = $scope.tmpCsvInfo.name;
+                    $scope.uploadedFile.size = $scope.tmpCsvInfo.size;
+                    $scope.tmpCsvInfo = {};
+                }
 
                 importResources.validate({ fileUrl: blade.csvFileUrl }, (data) => {
                     $scope.csvValidationErrors = data.errors;
