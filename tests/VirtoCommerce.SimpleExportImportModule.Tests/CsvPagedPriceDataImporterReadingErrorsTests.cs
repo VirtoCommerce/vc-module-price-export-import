@@ -111,9 +111,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Act
             await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
 
-            // Assert
-            var skuNotExistErrorsCount = validRows.Length;
-
             var errorProgressInfo = progressInfos.LastOrDefault();
             Assert.Equal(validRows.Length + invalidRows.Length, errorProgressInfo?.ProcessedCount);
             Assert.Equal(validRows.Length, errorProgressInfo?.CreatedCount);
