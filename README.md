@@ -1,6 +1,10 @@
 # Pricelist Import Export
 
-The business goal for the module is to provide to non-technical not high skilled business users (like "junior category manager") who works with prices on a daily basis and don't understand the database structure to work comfortably with prices export and import functionality using it for price management.
+If you want to transfer a large amount of price information between Virto Commerce and another system,
+then you can use a specially-formatted spreadsheet to import or export that data. Virto Commerce uses CSV (comma-separated value) files to perform this kind of bulk task.
+
+
+The business goal for the module is to provide to non-technical not high skilled business users (like "category manager") who works with prices on a daily basis and don't understand the database structure to work comfortably with prices export and import functionality using it for price management.
 
 ![Main-Scree](docs/media/main-screen.png)
 
