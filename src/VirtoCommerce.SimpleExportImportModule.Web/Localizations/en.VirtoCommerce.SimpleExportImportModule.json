@@ -47,7 +47,8 @@
           "total": "Total count",
           "created": "Lines created",
           "updated": "Lines updated",
-          "errors-url": "Errors report download Url:"
+          "errors-url": "Errors report download Url:",
+          "errors-log": "Errors"
         }
       }
     },
