@@ -107,7 +107,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
         }
 
         $scope.bladeClose = () => {
-            if (blade.csvFileUrl) {
+            if (blade.csvFilePath) {
                 bladeNavigationService.showConfirmationIfNeeded(true, true, blade, () => { bladeNavigationService.closeBlade(blade, removeCsv); }, () => {}, "simpleExportImport.dialogs.csv-file-delete.title", "simpleExportImport.dialogs.csv-file-delete.subtitle");
             } else {
                 bladeNavigationService.closeBlade(blade);
@@ -144,7 +144,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
         }
 
         function removeCsv() {
-            assetsApi.remove({urls: [blade.csvFileUrl]},
+            assetsApi.remove({urls: [blade.csvFilePath]},
                 () => { },
                 (error) => bladeNavigationService.setError('Error ' + error.status, blade)
             );
