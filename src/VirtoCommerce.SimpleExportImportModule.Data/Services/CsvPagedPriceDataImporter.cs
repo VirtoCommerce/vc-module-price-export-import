@@ -23,19 +23,18 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         private readonly IPricingSearchService _pricingSearchService;
         private readonly ICsvPagedPriceDataSourceFactory _dataSourceFactory;
         private readonly IValidator<ImportProductPrice[]> _importProductPricesValidator;
-        private readonly IBlobStorageProvider _blobStorageProvider;
         private readonly ICsvPriceDataValidator _csvPriceDataValidator;
         private readonly ICsvPriceImportReporterFactory _importReporterFactory;
         private readonly IBlobUrlResolver _blobUrlResolver;
 
         public CsvPagedPriceDataImporter(IBlobStorageProvider blobStorageProvider, IPricingService pricingService, IPricingSearchService pricingSearchService,
-            ICsvPriceDataValidator csvPriceDataValidator, ICsvPagedPriceDataSourceFactory dataSourceFactory, IValidator<ImportProductPrice[]> importProductPricesValidator, ICsvPriceImportReporterFactory importReporterFactory, IBlobUrlResolver blobUrlResolver)
+            ICsvPriceDataValidator csvPriceDataValidator, ICsvPagedPriceDataSourceFactory dataSourceFactory, IValidator<ImportProductPrice[]> importProductPricesValidator, ICsvPriceImportReporterFactory importReporterFactory
+            , IBlobUrlResolver blobUrlResolver)
         {
             _pricingService = pricingService;
             _pricingSearchService = pricingSearchService;
             _dataSourceFactory = dataSourceFactory;
             _importProductPricesValidator = importProductPricesValidator;
-            _blobStorageProvider = blobStorageProvider;
             _csvPriceDataValidator = csvPriceDataValidator;
             _importReporterFactory = importReporterFactory;
             _blobUrlResolver = blobUrlResolver;
@@ -50,37 +49,25 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 
             var errorsContext = new ImportErrorsContext();
 
-            var csvPriceDataValidationResult = await _csvPriceDataValidator.ValidateAsync(request.FileUrl);
+            var csvPriceDataValidationResult = await _csvPriceDataValidator.ValidateAsync(request.FilePath);
 
             if (csvPriceDataValidationResult.Errors.Any())
             {
                 throw new InvalidDataException();
             }
 
-            await using var stream = _blobStorageProvider.OpenRead(request.FileUrl);
+            var reportFilePath = GetReportFilePath(request.FilePath);
 
-            var reportFileUrl = GetReportFileUrl(request.FileUrl);
+            var configuration = new ImportConfiguration();
 
-            var reportBlob = await _blobStorageProvider.GetBlobInfoAsync(reportFileUrl);
-
-            if (reportBlob != null)
-            {
-                await _blobStorageProvider.RemoveAsync(new[] { reportFileUrl });
-            }
-
-            await using var importReporterStream = _blobStorageProvider.OpenWrite(reportFileUrl);
-
-            var csvConfiguration = new ImportConfiguration();
-
-            var importReporter = _importReporterFactory.Create(importReporterStream, csvConfiguration);
+            await using var importReporter = await _importReporterFactory.CreateAsync(reportFilePath, configuration.Delimiter);
 
             cancellationToken.ThrowIfCancellationRequested();
 
             var importProgress = new ImportProgressInfo { ProcessedCount = 0, CreatedCount = 0, UpdatedCount = 0, Description = "Import has started" };
 
-            var configuration = new ImportConfiguration();
 
-            var dataSource = _dataSourceFactory.Create(stream, ModuleConstants.Settings.PageSize, configuration);
+            using var dataSource = _dataSourceFactory.Create(request.FilePath, ModuleConstants.Settings.PageSize, configuration);
 
             var headerRaw = dataSource.GetHeaderRaw();
 
@@ -101,6 +88,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 if (!errorsContext.ErrorsRows.Contains(context.Row))
                 {
                     var fieldSourceValue = context.Record[context.CurrentIndex];
+
                     if (context.HeaderRecord.Length != context.Record.Length)
                     {
                         HandleNotClosedQuoteError(progressCallback, importProgress, importReporter, context, errorsContext);
@@ -124,7 +112,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             };
 
             configuration.MissingFieldFound = async (headerNames, index, context) =>
-                await HandleMissedColumnError(progressCallback, importProgress, importReporter, context, errorsContext, headerNames);
+                await HandleMissedColumnError(progressCallback, importProgress, importReporter, context, errorsContext);
 
             try
             {
@@ -228,18 +216,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
                 var completedMessage = importProgress.ErrorCount > 0 ? "Import completed with errors" : "Import completed";
                 importProgress.Description = $"{completedMessage}: {string.Format(importDescription, importProgress.ProcessedCount, importProgress.TotalCount)}";
 
-                var reportHasRecords = importReporter.RecordsWasWritten;
-
-                // Need to dispose importer manually, because we need flush buffer and potentially remove empty report
-                importReporter.Dispose();
-
-                if (reportHasRecords)
+                if (importReporter.ReportIsNotEmpty)
                 {
-                    importProgress.ReportUrl = _blobUrlResolver.GetAbsoluteUrl(reportFileUrl);
-                }
-                else
-                {
-                    await _blobStorageProvider.RemoveAsync(new[] { reportFileUrl });
+                    importProgress.ReportUrl = _blobUrlResolver.GetAbsoluteUrl(reportFilePath);
                 }
 
                 progressCallback(importProgress);
@@ -273,7 +252,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             return existingPrices;
         }
 
-        private static string GetReportFileUrl(string filePath)
+        private static string GetReportFilePath(string filePath)
         {
             var fileName = Path.GetFileName(filePath);
             var fileExtension = Path.GetExtension(fileName);
@@ -347,9 +326,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         private static void HandleRequiredValueError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
             var fieldName = context.HeaderRecord[context.CurrentIndex];
-
             var requiredFields = CsvPriceImportHelper.GetImportPriceRequiredValueColumns();
-
             var missedValueColumns = new List<string>();
 
             for (var i = 0; i < context.HeaderRecord.Length; i++)
@@ -373,16 +350,12 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             HandleError(progressCallback, importProgress);
         }
 
-        private static async Task HandleMissedColumnError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext, string[] headerNames)
+        private static async Task HandleMissedColumnError(Action<ImportProgressInfo> progressCallback, ImportProgressInfo importProgress, ICsvPriceImportReporter reporter, ReadingContext context, ImportErrorsContext errorsContext)
         {
             var headerColumns = context.HeaderRecord;
-
             var recordFields = context.Record;
-
             var missedColumns = headerColumns.Skip(recordFields.Length).ToArray();
-
             var error = $"This row has next missing columns: {string.Join(", ", missedColumns)}.";
-
             var importError = new ImportError { Error = error, RawRow = context.RawRecord };
 
             await reporter.WriteAsync(importError);

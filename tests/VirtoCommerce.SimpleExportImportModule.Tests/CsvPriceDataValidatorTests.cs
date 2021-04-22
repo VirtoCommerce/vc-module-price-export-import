@@ -159,7 +159,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             // Arrange
             var blobStorageProviderMoq = GetBlobStorageProviderMoq();
 
-            var records = TestHelper.GetArrayOfSameRecords(CsvRecord,  (int)ModuleConstants.Settings.General.ImportLimitOfLines.DefaultValue + 1);
+            var records = TestHelper.GetArrayOfSameRecords(CsvRecord, (int)ModuleConstants.Settings.General.ImportLimitOfLines.DefaultValue + 1);
             var stream = TestHelper.GetStream(TestHelper.GetCsv(records, CsvHeader));
             blobStorageProviderMoq.Setup(x => x.OpenRead(It.IsAny<string>()))
                 .Returns(stream);

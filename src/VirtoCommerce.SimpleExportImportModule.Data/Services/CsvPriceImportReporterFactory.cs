@@ -1,15 +1,27 @@
-using System.IO;
-using CsvHelper.Configuration;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
+using System.Threading.Tasks;
+using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.SimpleExportImportModule.Core.Services;
 
 namespace VirtoCommerce.SimpleExportImportModule.Data.Services
 {
     public sealed class CsvPriceImportReporterFactory : ICsvPriceImportReporterFactory
     {
-        public ICsvPriceImportReporter Create(Stream stream, Configuration configuration = null)
+        private readonly IBlobStorageProvider _blobStorageProvider;
+        public CsvPriceImportReporterFactory(IBlobStorageProvider blobStorageProvider)
         {
-            return new CsvPriceImportReporter(stream, configuration ?? new ImportConfiguration());
+            _blobStorageProvider = blobStorageProvider;
+        }
+
+        public async Task<ICsvPriceImportReporter> CreateAsync(string reportFilePath, string delimiter)
+        {
+            var reportBlob = await _blobStorageProvider.GetBlobInfoAsync(reportFilePath);
+
+            if (reportBlob != null)
+            {
+                await _blobStorageProvider.RemoveAsync(new[] { reportFilePath });
+            }
+
+            return new CsvPriceImportReporter(reportFilePath, _blobStorageProvider, delimiter);
         }
     }
 }

@@ -18,7 +18,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
             blade.isLoading = true;
             $scope.showUnparsedRowsWarning = false;
 
-            importResources.preview({ fileUrl: blade.csvFileUrl}, (data) => {
+            importResources.preview({ filePath: blade.csvFilePath}, (data) => {
                 blade.currentEntities = data.results;
                 blade.totalCount = data.totalCount;
                 $scope.pageSettings.totalItems = 10;
@@ -36,20 +36,22 @@ angular.module('virtoCommerce.simpleExportImportModule')
                     const importDataRequest = {
                         pricelistId: blade.priceListId,
                         importMode: blade.importStrategy,
-                        fileUrl: blade.csvFileUrl
+                        filePath: blade.csvFilePath
                     }
-                    importResources.run(importDataRequest, (data) => {
-                        var newBlade = {
-                            id: 'simpleImportProcessing',
-                            notification: data,
-                            headIcon: "fa fa-download",
-                            title: 'simpleExportImport.blades.import-processing.title',
-                            controller: 'virtoCommerce.simpleExportImportModule.importProcessingController',
-                            template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/import-processing.tpl.html'
-                        };
+                    importResources.run(importDataRequest,
+                        (data) => {
+                            var newBlade = {
+                                id: 'simpleImportProcessing',
+                                notification: data,
+                                headIcon: "fa fa-download",
+                                title: 'simpleExportImport.blades.import-processing.title',
+                                controller: 'virtoCommerce.simpleExportImportModule.importProcessingController',
+                                template:
+                                    'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/import-processing.tpl.html'
+                            };
 
-                        bladeNavigationService.showBlade(newBlade, blade);
-                    })
+                            bladeNavigationService.showBlade(newBlade, blade);
+                        });
                 },
                 permission: blade.importPermission
             }
