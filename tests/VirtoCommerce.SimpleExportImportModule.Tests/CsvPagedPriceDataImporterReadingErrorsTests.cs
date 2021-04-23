@@ -330,11 +330,6 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             return new CancellationTokenWrapper(new CancellationToken());
         }
 
-        private static void ProgressCallbackMock(ImportProgressInfo progressInfo)
-        {
-            // Mock
-        }
-
         private static IBlobStorageProvider GetBlobStorageProvider(string header, string[] records, MemoryStream errorReporterMemoryStream = null)
         {
             errorReporterMemoryStream ??= new MemoryStream();

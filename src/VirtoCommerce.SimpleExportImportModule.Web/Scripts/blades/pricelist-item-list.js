@@ -141,8 +141,8 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 toolbarCommands: [
                     {
                         name: "pricing.commands.add-selected", icon: 'fas fa-plus',
-                        executeMethod: function (blade) {
-                            addProductsToPricelist(selectedProducts, blade);
+                        executeMethod: function () {
+                            addProductsToPricelist(selectedProducts);
                         },
                         canExecuteMethod: function () {
                             return selectedProducts.length > 0;
@@ -172,8 +172,8 @@ angular.module('virtoCommerce.simpleExportImportModule')
             bladeNavigationService.showBlade(newBlade, blade);
         }
 
-        function addProductsToPricelist(products, theBlade) {
-            theBlade.isLoading = true;
+        function addProductsToPricelist(products) {
+            blade.isLoading = true;
 
             // search for possible duplicating prices
             prices.search({
@@ -194,7 +194,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 });
 
                 prices.update(newProductPrices, function () {
-                    bladeNavigationService.closeBlade(theBlade);
+                    bladeNavigationService.closeBlade(blade);
                     blade.refresh();
                     blade.parentWidgetRefresh();
                 }, function (error) {
@@ -286,7 +286,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 canExecuteMethod: function () {
                     return true;
                 },
-                executeMethod: function (blade) {
+                executeMethod: function () {
                     var newBlade = {
                         id: 'simpleImportFileUpload',
                         title: 'simpleExportImport.blades.file-upload.title',
