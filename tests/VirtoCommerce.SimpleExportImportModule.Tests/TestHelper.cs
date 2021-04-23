@@ -6,6 +6,7 @@ using Moq;
 using VirtoCommerce.CatalogModule.Core.Model;
 using VirtoCommerce.CatalogModule.Core.Model.Search;
 using VirtoCommerce.CatalogModule.Core.Search;
+using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Settings;
 using VirtoCommerce.SimpleExportImportModule.Core;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
@@ -31,9 +32,21 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             return productSearchServiceMock.Object;
         }
 
-        public static CsvPagedPriceDataSourceFactory GetCsvPagedPriceDataSourceFactory()
+        public static IBlobStorageProvider GetBlobStorageProvider(string csv, MemoryStream errorReporterMemoryStream = null)
         {
-            return new CsvPagedPriceDataSourceFactory(GetProductSearchService());
+            errorReporterMemoryStream ??= new MemoryStream();
+            var blobStorageProviderMock = new Mock<IBlobStorageProvider>();
+            var stream = GetStream(csv);
+            blobStorageProviderMock.Setup(x => x.OpenRead(It.IsAny<string>())).Returns(() => stream);
+            blobStorageProviderMock.Setup(x => x.OpenWrite(It.IsAny<string>())).Returns(() => errorReporterMemoryStream);
+            blobStorageProviderMock.Setup(x => x.GetBlobInfoAsync(It.IsAny<string>()))
+                .Returns(() => Task.FromResult(new BlobInfo { Size = stream.Length }));
+            return blobStorageProviderMock.Object;
+        }
+
+        public static CsvPagedPriceDataSourceFactory GetCsvPagedPriceDataSourceFactory(IBlobStorageProvider blobStorageProvider)
+        {
+            return new CsvPagedPriceDataSourceFactory(blobStorageProvider, GetProductSearchService());
         }
 
         public static Stream GetStream(string csv)
@@ -97,7 +110,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
 
         public static ImportDataRequest CreateImportDataRequest(ImportMode importMode = ImportMode.CreateOnly)
         {
-            return new ImportDataRequest { FileUrl = "https://localhost/test_url.csv", ImportMode = importMode, PricelistId = "TestId" };
+            return new ImportDataRequest { FilePath = "https://localhost/test_url.csv", ImportMode = importMode, PricelistId = "TestId" };
         }
 
     }

@@ -23,14 +23,14 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             _blobStorageProvider = blobStorageProvider;
             _settingsManager = settingsManager;
         }
-        public async Task<ImportDataValidationResult> ValidateAsync(string fileUrl)
+        public async Task<ImportDataValidationResult> ValidateAsync(string filePath)
         {
             var errorsList = new List<ImportDataValidationError>();
 
             var fileMaxSize = _settingsManager.GetValue(ModuleConstants.Settings.General.ImportFileMaxSize.Name,
                 (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue) * ModuleConstants.MByte;
 
-            var blobInfo = await _blobStorageProvider.GetBlobInfoAsync(fileUrl);
+            var blobInfo = await _blobStorageProvider.GetBlobInfoAsync(filePath);
 
             if (blobInfo == null)
             {
@@ -46,7 +46,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
             }
             else
             {
-                var stream = _blobStorageProvider.OpenRead(fileUrl);
+                var stream = _blobStorageProvider.OpenRead(filePath);
                 var csvConfiguration = new ImportConfiguration()
                 {
                     BadDataFound = null,

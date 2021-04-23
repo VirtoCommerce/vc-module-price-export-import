@@ -7,6 +7,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using VirtoCommerce.CatalogModule.Core.Model.Search;
 using VirtoCommerce.CatalogModule.Core.Search;
+using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.PricingModule.Core.Model;
 using VirtoCommerce.SimpleExportImportModule.Core.Models;
@@ -24,9 +25,11 @@ namespace VirtoCommerce.SimpleExportImportModule.Data.Services
         private readonly CsvReader _csvReader;
         private int? _totalCount;
 
-        public CsvPagedPriceDataSource(IProductSearchService productSearchService, Stream stream, int pageSize, Configuration configuration)
+        public CsvPagedPriceDataSource(string filePath, IProductSearchService productSearchService, IBlobStorageProvider blobStorageProvider, int pageSize, Configuration configuration)
         {
             _productSearchService = productSearchService;
+
+            var stream = blobStorageProvider.OpenRead(filePath);
 
             _stream = stream;
             _streamReader = new StreamReader(stream);

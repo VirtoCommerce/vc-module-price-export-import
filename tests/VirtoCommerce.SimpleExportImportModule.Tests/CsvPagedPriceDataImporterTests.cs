@@ -362,9 +362,9 @@ namespace VirtoCommerce.SimpleExportImportModule.Tests
             var blobUrlResolverMock = new Mock<IBlobUrlResolver>();
             blobUrlResolverMock.Setup(x => x.GetAbsoluteUrl(It.IsAny<string>())).Returns("test_path.csv");
 
-            importReporterFactory ??= new CsvPriceImportReporterFactory();
+            importReporterFactory ??= new CsvPriceImportReporterFactory(blobStorageProvider);
             return new CsvPagedPriceDataImporter(blobStorageProvider, GetPricingService(), pricingSearchService,
-                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(), GetImportProductPricesValidator(pricingSearchService), importReporterFactory, blobUrlResolverMock.Object);
+                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(blobStorageProvider), GetImportProductPricesValidator(pricingSearchService), importReporterFactory, blobUrlResolverMock.Object);
         }
     }
 }

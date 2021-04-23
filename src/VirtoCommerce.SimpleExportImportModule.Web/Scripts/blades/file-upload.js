@@ -56,13 +56,12 @@ angular.module('virtoCommerce.simpleExportImportModule')
                         name: 'csvMaxSize',
                         fn: (item) => {
                             $scope.uploadedFile.name = item.name;
-                            if (item.size <= $scope.maxCsvSize) {
+                            let result = item.size <= $scope.maxCsvSize;
+                            $scope.csvMaxSizeError = !result;
+                            if (result) {
                                 $scope.uploadedFile.size = formatFileSize(item.size);
-                                return true;
-                            } else {
-                                $scope.csvMaxSizeError = true;
-                                return false;
                             }
+                            return result;
                         }
                     }]
             });
@@ -76,16 +75,16 @@ angular.module('virtoCommerce.simpleExportImportModule')
             };
 
             uploader.onBeforeUploadItem = () => {
-                if (blade.csvFileUrl) {
+                if (blade.csvFilePath) {
                     $scope.tmpCsvInfo = {};
                     $scope.tmpCsvInfo.name = $scope.uploadedFile.name;
                     $scope.tmpCsvInfo.size = $scope.uploadedFile.size;
-                    $scope.deleteUploadedItem();
+                    removeCsv();
                 }
             };
 
             uploader.onSuccessItem = (__, asset) => {
-                blade.csvFileUrl = asset[0].relativeUrl;
+                blade.csvFilePath = asset[0].relativeUrl;
 
                 if (!_.isEmpty($scope.tmpCsvInfo)) {
                     $scope.uploadedFile.name = $scope.tmpCsvInfo.name;
@@ -93,7 +92,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
                     $scope.tmpCsvInfo = {};
                 }
 
-                importResources.validate({ fileUrl: blade.csvFileUrl }, (data) => {
+                importResources.validate({ filePath: blade.csvFilePath }, (data) => {
                     $scope.csvValidationErrors = data.errors;
                     $scope.internalCsvError = !!$scope.csvValidationErrors.length;
                     $scope.showUploadResult = true;
@@ -108,11 +107,11 @@ angular.module('virtoCommerce.simpleExportImportModule')
         }
 
         $scope.bladeClose = () => {
-            if (blade.csvFileUrl) {
-                $scope.deleteUploadedItem();
+            if (blade.csvFilePath) {
+                bladeNavigationService.showConfirmationIfNeeded(true, true, blade, () => { bladeNavigationService.closeBlade(blade, removeCsv); }, () => {}, "simpleExportImport.dialogs.csv-file-delete.title", "simpleExportImport.dialogs.csv-file-delete.subtitle");
+            } else {
+                bladeNavigationService.closeBlade(blade);
             }
-
-            bladeNavigationService.closeBlade(blade);
         }
 
         $scope.browse = () => {
@@ -120,18 +119,13 @@ angular.module('virtoCommerce.simpleExportImportModule')
         }
 
         $scope.deleteUploadedItem = () => {
-            assetsApi.remove({urls: [blade.csvFileUrl]},
-                () => { },
-                (error) => bladeNavigationService.setError('Error ' + error.status, blade)
-            );
-
-            resetState();
+            bladeNavigationService.showConfirmationIfNeeded(true, true, blade, () => { bladeNavigationService.closeChildrenBlades(blade, removeCsv); }, () => {}, "simpleExportImport.dialogs.csv-file-delete.title", "simpleExportImport.dialogs.csv-file-delete.subtitle");
         }
 
         $scope.showPreview = () => {
             var newBlade = {
                 id: 'simpleImportPreview',
-                csvFileUrl: blade.csvFileUrl,
+                csvFilePath: blade.csvFilePath,
                 priceListId: blade.priceListId,
                 headIcon: "fas fa-file-csv",
                 title: 'simpleExportImport.blades.import-preview.title',
@@ -149,9 +143,18 @@ angular.module('virtoCommerce.simpleExportImportModule')
             return result === translateKey ? errorCode : result;
         }
 
+        function removeCsv() {
+            assetsApi.remove({urls: [blade.csvFilePath]},
+                () => { },
+                (error) => bladeNavigationService.setError('Error ' + error.status, blade)
+            );
+
+            resetState();
+        }
+
         function resetState() {
             $scope.uploadedFile = {};
-            blade.csvFileUrl = null;
+            blade.csvFilePath = null;
 
             $scope.showUploadResult = false;
             $scope.fileTypeError = false;
