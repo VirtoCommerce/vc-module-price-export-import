@@ -11,7 +11,7 @@
         <dependency id="VirtoCommerce.Export" version="3.11.0" />
     </dependencies>
 
-    <title>Pricelist Export Import</title>
+    <title>Price Export Import</title>
     <description>This module adds prices export and import functionality using it for price management.</description>
     <authors>
         <author>Solution team</author>
