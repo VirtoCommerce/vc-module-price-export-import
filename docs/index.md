@@ -11,7 +11,7 @@ The business goal for the module is to provide to non-technical not high skilled
 
 
 ## Business scenarios
-* I need to export two pricelists to make comparing. 
+* I need to export prices from two pricelists to make comparing. 
 * I need to change multiple prices in the price list of few hundreds of records in the price list of thousands of records.
 * I need to make a bulk price update (+5% for everything) for a price list of thousands of records.
 * I need to add prices for a batch of new products added to the catalog.
@@ -19,23 +19,23 @@ The business goal for the module is to provide to non-technical not high skilled
 ## Using CSV
 
 ### Get a sample CSV file
-You can export and view a sample pricelist CSV file to use as a template.
+You can export and view a sample prices CSV file to use as a template.
 
 * The file contains product prices. Your import file likely contains many product prices. If you use the sample file to create your own import file.
 * The sample file includes the SKU column and prices. If you use products and you want to import or export catalog details, then use the catalog CSV file.
 
-### Pricelist CSV file format
+### Prices CSV file format
 The first line of your multiple CSV file must be the column headers that are included in the sample CSV file and in the same order. Each column must be separated by a comma. The following lines (or records) in the file must contain data for your product using the same columns in that exact same order.
 
-#### Overwriting Pricelist with an import CSV file
+#### Overwriting prices with an import CSV file
 
 #### Description of the product import CSV file
 
-### Create your Pricelist CSV file
+### Create your prices CSV file
 
-## Importing pricelist
+## Importing prices
 
-## Exporting pricelist
+## Exporting prices
 
 ## Solutions to common product CSV import problems
 
