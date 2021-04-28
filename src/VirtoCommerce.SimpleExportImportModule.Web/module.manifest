@@ -25,7 +25,7 @@
 
     <releaseNotes>First version.</releaseNotes>
     <copyright>Copyright © 2011-2021 Virto Commerce. All rights reserved</copyright>
-    <tags>extension module</tags>
+    <tags>price import export</tags>
 
     <assemblyFile>VirtoCommerce.SimpleExportImportModule.Web.dll</assemblyFile>
     <moduleType>VirtoCommerce.SimpleExportImportModule.Web.Module, VirtoCommerce.SimpleExportImportModule.Web</moduleType>
