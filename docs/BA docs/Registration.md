@@ -16,7 +16,7 @@ Type | Description |
 Organization | Represents a buyer organization in the system, an account (in business terms) in B2B case. Is a container for other organizations (brunches or sub-companies) and contacts.
 Contact | Represents a physical body that can be an account (in business terms) by himself in B2C case or may belong to one or more organization accounts in B2B case. 
 Vendor | Represents a vendor organization in the system, can not contain other entities (vendors or contacts) by default.
-Employee | Represnts the seller (system owner) employee. May belong to one or more organization accounts in B2B case.  
+Employee | Represents the seller (system owner) employee. May belong to one or more organization accounts in B2B case.  
 
 It is important to understand that *users*, i.e. the security entities that has access to the web store is a dedicated entity, that is linked by relation but physically decupled from contact.
 
