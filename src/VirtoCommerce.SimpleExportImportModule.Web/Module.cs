@@ -79,7 +79,7 @@ namespace VirtoCommerce.SimpleExportImportModule.Web
                 }).ToArray());
 
             var featureStorage = appBuilder.ApplicationServices.GetService<IFeatureStorage>();
-            featureStorage.TryAddFeatureDefinition(simpleExportImportCore.ModuleConstants.Features.SimpleExportImport, featureManagementCore.ModuleConstants.FeatureFilters.Developers);
+            featureStorage.TryAddFeatureDefinition(ModuleConstants.Features.SimpleExportImport, true);
 
             // Ensure that any pending migrations are applied
             using (var serviceScope = appBuilder.ApplicationServices.CreateScope())
