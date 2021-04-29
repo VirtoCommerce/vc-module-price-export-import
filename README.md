@@ -1,17 +1,19 @@
-# Pricelist Import Export
-
+# Price Export&Import module
 If you want to transfer a large amount of price information between Virto Commerce and another system,
-then you can use a specially-formatted spreadsheet to import or export that data. Virto Commerce uses CSV (comma-separated value) files to perform this kind of bulk task.
-
+then you can use a specially-formatted spreadsheet to import or export that data. Virto Commerce uses CSV (semicolon-separated value) files to perform this kind of bulk task.
 
 The business goal for the module is to provide to non-technical not high skilled business users (like "category manager") who works with prices on a daily basis and don't understand the database structure to work comfortably with prices export and import functionality using it for price management.
 
-![Main-Scree](docs/media/main-screen.png)
+![Main-Screen](docs/media/main-screen.png)
 
-### Business scenarios
-* I need to export two pricelists to make comparing. 
-* I need to change multiple prices in the price list of few hundreds of records in the price list of thousands of records.
-* I need to make a bulk price update (+5% for everything) for a price list of thousands of records.
+!!!note
+    If you want to automated transferring information from 3rd party system, like ERP, then see API, Integration Middleware approach and Azure Logic Apps connectors.
+
+
+## Business scenarios
+* I need to export two price lists to make comparing. 
+* I need to change multiple prices in the price list of few hundreds of records in the price list.
+* I need to make a bulk price update (+5% for everything) for a price list.
 * I need to add prices for a batch of new products added to the catalog.
 
 
