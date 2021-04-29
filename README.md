@@ -14,8 +14,8 @@ The business goal for the module is to provide to non-technical not high skilled
 
 ![Main-Screen](docs/media/main-screen.png)
 
-!!!Note
-    If you want to automated transferring information from 3rd party system, like ERP, then see API, Integration Middleware approach and Azure Logic Apps connectors.
+### Note
+If you want to automated transferring information from 3rd party system, like ERP, then see API, Integration Middleware approach and Azure Logic Apps connectors.
 
 ## Business scenarios
 * I need to export two price lists to make comparing.
