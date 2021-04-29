@@ -1,24 +1,26 @@
-# Price Export Import
+# Price Export & Import module
 
 [![CI status](https://github.com/VirtoCommerce/vc-module-simple-export-import/workflows/Module%20CI/badge.svg?branch=dev)](https://github.com/VirtoCommerce/vc-module-simple-export-import/actions?query=workflow%3A"Module+CI")
-[![Deployment status](https://github.com/VirtoCommerce/vc-module-simple-export-import/workflows/Module%20deployment/badge.svg?branch=dev)](https://github.com/VirtoCommerce/vc-module-simple-export-import/actions?query=workflow%3A"Module+deployment") 
+[![Deployment status](https://github.com/VirtoCommerce/vc-module-simple-export-import/workflows/Module%20deployment/badge.svg?branch=dev)](https://github.com/VirtoCommerce/vc-module-simple-export-import/actions?query=workflow%3A"Module+deployment")
 [![Quality gate](https://sonarcloud.io/api/project_badges/measure?project=VirtoCommerce_vc-module-simple-export-import&metric=alert_status)](https://sonarcloud.io/dashboard?id=VirtoCommerce_vc-module-simple-export-import)
 [![Reliability rating](https://sonarcloud.io/api/project_badges/measure?project=VirtoCommerce_vc-module-simple-export-import&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=VirtoCommerce_vc-module-simple-export-import)
 [![Security rating](https://sonarcloud.io/api/project_badges/measure?project=VirtoCommerce_vc-module-simple-export-import&metric=security_rating)](https://sonarcloud.io/dashboard?id=VirtoCommerce_vc-module-simple-export-import)
 [![Maintainability rating](https://sonarcloud.io/api/project_badges/measure?project=VirtoCommerce_vc-module-simple-export-import&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=VirtoCommerce_vc-module-simple-export-import)
 
 If you want to transfer a large amount of price information between Virto Commerce and another system,
-then you can use a specially-formatted spreadsheet to import or export that data. Virto Commerce uses CSV (comma-separated value) files to perform this kind of bulk task.
-
+then you can use a specially-formatted spreadsheet to import or export that data. Virto Commerce uses CSV (semicolon-separated value) files to perform this kind of bulk task.
 
 The business goal for the module is to provide to non-technical not high skilled business users (like "category manager") who works with prices on a daily basis and don't understand the database structure to work comfortably with prices export and import functionality using it for price management.
 
-![Main-Scree](docs/media/main-screen.png)
+![Main-Screen](docs/media/main-screen.png)
 
-### Business scenarios
-* I need to export prices from two pricelists to make comparing. 
-* I need to change multiple prices in the price list of few hundreds of records in the price list of thousands of records.
-* I need to make a bulk price update (+5% for everything) for a price list of thousands of records.
+!!!Note
+    If you want to automated transferring information from 3rd party system, like ERP, then see API, Integration Middleware approach and Azure Logic Apps connectors.
+
+## Business scenarios
+* I need to export two price lists to make comparing.
+* I need to change multiple prices in the price list of few hundreds of records in the price list.
+* I need to make a bulk price update (+5% for everything) for a price list.
 * I need to add prices for a batch of new products added to the catalog.
 
 
