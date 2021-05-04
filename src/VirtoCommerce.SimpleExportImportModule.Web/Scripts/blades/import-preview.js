@@ -1,5 +1,5 @@
 angular.module('virtoCommerce.simpleExportImportModule')
-    .controller('virtoCommerce.simpleExportImportModule.importPreviewController', ['$rootScope', '$scope', 'virtoCommerce.simpleExportImportModule.import', '$filter', 'platformWebApp.bladeNavigationService', 'uiGridConstants', 'platformWebApp.uiGridHelper', 'platformWebApp.bladeUtils', 'platformWebApp.dialogService', '$translate', 'platformWebApp.settings', 'platformWebApp.assets.api', function ($rootScope, $scope, importResources, $filter, bladeNavigationService, uiGridConstants, uiGridHelper, bladeUtils, dialogService, $translate, settings, assetsApi) {
+    .controller('virtoCommerce.simpleExportImportModule.importPreviewController', ['$rootScope', '$scope', 'virtoCommerce.simpleExportImportModule.import', '$filter', 'platformWebApp.bladeNavigationService', 'uiGridConstants', 'platformWebApp.uiGridHelper', 'platformWebApp.bladeUtils', 'platformWebApp.dialogService', '$translate', 'platformWebApp.settings', function ($rootScope, $scope, importResources, $filter, bladeNavigationService, uiGridConstants, uiGridHelper, bladeUtils, dialogService, $translate, settings) {
         $scope.uiGridConstants = uiGridConstants;
 
         var blade = $scope.blade;
