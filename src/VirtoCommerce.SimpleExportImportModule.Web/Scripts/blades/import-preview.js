@@ -1,5 +1,5 @@
 angular.module('virtoCommerce.simpleExportImportModule')
-    .controller('virtoCommerce.simpleExportImportModule.importPreviewController', ['$scope', 'virtoCommerce.simpleExportImportModule.import', '$filter', 'platformWebApp.bladeNavigationService', 'uiGridConstants', 'platformWebApp.uiGridHelper', 'platformWebApp.bladeUtils', 'platformWebApp.dialogService', '$translate', 'platformWebApp.settings', function ($scope, importResources, $filter, bladeNavigationService, uiGridConstants, uiGridHelper, bladeUtils, dialogService, $translate, settings) {
+    .controller('virtoCommerce.simpleExportImportModule.importPreviewController', ['$rootScope', '$scope', 'virtoCommerce.simpleExportImportModule.import', '$filter', 'platformWebApp.bladeNavigationService', 'uiGridConstants', 'platformWebApp.uiGridHelper', 'platformWebApp.bladeUtils', 'platformWebApp.dialogService', '$translate', 'platformWebApp.settings', 'platformWebApp.assets.api', function ($rootScope, $scope, importResources, $filter, bladeNavigationService, uiGridConstants, uiGridHelper, bladeUtils, dialogService, $translate, settings, assetsApi) {
         $scope.uiGridConstants = uiGridConstants;
 
         var blade = $scope.blade;
@@ -51,9 +51,19 @@ angular.module('virtoCommerce.simpleExportImportModule')
                             };
 
                             bladeNavigationService.showBlade(newBlade, blade);
-                        });
+                        }
+                    );
                 },
                 permission: blade.importPermission
+            },
+            {
+                name: "Upload new",
+                icon: 'fa fa-download',
+                executeMethod: () => {
+                    $rootScope.filter.newImportWasRequested = true;
+                    $scope.bladeClose();
+                },
+                canExecuteMethod: () => true,
             }
         ];
 
