@@ -59,11 +59,10 @@ angular.module('virtoCommerce.simpleExportImportModule')
             {
                 name: "Upload new",
                 icon: 'fa fa-download',
-                executeMethod: () => {
-                    $rootScope.filter.newImportWasRequested = true;
-                    $scope.bladeClose();
-                },
                 canExecuteMethod: () => true,
+                executeMethod: () => {
+                    bladeNavigationService.closeBlade(blade, () => $rootScope.filter.newImportWasRequested = true );
+                }
             }
         ];
 
