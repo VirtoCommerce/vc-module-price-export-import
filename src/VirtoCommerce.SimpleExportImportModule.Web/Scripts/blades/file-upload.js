@@ -1,7 +1,7 @@
 angular.module('virtoCommerce.simpleExportImportModule')
 .controller('virtoCommerce.simpleExportImportModule.fileUploadController',
-    ['FileUploader', '$document', '$rootScope', '$scope', '$timeout', 'platformWebApp.bladeNavigationService', 'platformWebApp.assets.api', 'virtoCommerce.simpleExportImportModule.import', '$translate', 'platformWebApp.settings',
-        function (FileUploader, $document, $rootScope, $scope, $timeout, bladeNavigationService, assetsApi, importResources, $translate, settings) {
+    ['FileUploader', '$document', '$scope', '$timeout', 'platformWebApp.bladeNavigationService', 'platformWebApp.assets.api', 'virtoCommerce.simpleExportImportModule.import', '$translate', 'platformWebApp.settings',
+        function (FileUploader, $document, $scope, $timeout, bladeNavigationService, assetsApi, importResources, $translate, settings) {
         const blade = $scope.blade;
         const oneKb = 1024;
         const oneMb = 1024 * oneKb;
@@ -19,25 +19,8 @@ angular.module('virtoCommerce.simpleExportImportModule')
             canExecuteMethod: () => true
         }];
 
-        $rootScope.filter = {
-            newImportWasRequested: false
-        };
-
-        $rootScope.$watch('filter.newImportWasRequested', newImportRequestHandler);
-
-        function newImportRequestHandler (newValue, oldValue) {
-            if (newValue === oldValue) {
-                return;
-            };
-            if ($rootScope.filter.newImportWasRequested === true) {
-                initialize();
-            }
-        };
-
         function initialize () {
             resetState();
-
-            $rootScope.filter.newImportWasRequested = false;
 
             settings.getValues({ id: 'SimpleExportImport.Import.FileMaxSize' }, (value) => {
                 if (!!value) {

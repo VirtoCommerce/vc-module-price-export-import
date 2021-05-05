@@ -36,7 +36,8 @@
           "update-existing-only": "Update existing only",
           "create-and-update": "Create & update",
           "preview-count": "Preview count:"
-        }
+        },
+        "upload-new": "Upload new"
       },
       "import-processing": {
         "title": "Import progress",
