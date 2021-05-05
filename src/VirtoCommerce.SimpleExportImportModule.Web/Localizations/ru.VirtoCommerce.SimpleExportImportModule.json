@@ -2,7 +2,7 @@
   "simpleExportImport": {
     "blades": {
       "import-preview": {
-        "upload-new": "Загрузить новый прайс-лист"
+        "upload-new": "Новый CSV"
       }
     },
     "dialogs": {
