@@ -9,7 +9,7 @@ angular.module(moduleName, [])
     .run(
         ['virtoCommerce.featureManagerSubscriber', 'platformWebApp.widgetService', 'platformWebApp.authService',
             function (featureManagerSubscriber, widgetService, authService) {
-                featureManagerSubscriber.onLoginStatusChanged('SimpleExportImport', () => {
+                featureManagerSubscriber.onLoginStatusChanged('PriceExportImport', () => {
 
                     widgetService.registerWidget({
                         isVisible: function (blade) { return blade.controller === 'virtoCommerce.pricingModule.pricelistDetailController' && !blade.isNew && authService.checkPermission('pricing:read'); },

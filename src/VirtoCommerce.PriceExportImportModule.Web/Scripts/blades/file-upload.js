@@ -22,7 +22,7 @@ angular.module('virtoCommerce.priceExportImportModule')
         function initialize () {
             resetState();
 
-            settings.getValues({ id: 'SimpleExportImport.Import.FileMaxSize' }, (value) => {
+            settings.getValues({ id: 'PriceExportImport.Import.FileMaxSize' }, (value) => {
                 if (!!value) {
                     $scope.maxCsvSize = value[0] * oneMb;
                 }

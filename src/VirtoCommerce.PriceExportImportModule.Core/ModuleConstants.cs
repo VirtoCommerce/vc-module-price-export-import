@@ -38,7 +38,7 @@ namespace VirtoCommerce.PriceExportImportModule.Core
 
         public static class Features
         {
-            public const string SimpleExportImport = "SimpleExportImport";
+            public const string PriceExportImport = "PriceExportImport";
         }
 
         public static class Security
@@ -59,8 +59,8 @@ namespace VirtoCommerce.PriceExportImportModule.Core
             {
                 public static SettingDescriptor ExportLimitOfLines { get; } = new SettingDescriptor
                 {
-                    Name = "SimpleExportImport.Export.LimitOfLines",
-                    GroupName = "SimpleExportImport|Export",
+                    Name = "PriceExportImport.Export.LimitOfLines",
+                    GroupName = "PriceExportImport|Export",
                     ValueType = SettingValueType.PositiveInteger,
                     IsHidden = true,
                     DefaultValue = 10000
@@ -68,8 +68,8 @@ namespace VirtoCommerce.PriceExportImportModule.Core
 
                 public static SettingDescriptor ImportLimitOfLines { get; } = new SettingDescriptor
                 {
-                    Name = "SimpleExportImport.Import.LimitOfLines",
-                    GroupName = "SimpleExportImport|Import",
+                    Name = "PriceExportImport.Import.LimitOfLines",
+                    GroupName = "PriceExportImport|Import",
                     ValueType = SettingValueType.PositiveInteger,
                     IsHidden = true,
                     DefaultValue = 10000
@@ -77,8 +77,8 @@ namespace VirtoCommerce.PriceExportImportModule.Core
 
                 public static SettingDescriptor ImportFileMaxSize { get; } = new SettingDescriptor
                 {
-                    Name = "SimpleExportImport.Import.FileMaxSize",
-                    GroupName = "SimpleExportImport|Import",
+                    Name = "PriceExportImport.Import.FileMaxSize",
+                    GroupName = "PriceExportImport|Import",
                     ValueType = SettingValueType.PositiveInteger,
                     IsHidden = true,
                     DefaultValue = 1 // MB

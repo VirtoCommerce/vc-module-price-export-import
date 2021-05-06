@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace VirtoCommerce.PriceExportImportModule.Data.Repositories
 {
-    public class VirtoCommerceSimpleExportImportModuleDbContext : DbContextWithTriggers
+    public class VirtoCommercePriceExportImportModuleDbContext : DbContextWithTriggers
     {
-        public VirtoCommerceSimpleExportImportModuleDbContext(DbContextOptions<VirtoCommerceSimpleExportImportModuleDbContext> options)
+        public VirtoCommercePriceExportImportModuleDbContext(DbContextOptions<VirtoCommercePriceExportImportModuleDbContext> options)
           : base(options)
         {
         }
 
-        protected VirtoCommerceSimpleExportImportModuleDbContext(DbContextOptions options)
+        protected VirtoCommercePriceExportImportModuleDbContext(DbContextOptions options)
             : base(options)
         {
         }

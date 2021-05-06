@@ -30,7 +30,7 @@ namespace VirtoCommerce.PriceExportImportModule.Web
         {
             // database initialization
             var connectionString = Configuration.GetConnectionString("VirtoCommerce.PriceExportImport") ?? Configuration.GetConnectionString("VirtoCommerce");
-            serviceCollection.AddDbContext<VirtoCommerceSimpleExportImportModuleDbContext>(options => options.UseSqlServer(connectionString));
+            serviceCollection.AddDbContext<VirtoCommercePriceExportImportModuleDbContext>(options => options.UseSqlServer(connectionString));
 
             serviceCollection.AddTransient<ICsvPagedPriceDataSourceFactory, CsvPagedPriceDataSourceFactory>();
             serviceCollection.AddTransient<ICsvPriceDataValidator, CsvPriceDataValidator>();
@@ -39,8 +39,8 @@ namespace VirtoCommerce.PriceExportImportModule.Web
 
             serviceCollection.AddTransient<IValidator<ImportProductPrice[]>, ImportProductPricesValidator>();
 
-            serviceCollection.AddOptions<ExportOptions>().Bind(Configuration.GetSection("SimpleExportImport:Export")).ValidateDataAnnotations();
-            serviceCollection.AddOptions<ImportOptions>().Bind(Configuration.GetSection("SimpleExportImport:Import")).ValidateDataAnnotations();
+            serviceCollection.AddOptions<ExportOptions>().Bind(Configuration.GetSection("PriceExportImport:Export")).ValidateDataAnnotations();
+            serviceCollection.AddOptions<ImportOptions>().Bind(Configuration.GetSection("PriceExportImport:Import")).ValidateDataAnnotations();
         }
 
         public void PostInitialize(IApplicationBuilder appBuilder)
@@ -71,18 +71,18 @@ namespace VirtoCommerce.PriceExportImportModule.Web
             permissionsProvider.RegisterPermissions(ModuleConstants.Security.Permissions.AllPermissions.Select(x =>
                 new Permission
                 {
-                    GroupName = "SimpleExportImport",
+                    GroupName = "PriceExportImport",
                     ModuleId = ModuleInfo.Id,
                     Name = x
                 }).ToArray());
 
             var featureStorage = appBuilder.ApplicationServices.GetService<IFeatureStorage>();
-            featureStorage.TryAddFeatureDefinition(ModuleConstants.Features.SimpleExportImport, true);
+            featureStorage.TryAddFeatureDefinition(ModuleConstants.Features.PriceExportImport, true);
 
             // Ensure that any pending migrations are applied
             using (var serviceScope = appBuilder.ApplicationServices.CreateScope())
             {
-                using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<VirtoCommerceSimpleExportImportModuleDbContext>())
+                using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<VirtoCommercePriceExportImportModuleDbContext>())
                 {
                     dbContext.Database.EnsureCreated();
                     dbContext.Database.Migrate();
