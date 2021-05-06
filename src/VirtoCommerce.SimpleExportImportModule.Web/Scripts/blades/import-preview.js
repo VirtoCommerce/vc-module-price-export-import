@@ -51,9 +51,18 @@ angular.module('virtoCommerce.simpleExportImportModule')
                             };
 
                             bladeNavigationService.showBlade(newBlade, blade);
-                        });
+                        }
+                    );
                 },
                 permission: blade.importPermission
+            },
+            {
+                name: "simpleExportImport.blades.import-preview.upload-new",
+                icon: 'fa fa-download',
+                canExecuteMethod: () => true,
+                executeMethod: () => {
+                    bladeNavigationService.closeBlade(blade);
+                }
             }
         ];
 

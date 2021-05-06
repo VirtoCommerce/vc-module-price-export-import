@@ -1,5 +1,10 @@
 {
   "simpleExportImport": {
+    "blades": {
+      "import-preview": {
+        "upload-new": "Новый CSV"
+      }
+    },
     "dialogs": {
       "pricelist-export": {
         "title": "Экспортировать цены",
