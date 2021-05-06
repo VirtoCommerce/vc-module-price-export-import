@@ -1,4 +1,4 @@
-namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
+namespace VirtoCommerce.PriceExportImportModule.Data.Validation
 {
     public enum ImportProductPricesExistenceValidationMode
     {

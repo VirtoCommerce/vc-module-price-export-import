@@ -2,7 +2,7 @@ using VirtoCommerce.ExportModule.Core.Model;
 using VirtoCommerce.PricingModule.Core.Model;
 using VirtoCommerce.PricingModule.Data.ExportImport;
 
-namespace VirtoCommerce.SimpleExportImportModule.Core.Models
+namespace VirtoCommerce.PriceExportImportModule.Core.Models
 {
     public sealed class ExportPrice : ExportablePrice
     {

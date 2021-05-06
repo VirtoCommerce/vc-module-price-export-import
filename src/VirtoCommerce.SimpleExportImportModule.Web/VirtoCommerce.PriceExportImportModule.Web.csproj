@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VirtoCommerce.SimpleExportImportModule.Data\VirtoCommerce.SimpleExportImportModule.Data.csproj" />
+    <ProjectReference Include="..\VirtoCommerce.SimpleExportImportModule.Data\VirtoCommerce.PriceExportImportModule.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="module.manifest">

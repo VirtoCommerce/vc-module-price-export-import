@@ -7,15 +7,15 @@ using CsvHelper;
 using FluentValidation;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
+using VirtoCommerce.PriceExportImportModule.Core;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
+using VirtoCommerce.PriceExportImportModule.Core.Services;
+using VirtoCommerce.PriceExportImportModule.Data.Validation;
 using VirtoCommerce.PricingModule.Core.Model;
 using VirtoCommerce.PricingModule.Core.Model.Search;
 using VirtoCommerce.PricingModule.Core.Services;
-using VirtoCommerce.SimpleExportImportModule.Core;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
-using VirtoCommerce.SimpleExportImportModule.Core.Services;
-using VirtoCommerce.SimpleExportImportModule.Data.Validation;
 
-namespace VirtoCommerce.SimpleExportImportModule.Data.Services
+namespace VirtoCommerce.PriceExportImportModule.Data.Services
 {
     public sealed class CsvPagedPriceDataImporter : ICsvPagedPriceDataImporter
     {

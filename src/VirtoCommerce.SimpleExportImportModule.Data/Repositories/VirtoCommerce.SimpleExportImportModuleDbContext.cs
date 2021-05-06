@@ -1,7 +1,7 @@
 using EntityFrameworkCore.Triggers;
 using Microsoft.EntityFrameworkCore;
 
-namespace VirtoCommerce.SimpleExportImportModule.Data.Repositories
+namespace VirtoCommerce.PriceExportImportModule.Data.Repositories
 {
     public class VirtoCommerceSimpleExportImportModuleDbContext : DbContextWithTriggers
     {

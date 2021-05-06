@@ -1,12 +1,11 @@
 using System.Threading.Tasks;
 using Moq;
 using VirtoCommerce.Platform.Core.Assets;
-using VirtoCommerce.Platform.Core.Settings;
-using VirtoCommerce.SimpleExportImportModule.Core;
-using VirtoCommerce.SimpleExportImportModule.Data.Services;
+using VirtoCommerce.PriceExportImportModule.Core;
+using VirtoCommerce.PriceExportImportModule.Data.Services;
 using Xunit;
 
-namespace VirtoCommerce.SimpleExportImportModule.Tests
+namespace VirtoCommerce.PriceExportImportModule.Tests
 {
     [Trait("Category", "CI")]
     public class CsvPriceDataValidatorTests

@@ -1,6 +1,6 @@
-angular.module('virtoCommerce.simpleExportImportModule')
-.controller('virtoCommerce.simpleExportImportModule.fileUploadController',
-    ['FileUploader', '$document', '$scope', '$timeout', 'platformWebApp.bladeNavigationService', 'platformWebApp.assets.api', 'virtoCommerce.simpleExportImportModule.import', '$translate', 'platformWebApp.settings',
+angular.module('virtoCommerce.priceExportImportModule')
+.controller('virtoCommerce.priceExportImportModule.fileUploadController',
+    ['FileUploader', '$document', '$scope', '$timeout', 'platformWebApp.bladeNavigationService', 'platformWebApp.assets.api', 'VirtoCommerce.PriceExportImportModule.import', '$translate', 'platformWebApp.settings',
         function (FileUploader, $document, $scope, $timeout, bladeNavigationService, assetsApi, importResources, $translate, settings) {
         const blade = $scope.blade;
         const oneKb = 1024;
@@ -130,7 +130,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
                 headIcon: "fas fa-file-csv",
                 title: 'simpleExportImport.blades.import-preview.title',
                 subtitle: 'simpleExportImport.blades.import-preview.subtitle',
-                controller: 'virtoCommerce.simpleExportImportModule.importPreviewController',
+                controller: 'virtoCommerce.priceExportImportModule.importPreviewController',
                 template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/import-preview.tpl.html'
             };
 

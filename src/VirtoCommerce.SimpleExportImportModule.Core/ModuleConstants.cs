@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using VirtoCommerce.Platform.Core.Settings;
 
-namespace VirtoCommerce.SimpleExportImportModule.Core
+namespace VirtoCommerce.PriceExportImportModule.Core
 {
     public static class ModuleConstants
     {

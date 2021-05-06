@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
 
-namespace VirtoCommerce.SimpleExportImportModule.Core.Services
+namespace VirtoCommerce.PriceExportImportModule.Core.Services
 {
     public interface ICsvPriceDataValidator
     {

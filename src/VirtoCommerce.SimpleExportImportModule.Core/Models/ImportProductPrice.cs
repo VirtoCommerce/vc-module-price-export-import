@@ -1,7 +1,7 @@
 using VirtoCommerce.CatalogModule.Core.Model;
 using VirtoCommerce.PricingModule.Core.Model;
 
-namespace VirtoCommerce.SimpleExportImportModule.Core.Models
+namespace VirtoCommerce.PriceExportImportModule.Core.Models
 {
     public sealed class ImportProductPrice
     {

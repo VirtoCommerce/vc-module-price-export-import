@@ -10,17 +10,15 @@ using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.Platform.Core.Modularity;
 using VirtoCommerce.Platform.Core.Security;
 using VirtoCommerce.Platform.Core.Settings;
+using VirtoCommerce.PriceExportImportModule.Core;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
+using VirtoCommerce.PriceExportImportModule.Core.Services;
+using VirtoCommerce.PriceExportImportModule.Data.Repositories;
+using VirtoCommerce.PriceExportImportModule.Data.Services;
+using VirtoCommerce.PriceExportImportModule.Data.Validation;
 using VirtoCommerce.PricingModule.Data.ExportImport;
-using VirtoCommerce.SimpleExportImportModule.Core;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
-using VirtoCommerce.SimpleExportImportModule.Core.Services;
-using VirtoCommerce.SimpleExportImportModule.Data.Repositories;
-using VirtoCommerce.SimpleExportImportModule.Data.Services;
-using VirtoCommerce.SimpleExportImportModule.Data.Validation;
-using featureManagementCore = VirtoCommerce.FeatureManagementModule.Core;
-using simpleExportImportCore = VirtoCommerce.SimpleExportImportModule.Core;
 
-namespace VirtoCommerce.SimpleExportImportModule.Web
+namespace VirtoCommerce.PriceExportImportModule.Web
 {
     public class Module : IModule, IHasConfiguration
     {

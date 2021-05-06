@@ -1,5 +1,5 @@
 // Call this to register your module to main application
-var moduleName = "virtoCommerce.simpleExportImportModule";
+var moduleName = "virtoCommerce.priceExportImportModule";
 
 if (AppDependencies !== undefined) {
     AppDependencies.push(moduleName);
@@ -13,7 +13,7 @@ angular.module(moduleName, [])
 
                     widgetService.registerWidget({
                         isVisible: function (blade) { return blade.controller === 'virtoCommerce.pricingModule.pricelistDetailController' && !blade.isNew && authService.checkPermission('pricing:read'); },
-                        controller: 'virtoCommerce.simpleExportImportModule.pricesWidgetController',
+                        controller: 'virtoCommerce.priceExportImportModule.pricesWidgetController',
                         template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/widgets/pricesWidget.tpl.html'
                     }, 'pricelistDetail');
 

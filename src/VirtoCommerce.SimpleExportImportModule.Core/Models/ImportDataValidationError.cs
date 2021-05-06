@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace VirtoCommerce.SimpleExportImportModule.Core.Models
+namespace VirtoCommerce.PriceExportImportModule.Core.Models
 {
     public sealed class ImportDataValidationError
     {

@@ -1,5 +1,5 @@
-angular.module('virtoCommerce.simpleExportImportModule')
-    .controller('virtoCommerce.simpleExportImportModule.pricelistItemListController', ['$scope', 'virtoCommerce.pricingModule.prices', '$filter', 'platformWebApp.bladeNavigationService', 'uiGridConstants', 'platformWebApp.uiGridHelper', 'platformWebApp.bladeUtils', 'platformWebApp.dialogService', '$translate', 'platformWebApp.settings', function ($scope, prices, $filter, bladeNavigationService, uiGridConstants, uiGridHelper, bladeUtils, dialogService, $translate, settings) {
+angular.module('virtoCommerce.priceExportImportModule')
+    .controller('virtoCommerce.priceExportImportModule.pricelistItemListController', ['$scope', 'virtoCommerce.pricingModule.prices', '$filter', 'platformWebApp.bladeNavigationService', 'uiGridConstants', 'platformWebApp.uiGridHelper', 'platformWebApp.bladeUtils', 'platformWebApp.dialogService', '$translate', 'platformWebApp.settings', function ($scope, prices, $filter, bladeNavigationService, uiGridConstants, uiGridHelper, bladeUtils, dialogService, $translate, settings) {
         $scope.uiGridConstants = uiGridConstants;
         $scope.noProductRowName = $translate.instant('pricing.blades.pricelist-item-list.labels.no-product-row-name');
         var blade = $scope.blade;
@@ -292,7 +292,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
                         title: 'simpleExportImport.blades.file-upload.title',
                         subtitle: 'simpleExportImport.blades.file-upload.subtitle',
                         priceListId: blade.currentEntityId,
-                        controller: 'virtoCommerce.simpleExportImportModule.fileUploadController',
+                        controller: 'virtoCommerce.priceExportImportModule.fileUploadController',
                         template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/file-upload.tpl.html'
                     };
                     bladeNavigationService.showBlade(newBlade, blade);

@@ -1,10 +1,10 @@
 using System.IO;
 using System.Threading.Tasks;
 using VirtoCommerce.Platform.Core.Assets;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
-using VirtoCommerce.SimpleExportImportModule.Core.Services;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
+using VirtoCommerce.PriceExportImportModule.Core.Services;
 
-namespace VirtoCommerce.SimpleExportImportModule.Data.Services
+namespace VirtoCommerce.PriceExportImportModule.Data.Services
 {
     public sealed class CsvPriceImportReporter : ICsvPriceImportReporter
     {

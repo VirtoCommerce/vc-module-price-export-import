@@ -1,8 +1,8 @@
 using FluentValidation;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
 using VirtoCommerce.PricingModule.Core.Services;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
-namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
+namespace VirtoCommerce.PriceExportImportModule.Data.Validation
 {
     public sealed class ImportProductPricesValidator : AbstractValidator<ImportProductPrice[]>
     {

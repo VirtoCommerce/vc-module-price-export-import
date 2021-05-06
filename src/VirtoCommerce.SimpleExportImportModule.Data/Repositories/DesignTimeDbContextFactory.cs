@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace VirtoCommerce.SimpleExportImportModule.Data.Repositories
+namespace VirtoCommerce.PriceExportImportModule.Data.Repositories
 {
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<VirtoCommerceSimpleExportImportModuleDbContext>
     {

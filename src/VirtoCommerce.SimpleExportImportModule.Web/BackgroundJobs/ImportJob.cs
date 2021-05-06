@@ -5,11 +5,11 @@ using Hangfire.Server;
 using VirtoCommerce.Platform.Core.Exceptions;
 using VirtoCommerce.Platform.Core.PushNotifications;
 using VirtoCommerce.Platform.Hangfire;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
-using VirtoCommerce.SimpleExportImportModule.Core.Services;
-using VirtoCommerce.SimpleExportImportModule.Web.Helpers;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
+using VirtoCommerce.PriceExportImportModule.Core.Services;
+using VirtoCommerce.PriceExportImportModule.Web.Helpers;
 
-namespace VirtoCommerce.SimpleExportImportModule.Web.BackgroundJobs
+namespace VirtoCommerce.PriceExportImportModule.Web.BackgroundJobs
 {
     public sealed class ImportJob
     {

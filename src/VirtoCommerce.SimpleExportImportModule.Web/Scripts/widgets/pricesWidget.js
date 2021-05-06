@@ -1,5 +1,5 @@
-﻿angular.module('virtoCommerce.simpleExportImportModule')
-.controller('virtoCommerce.simpleExportImportModule.pricesWidgetController', ['$scope', 'platformWebApp.bladeNavigationService', 'virtoCommerce.pricingModule.prices', function ($scope, bladeNavigationService, prices) {
+angular.module('virtoCommerce.priceExportImportModule')
+.controller('virtoCommerce.priceExportImportModule.pricesWidgetController', ['$scope', 'platformWebApp.bladeNavigationService', 'virtoCommerce.pricingModule.prices', function ($scope, bladeNavigationService, prices) {
     var blade = $scope.widget.blade;
 
     function refresh() {
@@ -22,7 +22,7 @@
             parentWidgetRefresh: refresh,
             title: blade.title,
             subtitle: 'pricing.blades.pricelist-item-list.subtitle',
-            controller: 'virtoCommerce.simpleExportImportModule.pricelistItemListController',
+            controller: 'virtoCommerce.priceExportImportModule.pricelistItemListController',
             template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/pricelist-item-list.tpl.html'
         };
 

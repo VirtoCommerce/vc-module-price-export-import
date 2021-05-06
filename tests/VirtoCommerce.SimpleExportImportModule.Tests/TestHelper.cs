@@ -8,11 +8,11 @@ using VirtoCommerce.CatalogModule.Core.Model.Search;
 using VirtoCommerce.CatalogModule.Core.Search;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Settings;
-using VirtoCommerce.SimpleExportImportModule.Core;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
-using VirtoCommerce.SimpleExportImportModule.Data.Services;
+using VirtoCommerce.PriceExportImportModule.Core;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
+using VirtoCommerce.PriceExportImportModule.Data.Services;
 
-namespace VirtoCommerce.SimpleExportImportModule.Tests
+namespace VirtoCommerce.PriceExportImportModule.Tests
 {
     public static class TestHelper
     {

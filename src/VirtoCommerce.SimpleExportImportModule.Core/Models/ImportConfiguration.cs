@@ -3,7 +3,7 @@ using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
 
-namespace VirtoCommerce.SimpleExportImportModule.Core.Models
+namespace VirtoCommerce.PriceExportImportModule.Core.Models
 {
     public sealed class ImportConfiguration : Configuration
     {

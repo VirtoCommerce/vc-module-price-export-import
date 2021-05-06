@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 using Moq;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
+using VirtoCommerce.PriceExportImportModule.Core.Services;
+using VirtoCommerce.PriceExportImportModule.Data.Services;
+using VirtoCommerce.PriceExportImportModule.Data.Validation;
 using VirtoCommerce.PricingModule.Core.Model;
 using VirtoCommerce.PricingModule.Core.Model.Search;
 using VirtoCommerce.PricingModule.Core.Services;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
-using VirtoCommerce.SimpleExportImportModule.Core.Services;
-using VirtoCommerce.SimpleExportImportModule.Data.Services;
-using VirtoCommerce.SimpleExportImportModule.Data.Validation;
 using Xunit;
 
-namespace VirtoCommerce.SimpleExportImportModule.Tests
+namespace VirtoCommerce.PriceExportImportModule.Tests
 {
     [Trait("Category", "CI")]
     public class CsvPagedPriceDataImporterTests

@@ -9,12 +9,12 @@ using VirtoCommerce.CatalogModule.Core.Model.Search;
 using VirtoCommerce.CatalogModule.Core.Search;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
+using VirtoCommerce.PriceExportImportModule.Core.Services;
+using VirtoCommerce.PriceExportImportModule.Data.Models;
 using VirtoCommerce.PricingModule.Core.Model;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
-using VirtoCommerce.SimpleExportImportModule.Core.Services;
-using VirtoCommerce.SimpleExportImportModule.Data.Models;
 
-namespace VirtoCommerce.SimpleExportImportModule.Data.Services
+namespace VirtoCommerce.PriceExportImportModule.Data.Services
 {
     public sealed class CsvPagedPriceDataSource : ICsvPagedPriceDataSource
     {

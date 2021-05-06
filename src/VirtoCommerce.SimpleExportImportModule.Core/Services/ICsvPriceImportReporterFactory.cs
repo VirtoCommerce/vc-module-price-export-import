@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace VirtoCommerce.SimpleExportImportModule.Core.Services
+namespace VirtoCommerce.PriceExportImportModule.Core.Services
 {
     public interface ICsvPriceImportReporterFactory
     {

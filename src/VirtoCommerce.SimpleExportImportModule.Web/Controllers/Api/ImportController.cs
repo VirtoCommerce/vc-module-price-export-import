@@ -6,12 +6,12 @@ using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.Platform.Core.PushNotifications;
 using VirtoCommerce.Platform.Core.Security;
-using VirtoCommerce.SimpleExportImportModule.Core;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
-using VirtoCommerce.SimpleExportImportModule.Core.Services;
-using VirtoCommerce.SimpleExportImportModule.Web.BackgroundJobs;
+using VirtoCommerce.PriceExportImportModule.Core;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
+using VirtoCommerce.PriceExportImportModule.Core.Services;
+using VirtoCommerce.PriceExportImportModule.Web.BackgroundJobs;
 
-namespace VirtoCommerce.SimpleExportImportModule.Web.Controllers.Api
+namespace VirtoCommerce.PriceExportImportModule.Web.Controllers.Api
 {
     [Route("api/pricing/import")]
     [Authorize(ModuleConstants.Security.Permissions.ImportAccess)]

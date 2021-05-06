@@ -5,15 +5,15 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A38FDF79-C96A-45BF-B32B-D4978077959A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.SimpleExportImportModule.Web", "src\VirtoCommerce.SimpleExportImportModule.Web\VirtoCommerce.SimpleExportImportModule.Web.csproj", "{2FB5F2CE-B9D8-4F74-A8D0-FB457E9C8D7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.PriceExportImportModule.Web", "src\VirtoCommerce.SimpleExportImportModule.Web\VirtoCommerce.PriceExportImportModule.Web.csproj", "{2FB5F2CE-B9D8-4F74-A8D0-FB457E9C8D7D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.SimpleExportImportModule.Core", "src\VirtoCommerce.SimpleExportImportModule.Core\VirtoCommerce.SimpleExportImportModule.Core.csproj", "{3FE0BDFE-5406-46CA-9ECF-9128B1CE1B7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.PriceExportImportModule.Core", "src\VirtoCommerce.SimpleExportImportModule.Core\VirtoCommerce.PriceExportImportModule.Core.csproj", "{3FE0BDFE-5406-46CA-9ECF-9128B1CE1B7C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.SimpleExportImportModule.Data", "src\VirtoCommerce.SimpleExportImportModule.Data\VirtoCommerce.SimpleExportImportModule.Data.csproj", "{3D04A3E5-AE44-4976-8ACA-51410FF6E01C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.PriceExportImportModule.Data", "src\VirtoCommerce.SimpleExportImportModule.Data\VirtoCommerce.PriceExportImportModule.Data.csproj", "{3D04A3E5-AE44-4976-8ACA-51410FF6E01C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7622F9C9-2C59-4918-A050-2F0CE95ECF4C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.SimpleExportImportModule.Tests", "tests\VirtoCommerce.SimpleExportImportModule.Tests\VirtoCommerce.SimpleExportImportModule.Tests.csproj", "{3717CA74-5122-4D75-9661-60BC996BDB2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.PriceExportImportModule.Tests", "tests\VirtoCommerce.SimpleExportImportModule.Tests\VirtoCommerce.PriceExportImportModule.Tests.csproj", "{3717CA74-5122-4D75-9661-60BC996BDB2B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8A37690E-3FA6-4C33-9B48-F05CC536E1B9}"
 	ProjectSection(SolutionItems) = preProject

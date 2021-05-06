@@ -1,5 +1,5 @@
-angular.module('virtoCommerce.simpleExportImportModule')
-    .controller('virtoCommerce.simpleExportImportModule.importPreviewController', ['$scope', 'virtoCommerce.simpleExportImportModule.import', '$filter', 'platformWebApp.bladeNavigationService', 'uiGridConstants', 'platformWebApp.uiGridHelper', 'platformWebApp.bladeUtils', 'platformWebApp.dialogService', '$translate', 'platformWebApp.settings', function ($scope, importResources, $filter, bladeNavigationService, uiGridConstants, uiGridHelper, bladeUtils, dialogService, $translate, settings) {
+angular.module('virtoCommerce.priceExportImportModule')
+    .controller('virtoCommerce.priceExportImportModule.importPreviewController', ['$scope', 'virtoCommerce.priceExportImportModule.import', '$filter', 'platformWebApp.bladeNavigationService', 'uiGridConstants', 'platformWebApp.uiGridHelper', 'platformWebApp.bladeUtils', 'platformWebApp.dialogService', '$translate', 'platformWebApp.settings', function ($scope, importResources, $filter, bladeNavigationService, uiGridConstants, uiGridHelper, bladeUtils, dialogService, $translate, settings) {
         $scope.uiGridConstants = uiGridConstants;
 
         var blade = $scope.blade;
@@ -45,7 +45,7 @@ angular.module('virtoCommerce.simpleExportImportModule')
                                 notification: data,
                                 headIcon: "fa fa-download",
                                 title: 'simpleExportImport.blades.import-processing.title',
-                                controller: 'virtoCommerce.simpleExportImportModule.importProcessingController',
+                                controller: 'virtoCommerce.priceExportImportModule.importProcessingController',
                                 template:
                                     'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/import-processing.tpl.html'
                             };

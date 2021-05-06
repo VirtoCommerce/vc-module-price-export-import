@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using VirtoCommerce.Platform.Core.Common;
 
-namespace VirtoCommerce.SimpleExportImportModule.Core.Models
+namespace VirtoCommerce.PriceExportImportModule.Core.Models
 {
     public sealed class ImportProgressInfo : ValueObject
     {

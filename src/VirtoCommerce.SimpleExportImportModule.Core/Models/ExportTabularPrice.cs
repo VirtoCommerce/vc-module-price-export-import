@@ -1,7 +1,7 @@
 using System;
 using VirtoCommerce.PricingModule.Data.ExportImport;
 
-namespace VirtoCommerce.SimpleExportImportModule.Core.Models
+namespace VirtoCommerce.PriceExportImportModule.Core.Models
 {
     public sealed class ExportTabularPrice : TabularPrice
     {

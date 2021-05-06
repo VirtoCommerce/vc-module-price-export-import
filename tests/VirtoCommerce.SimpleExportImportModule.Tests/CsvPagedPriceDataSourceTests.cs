@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CsvHelper;
 using Xunit;
 
-namespace VirtoCommerce.SimpleExportImportModule.Tests
+namespace VirtoCommerce.PriceExportImportModule.Tests
 {
     [Trait("Category", "CI")]
     public class CsvPagedPriceDataSourceTests

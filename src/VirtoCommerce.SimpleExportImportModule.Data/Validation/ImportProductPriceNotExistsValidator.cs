@@ -1,10 +1,10 @@
 using System.Linq;
 using FluentValidation;
+using VirtoCommerce.PriceExportImportModule.Core;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
 using VirtoCommerce.PricingModule.Core.Model;
-using VirtoCommerce.SimpleExportImportModule.Core;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
 
-namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
+namespace VirtoCommerce.PriceExportImportModule.Data.Validation
 {
     public sealed class ImportProductPriceNotExistsValidator : AbstractValidator<ImportProductPrice>
     {

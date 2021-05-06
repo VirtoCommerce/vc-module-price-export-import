@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VirtoCommerce.SimpleExportImportModule.Core\VirtoCommerce.SimpleExportImportModule.Core.csproj" />
+    <ProjectReference Include="..\VirtoCommerce.SimpleExportImportModule.Core\VirtoCommerce.PriceExportImportModule.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

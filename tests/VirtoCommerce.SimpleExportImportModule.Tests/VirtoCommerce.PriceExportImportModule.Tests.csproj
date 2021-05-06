@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\VirtoCommerce.SimpleExportImportModule.Data\VirtoCommerce.SimpleExportImportModule.Data.csproj" />
+    <ProjectReference Include="..\..\src\VirtoCommerce.SimpleExportImportModule.Data\VirtoCommerce.PriceExportImportModule.Data.csproj" />
   </ItemGroup>
 
 </Project>

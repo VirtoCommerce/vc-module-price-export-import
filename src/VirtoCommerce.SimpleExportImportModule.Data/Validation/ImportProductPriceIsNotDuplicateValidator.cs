@@ -1,9 +1,9 @@
 using System.Linq;
 using FluentValidation;
-using VirtoCommerce.SimpleExportImportModule.Core;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
+using VirtoCommerce.PriceExportImportModule.Core;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
 
-namespace VirtoCommerce.SimpleExportImportModule.Data.Validation
+namespace VirtoCommerce.PriceExportImportModule.Data.Validation
 {
     public sealed class ImportProductPriceIsNotDuplicateValidator : AbstractValidator<ImportProductPrice>
     {

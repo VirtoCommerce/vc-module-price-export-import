@@ -3,15 +3,15 @@ using System.Threading.Tasks;
 using FluentValidation;
 using Moq;
 using VirtoCommerce.CatalogModule.Core.Model;
+using VirtoCommerce.PriceExportImportModule.Core;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
+using VirtoCommerce.PriceExportImportModule.Data.Validation;
 using VirtoCommerce.PricingModule.Core.Model;
 using VirtoCommerce.PricingModule.Core.Model.Search;
 using VirtoCommerce.PricingModule.Core.Services;
-using VirtoCommerce.SimpleExportImportModule.Core;
-using VirtoCommerce.SimpleExportImportModule.Core.Models;
-using VirtoCommerce.SimpleExportImportModule.Data.Validation;
 using Xunit;
 
-namespace VirtoCommerce.SimpleExportImportModule.Tests
+namespace VirtoCommerce.PriceExportImportModule.Tests
 {
     [Trait("Category", "CI")]
     public class ImportProductPriceValidationTests

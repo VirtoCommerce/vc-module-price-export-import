@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using CsvHelper.Configuration.Attributes;
-using VirtoCommerce.SimpleExportImportModule.Data.Models;
+using VirtoCommerce.PriceExportImportModule.Data.Models;
 
-namespace VirtoCommerce.SimpleExportImportModule.Data.Services
+namespace VirtoCommerce.PriceExportImportModule.Data.Services
 {
     public static class CsvPriceImportHelper
     {

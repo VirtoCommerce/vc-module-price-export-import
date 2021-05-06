@@ -1,6 +1,6 @@
 using CsvHelper.Configuration.Attributes;
 
-namespace VirtoCommerce.SimpleExportImportModule.Data.Models
+namespace VirtoCommerce.PriceExportImportModule.Data.Models
 {
     public sealed class CsvPrice
     {
