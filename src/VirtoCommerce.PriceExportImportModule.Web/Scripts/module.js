@@ -14,7 +14,7 @@ angular.module(moduleName, [])
                     widgetService.registerWidget({
                         isVisible: function (blade) { return blade.controller === 'virtoCommerce.pricingModule.pricelistDetailController' && !blade.isNew && authService.checkPermission('pricing:read'); },
                         controller: 'virtoCommerce.priceExportImportModule.pricesWidgetController',
-                        template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/widgets/pricesWidget.tpl.html'
+                        template: 'Modules/$(VirtoCommerce.PriceExportImport)/Scripts/widgets/pricesWidget.tpl.html'
                     }, 'pricelistDetail');
 
                 });

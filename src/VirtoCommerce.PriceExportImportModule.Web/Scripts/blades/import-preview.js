@@ -47,7 +47,7 @@ angular.module('virtoCommerce.priceExportImportModule')
                                 title: 'simpleExportImport.blades.import-processing.title',
                                 controller: 'virtoCommerce.priceExportImportModule.importProcessingController',
                                 template:
-                                    'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/import-processing.tpl.html'
+                                    'Modules/$(VirtoCommerce.PriceExportImport)/Scripts/blades/import-processing.tpl.html'
                             };
 
                             bladeNavigationService.showBlade(newBlade, blade);

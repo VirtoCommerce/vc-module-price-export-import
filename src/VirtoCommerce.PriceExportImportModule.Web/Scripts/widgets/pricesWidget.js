@@ -23,7 +23,7 @@ angular.module('virtoCommerce.priceExportImportModule')
             title: blade.title,
             subtitle: 'pricing.blades.pricelist-item-list.subtitle',
             controller: 'virtoCommerce.priceExportImportModule.pricelistItemListController',
-            template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/pricelist-item-list.tpl.html'
+            template: 'Modules/$(VirtoCommerce.PriceExportImport)/Scripts/blades/pricelist-item-list.tpl.html'
         };
 
         bladeNavigationService.showBlade(newBlade, blade);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <module>
-    <id>VirtoCommerce.SimpleExportImport</id>
+    <id>VirtoCommerce.PriceExportImport</id>
     <version>1.0.0</version>
     <version-tag></version-tag>
     <platformVersion>3.49.0</platformVersion>
@@ -21,7 +21,7 @@
     </owners>
 
     <projectUrl>https://github.com/VirtoCommerce/vc-module-simple-export-import</projectUrl>
-    <iconUrl>Modules/$(VirtoCommerce.SimpleExportImport)/Content/logo.png</iconUrl>
+    <iconUrl>Modules/$(VirtoCommerce.PriceExportImport)/Content/logo.png</iconUrl>
 
     <releaseNotes>First version.</releaseNotes>
     <copyright>Copyright © 2011-2021 Virto Commerce. All rights reserved</copyright>

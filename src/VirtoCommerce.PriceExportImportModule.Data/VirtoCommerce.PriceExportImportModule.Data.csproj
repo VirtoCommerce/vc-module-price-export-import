@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VirtoCommerce.SimpleExportImportModule.Core\VirtoCommerce.PriceExportImportModule.Core.csproj" />
+    <ProjectReference Include="..\VirtoCommerce.PriceExportImportModule.Core\VirtoCommerce.PriceExportImportModule.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

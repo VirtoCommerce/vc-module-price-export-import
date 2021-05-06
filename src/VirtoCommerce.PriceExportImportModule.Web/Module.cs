@@ -29,7 +29,7 @@ namespace VirtoCommerce.PriceExportImportModule.Web
         public void Initialize(IServiceCollection serviceCollection)
         {
             // database initialization
-            var connectionString = Configuration.GetConnectionString("VirtoCommerce.SimpleExportImport") ?? Configuration.GetConnectionString("VirtoCommerce");
+            var connectionString = Configuration.GetConnectionString("VirtoCommerce.PriceExportImport") ?? Configuration.GetConnectionString("VirtoCommerce");
             serviceCollection.AddDbContext<VirtoCommerceSimpleExportImportModuleDbContext>(options => options.UseSqlServer(connectionString));
 
             serviceCollection.AddTransient<ICsvPagedPriceDataSourceFactory, CsvPagedPriceDataSourceFactory>();

@@ -131,7 +131,7 @@ angular.module('virtoCommerce.priceExportImportModule')
                 title: 'simpleExportImport.blades.import-preview.title',
                 subtitle: 'simpleExportImport.blades.import-preview.subtitle',
                 controller: 'virtoCommerce.priceExportImportModule.importPreviewController',
-                template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/import-preview.tpl.html'
+                template: 'Modules/$(VirtoCommerce.PriceExportImport)/Scripts/blades/import-preview.tpl.html'
             };
 
             bladeNavigationService.showBlade(newBlade, blade);

@@ -293,7 +293,7 @@ angular.module('virtoCommerce.priceExportImportModule')
                         subtitle: 'simpleExportImport.blades.file-upload.subtitle',
                         priceListId: blade.currentEntityId,
                         controller: 'virtoCommerce.priceExportImportModule.fileUploadController',
-                        template: 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/blades/file-upload.tpl.html'
+                        template: 'Modules/$(VirtoCommerce.PriceExportImport)/Scripts/blades/file-upload.tpl.html'
                     };
                     bladeNavigationService.showBlade(newBlade, blade);
                 }
@@ -362,7 +362,7 @@ angular.module('virtoCommerce.priceExportImportModule')
                     }
                 }
             }
-            dialogService.showDialog(dialog, 'Modules/$(VirtoCommerce.SimpleExportImport)/Scripts/dialogs/priceExport-dialog.tpl.html', 'platformWebApp.confirmDialogController');
+            dialogService.showDialog(dialog, 'Modules/$(VirtoCommerce.PriceExportImport)/Scripts/dialogs/priceExport-dialog.tpl.html', 'platformWebApp.confirmDialogController');
         }
 
         $scope.getPriceRange = function (priceGroup) {
