@@ -1,5 +1,5 @@
 {
-  "simpleExportImport": {
+  "priceExportImport": {
     "blades": {
       "file-upload": {
         "title": "Upload CSV",
@@ -79,11 +79,11 @@
     "widgets": {
       "prices": {
         "title": "Prices",
-        "subtitle": "(Simple Export/Import)"
+        "subtitle": "(Price Export/Import)"
       }
     },
     "settings": {
-      "SimpleExport": {
+      "PriceExport": {
         "LimitOfLines": {
           "title": "The limit for number of lines that can be exported / imported",
           "description": "High value may cause slow performance"

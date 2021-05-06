@@ -20,7 +20,7 @@
       <owner>Virto Commerce</owner>
     </owners>
 
-    <projectUrl>https://github.com/VirtoCommerce/vc-module-simple-export-import</projectUrl>
+    <projectUrl>https://github.com/VirtoCommerce/vc-module-price-export-import</projectUrl>
     <iconUrl>Modules/$(VirtoCommerce.PriceExportImport)/Content/logo.png</iconUrl>
 
     <releaseNotes>First version.</releaseNotes>

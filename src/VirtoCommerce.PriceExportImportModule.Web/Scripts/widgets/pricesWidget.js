@@ -15,7 +15,7 @@ angular.module('virtoCommerce.priceExportImportModule')
 
     $scope.openBlade = function () {
         var newBlade = {
-            id: "simpleImportExportPricelistChild",
+            id: "priceImportExportPricelistChild",
             currency: blade.currentEntity.currency,
             currentEntity: blade.currentEntity,
             currentEntityId: blade.currentEntityId,

@@ -1,19 +1,19 @@
-<div class="blade-static _expanded simple-export-import">
+<div class="blade-static _expanded price-export-import">
     <div class="d-flex h-100 align-items-center">
         <div class="mr-auto p-14">
-            <div class="label">{{ 'simpleExportImport.blades.import-preview.labels.import-strategy' | translate }}</div>
+            <div class="label">{{ 'priceExportImport.blades.import-preview.labels.import-strategy' | translate }}</div>
             <label class="radio-label">
-                <input type="radio" name="name1" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.createNewOnly}}" /> {{ 'simpleExportImport.blades.import-preview.labels.create-new-only' | translate }}
+                <input type="radio" name="name1" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.createNewOnly}}" /> {{ 'priceExportImport.blades.import-preview.labels.create-new-only' | translate }}
             </label>
             <label class="radio-label">
-                <input type="radio" name="name2" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.updateExistingOnly}}" /> {{ 'simpleExportImport.blades.import-preview.labels.update-existing-only' | translate }}
+                <input type="radio" name="name2" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.updateExistingOnly}}" /> {{ 'priceExportImport.blades.import-preview.labels.update-existing-only' | translate }}
             </label>
             <label class="radio-label">
-                <input type="radio" name="name3" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.createAndUpdate}}" /> {{ 'simpleExportImport.blades.import-preview.labels.create-and-update' | translate }}
+                <input type="radio" name="name3" ng-model="blade.importStrategy" value="{{blade.importStrategyTypes.createAndUpdate}}" /> {{ 'priceExportImport.blades.import-preview.labels.create-and-update' | translate }}
             </label>
         </div>
         <div class="p-14 bl-1">
-            <div class="label">{{ 'simpleExportImport.blades.import-preview.labels.preview-count' | translate }}</div>
+            <div class="label">{{ 'priceExportImport.blades.import-preview.labels.preview-count' | translate }}</div>
             <div>
                 <span class="count">{{blade.currentEntities.length | number:0}}</span> of <span class="count">{{blade.totalCount | number:0}}</span>
             </div>
@@ -21,10 +21,10 @@
     </div>
 </div>
 <div class="blade-static __bottom" ng-if="pageSettings.itemsPerPageCount < pageSettings.totalItems" ng-include="'pagerTemplate.html'"></div>
-<div class="simple-export-import preview-warning-block" ng-if="showUnparsedRowsWarning">
+<div class="price-export-import preview-warning-block" ng-if="showUnparsedRowsWarning">
     <i class="fas fa-exclamation-triangle triangle-warning-icon mr-10"></i> <span class="preview-warning-text">{{unparsedRowsCount | number:0}} lines from {{previewCount | number:0}} have not been parsed for preview. Check final report after prices import.</span>
 </div>
-<div class="blade-content __xlarge-wide simple-export-import">
+<div class="blade-content __xlarge-wide price-export-import">
     <div class="blade-inner">
         <div class="inner-block" ng-init="setGridOptions({
                     data: 'blade.currentEntities',
@@ -33,13 +33,13 @@
                     rowTemplate: 'list.row.html',
                     columnDefs: [
                         {
-                            name: 'sku', displayName: 'simpleExportImport.blades.import-preview.labels.sku', field: 'sku',
+                            name: 'sku', displayName: 'priceExportImport.blades.import-preview.labels.sku', field: 'sku',
                             cellClass: 'pl-10', headerCellClass: 'pl-10',
                             cellTooltip:true,  headerTooltip: true, width: '**'
                         },
-                        { name: 'minQuantity', displayName: 'simpleExportImport.blades.import-preview.labels.min-quantity', headerTooltip: true, field: 'price.minQuantity', width: 150},
-                        { name: 'listPrice', displayName: 'simpleExportImport.blades.import-preview.labels.list-price', headerTooltip: true, field: 'price.list', width: 150, cellTemplate: 'price.cell.html'},
-                        { name: 'salePrice', displayName: 'simpleExportImport.blades.import-preview.labels.sale-price', headerTooltip: true, field: 'price.sale', width: 150, cellTemplate: 'price.cell.html'}
+                        { name: 'minQuantity', displayName: 'priceExportImport.blades.import-preview.labels.min-quantity', headerTooltip: true, field: 'price.minQuantity', width: 150},
+                        { name: 'listPrice', displayName: 'priceExportImport.blades.import-preview.labels.list-price', headerTooltip: true, field: 'price.list', width: 150, cellTemplate: 'price.cell.html'},
+                        { name: 'salePrice', displayName: 'priceExportImport.blades.import-preview.labels.sale-price', headerTooltip: true, field: 'price.sale', width: 150, cellTemplate: 'price.cell.html'}
                     ]})">
             <div class="table-wrapper" ng-if="blade.currentEntities.length">
                 <div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-save-state ui-grid-resize-columns ui-grid-move-columns ui-grid-height></div>

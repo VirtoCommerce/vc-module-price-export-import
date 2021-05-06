@@ -41,10 +41,10 @@ angular.module('virtoCommerce.priceExportImportModule')
                     importResources.run(importDataRequest,
                         (data) => {
                             var newBlade = {
-                                id: 'simpleImportProcessing',
+                                id: 'priceImportProcessing',
                                 notification: data,
                                 headIcon: "fa fa-download",
-                                title: 'simpleExportImport.blades.import-processing.title',
+                                title: 'priceExportImport.blades.import-processing.title',
                                 controller: 'virtoCommerce.priceExportImportModule.importProcessingController',
                                 template:
                                     'Modules/$(VirtoCommerce.PriceExportImport)/Scripts/blades/import-processing.tpl.html'

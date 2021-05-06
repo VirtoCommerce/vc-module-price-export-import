@@ -12,7 +12,6 @@
     <Folder Include="Caching\" />
     <Folder Include="ExportImport\" />
     <Folder Include="Handlers\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>

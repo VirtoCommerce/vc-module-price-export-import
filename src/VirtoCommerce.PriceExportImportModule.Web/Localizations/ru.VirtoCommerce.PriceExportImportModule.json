@@ -1,5 +1,5 @@
 {
-  "simpleExportImport": {
+  "priceExportImport": {
     "blades": {
       "import-preview": {
         "upload-new": "Новый CSV"
@@ -32,7 +32,7 @@
       }
     },
     "settings": {
-      "SimpleExport": {
+      "PriceExport": {
         "LimitOfLines": {
           "title": "Ограничение на количество строк, которые можно экспортировать / импортировать",
           "description": "Большие значения могут привести к ухудшению производительности."

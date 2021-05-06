@@ -53,18 +53,18 @@ namespace VirtoCommerce.PriceExportImportModule.Web
             settingsRegistrar.RegisterSettings(ModuleConstants.Settings.General.AllSettings, ModuleInfo.Id);
 
             var settingsManager = appBuilder.ApplicationServices.GetService<ISettingsManager>();
-            var simpleExportOptions = appBuilder.ApplicationServices.GetService<IOptions<ExportOptions>>().Value;
+            var priceExportOptions = appBuilder.ApplicationServices.GetService<IOptions<ExportOptions>>().Value;
 
             settingsManager.SetValue(ModuleConstants.Settings.General.ExportLimitOfLines.Name,
-                simpleExportOptions.LimitOfLines ?? ModuleConstants.Settings.General.ExportLimitOfLines.DefaultValue);
+                priceExportOptions.LimitOfLines ?? ModuleConstants.Settings.General.ExportLimitOfLines.DefaultValue);
 
-            var simpleImportOptions = appBuilder.ApplicationServices.GetService<IOptions<ImportOptions>>().Value;
+            var priceImportOptions = appBuilder.ApplicationServices.GetService<IOptions<ImportOptions>>().Value;
 
             settingsManager.SetValue(ModuleConstants.Settings.General.ImportLimitOfLines.Name,
-                simpleImportOptions.LimitOfLines ?? ModuleConstants.Settings.General.ImportLimitOfLines.DefaultValue);
+                priceImportOptions.LimitOfLines ?? ModuleConstants.Settings.General.ImportLimitOfLines.DefaultValue);
 
             settingsManager.SetValue(ModuleConstants.Settings.General.ImportFileMaxSize.Name,
-                simpleImportOptions.FileMaxSize ?? ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue);
+                priceImportOptions.FileMaxSize ?? ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue);
 
             // register permissions
             var permissionsProvider = appBuilder.ApplicationServices.GetRequiredService<IPermissionsRegistrar>();

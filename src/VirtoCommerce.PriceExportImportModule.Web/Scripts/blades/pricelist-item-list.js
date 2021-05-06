@@ -288,9 +288,9 @@ angular.module('virtoCommerce.priceExportImportModule')
                 },
                 executeMethod: function () {
                     var newBlade = {
-                        id: 'simpleImportFileUpload',
-                        title: 'simpleExportImport.blades.file-upload.title',
-                        subtitle: 'simpleExportImport.blades.file-upload.subtitle',
+                        id: 'priceImportFileUpload',
+                        title: 'priceExportImport.blades.file-upload.title',
+                        subtitle: 'priceExportImport.blades.file-upload.subtitle',
                         priceListId: blade.currentEntityId,
                         controller: 'virtoCommerce.priceExportImportModule.fileUploadController',
                         template: 'Modules/$(VirtoCommerce.PriceExportImport)/Scripts/blades/file-upload.tpl.html'
