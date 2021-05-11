@@ -362,7 +362,7 @@ angular.module('virtoCommerce.priceExportImportModule')
                     }
                 }
             }
-            dialogService.showDialog(dialog, 'Modules/$(VirtoCommerce.PriceExportImport)/Scripts/dialogs/priceExport-dialog.tpl.html', 'platformWebApp.confirmDialogController');
+            dialogService.showDialog(dialog, 'Modules/$(VirtoCommerce.PriceExportImport)/Scripts/dialogs/price-export-dialog.tpl.html', 'platformWebApp.confirmDialogController');
         }
 
         $scope.getPriceRange = function (priceGroup) {
