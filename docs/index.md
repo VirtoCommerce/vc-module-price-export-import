@@ -38,11 +38,11 @@ SKU | List price | Sale price | Min quantity
 
 
 ## Export priceline
-### Run simple export from the price list
+### Run price export from the price list
 #### User exports all prices from the price list
 1. The user opens price list blade
 2. The user clicks the “Export” icon
-3. The system opens “Simple export dialog screen” with the text “All NN prices will be exported”
+3. The system opens “Price export dialog screen” with the text “All NN prices will be exported”
 4. User confirms export
 5. The system opens the processing blade where the link to download file appears when the processing is finished
 6. The user clicks the link
@@ -50,7 +50,7 @@ SKU | List price | Sale price | Min quantity
 #### User exports selected prices from the price list
 1. The user opens price list blade, Selects NN pricelines
 2. The user clicks the “Export” icon
-3. The system opens “Simple export dialog screen” with the text “Selected NN prices will be exported”
+3. The system opens “Price export dialog screen” with the text “Selected NN prices will be exported”
 4. User confirms export
 5. The system opens the processing blade where the link to download file appears when the processing is finished
 6. The user clicks the link
@@ -58,7 +58,7 @@ SKU | List price | Sale price | Min quantity
 #### User exports all prices from the filtered price list
 1. The user opens price list blade, Filtered pricelines
 2. The user clicks the “Export” icon
-3. The system opens “Simple export dialog screen” with the text “NN prices will be exported”
+3. The system opens “Price export dialog screen” with the text “NN prices will be exported”
 4. User confirms export
 5. The system opens the processing blade where the link appears when the processing is finished
 6. The user clicks the link
@@ -104,11 +104,11 @@ SKU | List price | Sale price | Min quantity
 There are default limit values exist in the system
 
 * Limit for number of lines to export = 10000 by default
-Ask system administrator to change it throught an environment variable for `SimpleExportImport__Export__LimitOfLines`
+Ask system administrator to change it throught an environment variable for `PriceExportImport__Export__LimitOfLines`
 * Limit for number of lines to import = 10000 by default
-Ask system administrator to change it throught an environment variable for `SimpleExportImport__Import__LimitOfLines`
+Ask system administrator to change it throught an environment variable for `PriceExportImport__Import__LimitOfLines`
 * Limit for size of csv file = 1mb by default
-Ask system administrator to change it throught an environment variable for `SimpleExportImport__Import__FileMaxSize`
+Ask system administrator to change it throught an environment variable for `PriceExportImport__Import__FileMaxSize`
 
 ## Development
 The C# interfaces and implementation can be changed in next releases.
