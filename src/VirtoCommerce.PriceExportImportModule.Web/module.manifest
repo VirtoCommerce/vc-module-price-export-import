@@ -10,6 +10,9 @@
         <dependency id="VirtoCommerce.Catalog" version="3.35.0" />
         <dependency id="VirtoCommerce.Export" version="3.11.0" />
     </dependencies>
+    <incompatibilities>
+        <module id="VirtoCommerce.SimpleExportImport" version="1.0.0" />
+    </incompatibilities>
 
     <title>Price Export Import</title>
     <description>This module adds prices export and import functionality using it for price management.</description>
