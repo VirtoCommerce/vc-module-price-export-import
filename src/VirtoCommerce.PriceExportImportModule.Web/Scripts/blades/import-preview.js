@@ -57,7 +57,7 @@ angular.module('virtoCommerce.priceExportImportModule')
                 permission: blade.importPermission
             },
             {
-                name: "simpleExportImport.blades.import-preview.upload-new",
+                name: "priceExportImport.blades.import-preview.upload-new",
                 icon: 'fa fa-download',
                 canExecuteMethod: () => true,
                 executeMethod: () => {
