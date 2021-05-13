@@ -1,0 +1,29 @@
+<div class="modal-header price-export-import" ng-class="{'modal-warning': validationError}">
+    <h3 class="modal-title">{{ 'priceExportImport.dialogs.pricelist-export.title' | translate }}</h3>
+</div>
+<div class="modal-body">
+    <p ng-if="!validationError">
+        <b ng-if="exportAll">{{ 'priceExportImport.dialogs.pricelist-export.subtitle-all' | translate: {count: totalItemsCount} }}</b>
+        <b ng-if="!exportAll">{{ 'priceExportImport.dialogs.pricelist-export.subtitle-not-all' | translate: {count: selectedItemsCount} }}</b>
+        {{ 'priceExportImport.dialogs.pricelist-export.subtitle-end' | translate }}
+    </p>
+    <p class="form-group" ng-if="!validationError">
+        {{ 'priceExportImport.dialogs.pricelist-export.advanced-export-subtitle-start' | translate }}
+        <a ng-click="advancedExport()">{{ 'priceExportImport.dialogs.pricelist-export.advanced-export-subtitle-link' | translate }}</a>
+        {{ 'priceExportImport.dialogs.pricelist-export.advanced-export-subtitle-end' | translate }}
+    </p>
+    <p ng-if="validationError">
+        {{ 'priceExportImport.dialogs.pricelist-export.validation-error-subtitle-start' | translate }}
+        <b>{{ 'priceExportImport.dialogs.pricelist-export.validation-error-subtitle-count' | translate: {count: selectedItemsCount} }}</b>
+        {{ 'priceExportImport.dialogs.pricelist-export.validation-error-subtitle-middle' | translate }}
+        <b>{{ 'priceExportImport.dialogs.pricelist-export.validation-error-subtitle-count' | translate: {count: exportLimit, comma:','} }}</b>
+        {{ 'priceExportImport.dialogs.pricelist-export.validation-error-subtitle-end' | translate }}
+    </p>
+</div>
+<div class="modal-footer price-export-import" ng-if="!validationError">
+    <button class="btn cancel-btn" ng-click="cancel()">{{ 'platform.commands.cancel' | translate }}</button>
+    <button class="btn" ng-click="yes()">{{ 'priceExportImport.dialogs.pricelist-export.export' | translate }}</button>
+</div>
+<div class="modal-footer" ng-if="validationError">
+    <button class="btn" ng-click="cancel()">{{ 'platform.commands.ok' | translate }}</button>
+</div>
