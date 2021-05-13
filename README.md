@@ -1,11 +1,11 @@
 # Price Export & Import module
 
-[![CI status](https://github.com/VirtoCommerce/vc-module-simple-export-import/workflows/Module%20CI/badge.svg?branch=dev)](https://github.com/VirtoCommerce/vc-module-simple-export-import/actions?query=workflow%3A"Module+CI")
-[![Deployment status](https://github.com/VirtoCommerce/vc-module-simple-export-import/workflows/Module%20deployment/badge.svg?branch=dev)](https://github.com/VirtoCommerce/vc-module-simple-export-import/actions?query=workflow%3A"Module+deployment")
-[![Quality gate](https://sonarcloud.io/api/project_badges/measure?project=VirtoCommerce_vc-module-simple-export-import&metric=alert_status)](https://sonarcloud.io/dashboard?id=VirtoCommerce_vc-module-simple-export-import)
-[![Reliability rating](https://sonarcloud.io/api/project_badges/measure?project=VirtoCommerce_vc-module-simple-export-import&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=VirtoCommerce_vc-module-simple-export-import)
-[![Security rating](https://sonarcloud.io/api/project_badges/measure?project=VirtoCommerce_vc-module-simple-export-import&metric=security_rating)](https://sonarcloud.io/dashboard?id=VirtoCommerce_vc-module-simple-export-import)
-[![Maintainability rating](https://sonarcloud.io/api/project_badges/measure?project=VirtoCommerce_vc-module-simple-export-import&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=VirtoCommerce_vc-module-simple-export-import)
+[![CI status](https://github.com/VirtoCommerce/vc-module-price-export-import/workflows/Module%20CI/badge.svg?branch=dev)](https://github.com/VirtoCommerce/vc-module-price-export-import/actions?query=workflow%3A"Module+CI")
+[![Deployment status](https://github.com/VirtoCommerce/vc-module-price-export-import/workflows/Module%20deployment/badge.svg?branch=dev)](https://github.com/VirtoCommerce/vc-module-price-export-import/actions?query=workflow%3A"Module+deployment")
+[![Quality gate](https://sonarcloud.io/api/project_badges/measure?project=VirtoCommerce_vc-module-price-export-import&metric=alert_status)](https://sonarcloud.io/dashboard?id=VirtoCommerce_vc-module-price-export-import)
+[![Reliability rating](https://sonarcloud.io/api/project_badges/measure?project=VirtoCommerce_vc-module-price-export-import&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=VirtoCommerce_vc-module-price-export-import)
+[![Security rating](https://sonarcloud.io/api/project_badges/measure?project=VirtoCommerce_vc-module-price-export-import&metric=security_rating)](https://sonarcloud.io/dashboard?id=VirtoCommerce_vc-module-price-export-import)
+[![Maintainability rating](https://sonarcloud.io/api/project_badges/measure?project=VirtoCommerce_vc-module-price-export-import&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=VirtoCommerce_vc-module-price-export-import)
 
 If you want to transfer a large amount of price information between Virto Commerce and another system,
 then you can use a specially-formatted spreadsheet to import or export that data. Virto Commerce uses CSV (semicolon-separated value) files to perform this kind of bulk task.
@@ -25,7 +25,7 @@ If you want to automated transferring information from 3rd party system, like ER
 
 
 ## Documentation
-* [Module Documentation](https://virtocommerce.com/docs/latest/modules/simple-export-import/)
+* [Module Documentation](https://virtocommerce.com/docs/latest/modules/price-export-import/)
 * [View on GitHub](docs/index.md)
 
 ## Development
@@ -37,7 +37,7 @@ If you want to automated transferring information from 3rd party system, like ER
 * Installation: https://www.virtocommerce.com/docs/latest/user-guide/modules/
 * Home: https://virtocommerce.com
 * Community: https://www.virtocommerce.org
-* [Download Latest Release](https://github.com/VirtoCommerce/vc-module-simple-export-import/releases/latest)
+* [Download Latest Release](https://github.com/VirtoCommerce/vc-module-price-export-import/releases/latest)
 
 ## License
 
