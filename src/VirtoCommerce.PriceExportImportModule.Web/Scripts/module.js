@@ -135,20 +135,8 @@ angular.module(moduleName, [])
                                     exportLimit: exportLimit,
                                     validationError,
                                     advancedExport: function () {
-                                        if (exportDataRequest.providerConfig) {
-                                            delete exportDataRequest.providerConfig;
-                                        }
-
                                         this.no();
-                                        const newBlade = {
-                                            id: 'priceExport',
-                                            title: 'pricing.blades.exporter.priceTitle',
-                                            subtitle: 'pricing.blades.exporter.priceSubtitle',
-                                            controller: 'virtoCommerce.exportModule.exportSettingsController',
-                                            template: 'Modules/$(VirtoCommerce.Export)/Scripts/blades/export-settings.tpl.html',
-                                            exportDataRequest: exportDataRequest
-                                        };
-                                        bladeNavigationService.showBlade(newBlade, blade);
+                                        blade.exportPrices();
                                     },
                                     callback: function (confirm) {
                                         if (confirm) {
