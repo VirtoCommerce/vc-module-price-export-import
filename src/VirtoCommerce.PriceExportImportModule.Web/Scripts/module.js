@@ -16,79 +16,19 @@ angular.module(moduleName, [])
                         executeMethod: function (blade) {
                             const csvExportDelimiter = ';';
                             const csvExportProvider = 'CsvExportProvider';
-                            const csvPropertyInfos = [
-                                {
-                                    fullName: "Code",
-                                    group: "TabularPrice",
-                                    displayName: "SKU",
-                                    isRequired: false,
-                                },
-                                {
-                                    fullName: "ProductName",
-                                    group: "TabularPrice",
-                                    displayName: "Product Name",
-                                    isRequired: false,
-                                },
-                                {
-                                    fullName: "Currency",
-                                    group: "TabularPrice",
-                                    displayName: "Currency",
-                                    isRequired: false,
-                                },
-                                {
-                                    fullName: "List",
-                                    group: "TabularPrice",
-                                    displayName: "List price",
-                                    isRequired: false,
-                                },
-                                {
-                                    fullName: "Sale",
-                                    group: "TabularPrice",
-                                    displayName: "Sale price",
-                                    isRequired: false,
-                                },
-                                {
-                                    fullName: "MinQuantity",
-                                    group: "TabularPrice",
-                                    displayName: "Min quantity",
-                                    isRequired: false,
-                                },
-                                {
-                                    fullName: "ModifiedDate",
-                                    group: "TabularPrice",
-                                    displayName: "Modified",
-                                    isRequired: false,
-                                },
-                                {
-                                    fullName: "StartDate",
-                                    group: "TabularPrice",
-                                    displayName: "Valid from",
-                                    isRequired: false,
-                                },
-                                {
-                                    fullName: "EndDate",
-                                    group: "TabularPrice",
-                                    displayName: "Valid to",
-                                    isRequired: false,
-                                },
-                                {
-                                    fullName: "CreatedDate",
-                                    group: "TabularPrice",
-                                    displayName: "Created date",
-                                    isRequired: false,
-                                },
-                                {
-                                    fullName: "CreatedBy",
-                                    group: "TabularPrice",
-                                    displayName: "Created by",
-                                    isRequired: false,
-                                },
-                                {
-                                    fullName: "ModifiedBy",
-                                    group: "TabularPrice",
-                                    displayName: "Modified By",
-                                    isRequired: false,
-                                }
+                            const csvPropertyInfo = [
+                                getCsvPropertyInfo("Code", "SKU"),
+                                getCsvPropertyInfo("ProductName", "Product Name"),
+                                getCsvPropertyInfo("Currency", "Currency"),
+                                getCsvPropertyInfo("List", "List price"),
+                                getCsvPropertyInfo("Sale", "Sale price"),
+                                getCsvPropertyInfo("MinQuantity", "Min quantity"),
+                                getCsvPropertyInfo("ModifiedDate", "Modified"),
+                                getCsvPropertyInfo("StartDate", "Valid from"),
+                                getCsvPropertyInfo("EndDate", "Valid to"),
+                                getCsvPropertyInfo("CreatedDate", "Created date"),
+                                getCsvPropertyInfo("CreatedBy", "Created by"),
+                                getCsvPropertyInfo("ModifiedBy", "Modified By")
                             ];
                             const exportDataRequest = {
                                 exportTypeName: 'VirtoCommerce.PricingModule.Data.ExportImport.ExportablePrice',
@@ -144,7 +84,7 @@ angular.module(moduleName, [])
                                             exportDataRequest.providerConfig.delimiter = csvExportDelimiter;
                                             exportDataRequest.providerConfig.type = 'CsvProviderConfiguration';
                                             exportDataRequest.providerName = csvExportProvider;
-                                            exportDataRequest.dataQuery.includedProperties = csvPropertyInfos;
+                                            exportDataRequest.dataQuery.includedProperties = csvPropertyInfo;
                                             delete exportDataRequest.dataQuery.skip;
                                             delete exportDataRequest.dataQuery.take;
                                             delete exportDataRequest.dataQuery.IsPreview;
@@ -187,6 +127,15 @@ angular.module(moduleName, [])
                         canExecuteMethod: function () { return true; },
                         index: 5
                     }, 'virtoCommerce.pricingModule.pricelistItemListController');
+
+                    function getCsvPropertyInfo(fullName, displayName) {
+                        return {
+                            fullName,
+                            group: "TabularPrice",
+                            displayName,
+                            isRequired: false,
+                        }
+                    }
 
                 });
             }
