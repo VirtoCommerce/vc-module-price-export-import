@@ -17,18 +17,18 @@ angular.module(moduleName, [])
                             const csvExportDelimiter = ';';
                             const csvExportProvider = 'CsvExportProvider';
                             const csvPropertyInfo = [
-                                getCsvPropertyInfo("Code", "SKU"),
-                                getCsvPropertyInfo("ProductName", "Product Name"),
-                                getCsvPropertyInfo("Currency", "Currency"),
-                                getCsvPropertyInfo("List", "List price"),
-                                getCsvPropertyInfo("Sale", "Sale price"),
-                                getCsvPropertyInfo("MinQuantity", "Min quantity"),
-                                getCsvPropertyInfo("ModifiedDate", "Modified"),
-                                getCsvPropertyInfo("StartDate", "Valid from"),
-                                getCsvPropertyInfo("EndDate", "Valid to"),
-                                getCsvPropertyInfo("CreatedDate", "Created date"),
-                                getCsvPropertyInfo("CreatedBy", "Created by"),
-                                getCsvPropertyInfo("ModifiedBy", "Modified By")
+                                createCsvPropertyInfo("Code", "SKU"),
+                                createCsvPropertyInfo("ProductName", "Product Name"),
+                                createCsvPropertyInfo("Currency", "Currency"),
+                                createCsvPropertyInfo("List", "List price"),
+                                createCsvPropertyInfo("Sale", "Sale price"),
+                                createCsvPropertyInfo("MinQuantity", "Min quantity"),
+                                createCsvPropertyInfo("ModifiedDate", "Modified"),
+                                createCsvPropertyInfo("StartDate", "Valid from"),
+                                createCsvPropertyInfo("EndDate", "Valid to"),
+                                createCsvPropertyInfo("CreatedDate", "Created date"),
+                                createCsvPropertyInfo("CreatedBy", "Created by"),
+                                createCsvPropertyInfo("ModifiedBy", "Modified By")
                             ];
                             const exportDataRequest = {
                                 exportTypeName: 'VirtoCommerce.PricingModule.Data.ExportImport.ExportablePrice',
@@ -128,7 +128,7 @@ angular.module(moduleName, [])
                         index: 5
                     }, 'virtoCommerce.pricingModule.pricelistItemListController');
 
-                    function getCsvPropertyInfo(fullName, displayName) {
+                    function createCsvPropertyInfo(fullName, displayName) {
                         return {
                             fullName,
                             group: "TabularPrice",
