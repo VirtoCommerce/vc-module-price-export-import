@@ -8,7 +8,7 @@
           "progress": "Progress"
         },
         "drag-and-drop": {
-          "placeholder": "Drag and drop images here",
+          "placeholder": "Drag and drop file here",
           "or": "or ",
           "link": "browse your files"
         },
