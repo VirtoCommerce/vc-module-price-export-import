@@ -136,7 +136,6 @@ angular.module(moduleName, [])
                             isRequired: false,
                         }
                     }
-
                 });
             }
         ]);
