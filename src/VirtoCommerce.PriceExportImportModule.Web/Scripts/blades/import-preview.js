@@ -4,8 +4,6 @@ angular.module('virtoCommerce.priceExportImportModule')
 
         var blade = $scope.blade;
 
-        blade.importPermission = "import:access";
-
         blade.importStrategyTypes = {
             createNewOnly: "createOnly",
             updateExistingOnly: "updateOnly",
@@ -54,7 +52,6 @@ angular.module('virtoCommerce.priceExportImportModule')
                         }
                     );
                 },
-                permission: blade.importPermission
             },
             {
                 name: "priceExportImport.blades.import-preview.upload-new",
