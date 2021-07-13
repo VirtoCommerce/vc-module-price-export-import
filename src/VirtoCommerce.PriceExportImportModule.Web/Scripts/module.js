@@ -12,7 +12,8 @@ angular.module(moduleName, [])
                 featureManagerSubscriber.onLoginStatusChanged('PriceExportImport', () => {
 
                     toolbarService.register({
-                        name: "platform.commands.export", icon: 'fa fa-upload',
+                        name: "platform.commands.export",
+                        icon: 'fa fa-upload',
                         executeMethod: function (blade) {
                             const csvExportDelimiter = ';';
                             const csvExportProvider = 'CsvExportProvider';
@@ -107,6 +108,7 @@ angular.module(moduleName, [])
                             });
                         },
                         canExecuteMethod: function () { return true; },
+                        permission: 'export:access',
                         index: 4
                     }, 'virtoCommerce.pricingModule.pricelistItemListController');
 
@@ -125,6 +127,7 @@ angular.module(moduleName, [])
                             bladeNavigationService.showBlade(newBlade, blade);
                         },
                         canExecuteMethod: function () { return true; },
+                        permission: 'pricing:simpleImport',
                         index: 5
                     }, 'virtoCommerce.pricingModule.pricelistItemListController');
 

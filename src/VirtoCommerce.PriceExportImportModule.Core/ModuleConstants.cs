@@ -45,7 +45,7 @@ namespace VirtoCommerce.PriceExportImportModule.Core
         {
             public static class Permissions
             {
-                public const string ImportAccess = "import:access";
+                public const string ImportAccess = "pricing:simpleImport";
 
                 public static string[] AllPermissions { get; } = { ImportAccess };
             }
