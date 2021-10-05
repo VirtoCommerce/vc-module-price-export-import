@@ -38,5 +38,40 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
 
             Assert.Equal(1, errorCount);
         }
+
+        [Fact]
+        public async Task EnsureBadDataFoundWasCalledOnceCase()
+        {
+            var isRecordBad = false;
+            var errorCount = 0;
+            var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                //ReadingExceptionOccurred = args => false,
+                BadDataFound = args =>
+                {
+                    ++errorCount;
+                    isRecordBad = true;
+                },
+                Delimiter = ";",
+            };
+            var header = "SKU;Min quantity;List price;Sale price";
+            var records = new[] { "TestSku1;2;10.99;9.99", "TestSku2;2;10.99;9", "XXX;\"9;10.9;9" };
+            var csv = TestHelper.GetCsv(records, header);
+            var textReader = new StreamReader(TestHelper.GetStream(csv), leaveOpen: true);
+
+            var csvReader = new CsvReader(textReader, csvConfiguration);
+
+            while (await csvReader.ReadAsync())
+            {
+                if (!isRecordBad)
+                {
+                    csvReader.GetRecord<CsvPrice>();
+                }
+
+                isRecordBad = false;
+            }
+
+            Assert.Equal(1, errorCount);
+        }
     }
 }
