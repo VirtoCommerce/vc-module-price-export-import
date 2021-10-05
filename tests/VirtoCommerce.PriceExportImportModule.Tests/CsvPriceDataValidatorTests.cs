@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Moq;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.PriceExportImportModule.Core;
+using VirtoCommerce.PriceExportImportModule.Core.Models;
 using VirtoCommerce.PriceExportImportModule.Data.Services;
 using Xunit;
 
@@ -42,7 +43,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
 
             var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object, new ImportConfigurationFactory());
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -64,7 +65,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
 
             var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object, new ImportConfigurationFactory());
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -87,7 +88,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
 
             var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object, new ImportConfigurationFactory());
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -119,7 +120,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
 
             var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object, new ImportConfigurationFactory());
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -142,7 +143,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
 
             var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object, new ImportConfigurationFactory());
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -165,7 +166,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
 
             var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object, new ImportConfigurationFactory());
 
             // Act
             var result = await validator.ValidateAsync("file url");
@@ -190,7 +191,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
 
             var settingsManagerMoq = TestHelper.GetSettingsManagerMoq();
 
-            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object);
+            var validator = new CsvPriceDataValidator(blobStorageProviderMoq.Object, settingsManagerMoq.Object, new ImportConfigurationFactory());
 
             // Act
             var result = await validator.ValidateAsync("file url");

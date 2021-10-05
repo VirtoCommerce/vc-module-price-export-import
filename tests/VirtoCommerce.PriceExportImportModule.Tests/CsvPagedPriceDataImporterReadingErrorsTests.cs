@@ -368,7 +368,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
 
         private static ICsvPriceDataValidator GetPriceDataValidator(IBlobStorageProvider blobStorageProvider)
         {
-            return new CsvPriceDataValidator(blobStorageProvider, TestHelper.GetSettingsManagerMoq().Object);
+            return new CsvPriceDataValidator(blobStorageProvider, TestHelper.GetSettingsManagerMoq().Object, new ImportConfigurationFactory());
         }
 
         private static ImportProductPricesValidator GetImportProductPricesValidator(IPricingSearchService pricingSearchService)
@@ -386,7 +386,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
 
             importReporterFactory ??= new CsvPriceImportReporterFactory(blobStorageProvider);
             return new CsvPagedPriceDataImporter(blobStorageProvider, GetPricingService(), pricingSearchService,
-                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(blobStorageProvider), GetImportProductPricesValidator(pricingSearchService), importReporterFactory, blobUrlResolverMock.Object);
+                GetPriceDataValidator(blobStorageProvider), TestHelper.GetCsvPagedPriceDataSourceFactory(blobStorageProvider), GetImportProductPricesValidator(pricingSearchService), importReporterFactory, blobUrlResolverMock.Object, new ImportConfigurationFactory());
         }
     }
 }

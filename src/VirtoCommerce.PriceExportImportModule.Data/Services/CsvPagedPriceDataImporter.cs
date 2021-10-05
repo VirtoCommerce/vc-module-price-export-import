@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
+using CsvHelper.Configuration;
 using FluentValidation;
 using VirtoCommerce.Platform.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
@@ -26,10 +27,11 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
         private readonly ICsvPriceDataValidator _csvPriceDataValidator;
         private readonly ICsvPriceImportReporterFactory _importReporterFactory;
         private readonly IBlobUrlResolver _blobUrlResolver;
+        private readonly ImportConfigurationFactory _importConfigurationFactory;
 
         public CsvPagedPriceDataImporter(IBlobStorageProvider blobStorageProvider, IPricingService pricingService, IPricingSearchService pricingSearchService,
             ICsvPriceDataValidator csvPriceDataValidator, ICsvPagedPriceDataSourceFactory dataSourceFactory, IValidator<ImportProductPrice[]> importProductPricesValidator, ICsvPriceImportReporterFactory importReporterFactory
-            , IBlobUrlResolver blobUrlResolver)
+            , IBlobUrlResolver blobUrlResolver, ImportConfigurationFactory importConfigurationFactory)
         {
             _pricingService = pricingService;
             _pricingSearchService = pricingSearchService;
@@ -38,6 +40,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             _csvPriceDataValidator = csvPriceDataValidator;
             _importReporterFactory = importReporterFactory;
             _blobUrlResolver = blobUrlResolver;
+            _importConfigurationFactory = importConfigurationFactory;
         }
 
         public async Task ImportAsync(ImportDataRequest request, Action<ImportProgressInfo> progressCallback, ICancellationToken cancellationToken)
@@ -58,7 +61,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
             var reportFilePath = GetReportFilePath(request.FilePath);
 
-            var configuration = ImportConfiguration.GetCsvConfiguration();
+            var configuration = _importConfigurationFactory.Create();
 
             await using var importReporter = await _importReporterFactory.CreateAsync(reportFilePath, configuration.Delimiter);
 
@@ -66,6 +69,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
             var importProgress = new ImportProgressInfo { ProcessedCount = 0, CreatedCount = 0, UpdatedCount = 0, Description = "Import has started" };
 
+            SetupErrorHandlers(progressCallback, configuration, errorsContext, importProgress, importReporter);
 
             using var dataSource = _dataSourceFactory.Create(request.FilePath, ModuleConstants.Settings.PageSize, configuration);
 
@@ -80,35 +84,6 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             progressCallback(importProgress);
 
             const string importDescription = "{0} out of {1} have been imported.";
-
-            configuration.ReadingExceptionOccurred = args =>
-            {
-                var context = args.Exception.Context;
-
-                if (!errorsContext.ErrorsRows.Contains(context.Parser.Row))
-                {
-                    var fieldSourceValue = context.Reader[context.Reader.CurrentIndex];
-
-                    if (context.Reader.HeaderRecord.Length != context.Parser.Record.Length)
-                    {
-                        HandleNotClosedQuoteError(progressCallback, importProgress, importReporter, context, errorsContext);
-                    }
-                    else if (fieldSourceValue == "")
-                    {
-                        HandleRequiredValueError(progressCallback, importProgress, importReporter, context, errorsContext);
-                    }
-                    else
-                    {
-                        HandleWrongValueError(progressCallback, importProgress, importReporter, context, errorsContext);
-                    }
-                }
-
-                return false;
-            };
-
-            configuration.BadDataFound = args => HandleBadDataError(progressCallback, importProgress, importReporter, args.Context, errorsContext);
-
-            configuration.MissingFieldFound = args => HandleMissedColumnError(progressCallback, importProgress, importReporter, args.Context, errorsContext);
 
             try
             {
@@ -358,6 +333,41 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
             errorsContext.ErrorsRows.Add(context.Parser.Row);
             HandleError(progressCallback, importProgress);
+        }
+
+        private static void SetupErrorHandlers(Action<ImportProgressInfo> progressCallback,
+            CsvConfiguration configuration,
+            ImportErrorsContext errorsContext, ImportProgressInfo importProgress,
+            ICsvPriceImportReporter importReporter)
+        {
+            configuration.ReadingExceptionOccurred = args =>
+            {
+                var context = args.Exception.Context;
+
+                if (!errorsContext.ErrorsRows.Contains(context.Parser.Row))
+                {
+                    var fieldSourceValue = context.Reader[context.Reader.CurrentIndex];
+
+                    if (context.Reader.HeaderRecord.Length != context.Parser.Record.Length)
+                    {
+                        HandleNotClosedQuoteError(progressCallback, importProgress, importReporter, context, errorsContext);
+                    }
+                    else if (fieldSourceValue == "")
+                    {
+                        HandleRequiredValueError(progressCallback, importProgress, importReporter, context, errorsContext);
+                    }
+                    else
+                    {
+                        HandleWrongValueError(progressCallback, importProgress, importReporter, context, errorsContext);
+                    }
+                }
+
+                return false;
+            };
+
+            configuration.BadDataFound = args => HandleBadDataError(progressCallback, importProgress, importReporter, args.Context, errorsContext);
+
+            configuration.MissingFieldFound = args => HandleMissedColumnError(progressCallback, importProgress, importReporter, args.Context, errorsContext);
         }
     }
 }

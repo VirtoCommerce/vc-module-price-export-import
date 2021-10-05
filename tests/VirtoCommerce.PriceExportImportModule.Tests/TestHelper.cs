@@ -46,7 +46,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
 
         public static CsvPagedPriceDataSourceFactory GetCsvPagedPriceDataSourceFactory(IBlobStorageProvider blobStorageProvider)
         {
-            return new CsvPagedPriceDataSourceFactory(blobStorageProvider, GetProductSearchService());
+            return new CsvPagedPriceDataSourceFactory(blobStorageProvider, GetProductSearchService(), new ImportConfigurationFactory());
         }
 
         public static Stream GetStream(string csv)

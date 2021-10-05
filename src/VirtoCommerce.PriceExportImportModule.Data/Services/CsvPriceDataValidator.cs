@@ -17,11 +17,16 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
     {
         private readonly IBlobStorageProvider _blobStorageProvider;
         private readonly ISettingsManager _settingsManager;
+        private readonly ImportConfigurationFactory _importConfigurationFactory;
 
-        public CsvPriceDataValidator(IBlobStorageProvider blobStorageProvider, ISettingsManager settingsManager)
+        public CsvPriceDataValidator(
+            IBlobStorageProvider blobStorageProvider,
+            ISettingsManager settingsManager,
+            ImportConfigurationFactory importConfigurationFactory)
         {
             _blobStorageProvider = blobStorageProvider;
             _settingsManager = settingsManager;
+            _importConfigurationFactory = importConfigurationFactory;
         }
         public async Task<ImportDataValidationResult> ValidateAsync(string filePath)
         {
@@ -47,7 +52,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             else
             {
                 var stream = _blobStorageProvider.OpenRead(filePath);
-                var csvConfiguration = ImportConfiguration.GetCsvConfiguration();
+                var csvConfiguration = _importConfigurationFactory.Create();
                 csvConfiguration.BadDataFound = null;
                 csvConfiguration.ReadingExceptionOccurred = null;
 
