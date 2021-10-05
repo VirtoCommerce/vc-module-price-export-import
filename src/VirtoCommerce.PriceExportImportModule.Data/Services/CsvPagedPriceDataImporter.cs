@@ -365,7 +365,10 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
                 return false;
             };
 
-            configuration.BadDataFound = args => HandleBadDataError(progressCallback, importProgress, importReporter, args.Context, errorsContext);
+            configuration.BadDataFound = args =>
+            {
+                HandleBadDataError(progressCallback, importProgress, importReporter, args.Context, errorsContext);
+            };
 
             configuration.MissingFieldFound = args => HandleMissedColumnError(progressCallback, importProgress, importReporter, args.Context, errorsContext);
         }

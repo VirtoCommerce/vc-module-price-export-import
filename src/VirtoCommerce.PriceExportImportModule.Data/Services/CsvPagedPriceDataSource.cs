@@ -83,6 +83,13 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             var streamPosition = _stream.Position;
             _stream.Seek(0, SeekOrigin.Begin);
 
+            // Because of these properties are delegates we have to null them to fix false positive firing
+            var originReadingExceptionOccurredDelegate = _configuration.ReadingExceptionOccurred;
+            var originBadDataFoundDelegate = _configuration.BadDataFound;
+
+            _configuration.ReadingExceptionOccurred = args => false;
+            _configuration.BadDataFound = null;
+
             using var streamReader = new StreamReader(_stream, leaveOpen: true);
             using var csvReader = new CsvReader(streamReader, _configuration);
             try
@@ -95,13 +102,16 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             {
                 _totalCount++;
             }
-
             while (csvReader.Read())
             {
                 _totalCount++;
             }
 
             _stream.Seek(streamPosition, SeekOrigin.Begin);
+
+            // And after counting totals return back delegates
+            _configuration.ReadingExceptionOccurred = originReadingExceptionOccurredDelegate;
+            _configuration.BadDataFound = originBadDataFoundDelegate;
 
             return _totalCount.Value;
         }
