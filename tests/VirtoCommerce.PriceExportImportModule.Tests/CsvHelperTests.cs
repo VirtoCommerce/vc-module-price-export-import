@@ -14,13 +14,13 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
         [Fact]
         public async Task TestDoubleBadDataFoundCase()
         {
-            var erroCount = 0;
+            var errorCount = 0;
             var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 ReadingExceptionOccurred = args => false,
                 BadDataFound = args =>
                 {
-                    ++erroCount;
+                    ++errorCount;
                 },
                 Delimiter = ";",
             };
@@ -36,7 +36,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
                 csvReader.GetRecord<CsvPrice>();
             }
 
-            Assert.Equal(1, erroCount);
+            Assert.Equal(1, errorCount);
         }
     }
 }
