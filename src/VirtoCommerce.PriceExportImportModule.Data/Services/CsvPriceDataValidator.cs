@@ -47,11 +47,9 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             else
             {
                 var stream = _blobStorageProvider.OpenRead(filePath);
-                var csvConfiguration = new ImportConfiguration()
-                {
-                    BadDataFound = null,
-                    MissingFieldFound = null
-                };
+                var csvConfiguration = ImportConfiguration.GetCsvConfiguration();
+                csvConfiguration.BadDataFound = null;
+                csvConfiguration.ReadingExceptionOccurred = null;
 
                 await ValidateDelimiterAndDataExists(stream, csvConfiguration, errorsList);
 
@@ -67,7 +65,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             return result;
         }
 
-        private void ValidateLineLimit(Stream stream, Configuration csvConfiguration, List<ImportDataValidationError> errorsList)
+        private void ValidateLineLimit(Stream stream, CsvConfiguration csvConfiguration, List<ImportDataValidationError> errorsList)
         {
             var notCompatibleErrors = new[]
             {
@@ -108,7 +106,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             }
         }
 
-        private static void ValidateRequiredColumns(Stream stream, Configuration csvConfiguration, List<ImportDataValidationError> errorsList)
+        private static void ValidateRequiredColumns(Stream stream, CsvConfiguration csvConfiguration, List<ImportDataValidationError> errorsList)
         {
             var notCompatibleErrors = new[]
             {
@@ -130,7 +128,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             csvReader.Read();
             csvReader.ReadHeader();
 
-            var existedColumns = csvReader.Context.HeaderRecord;
+            var existedColumns = csvReader.Context.Reader.HeaderRecord;
 
             var requiredColumns = CsvPriceImportHelper.GetImportPriceRequiredColumns();
 
@@ -144,7 +142,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             }
         }
 
-        private static async Task ValidateDelimiterAndDataExists(Stream stream, Configuration csvConfiguration, List<ImportDataValidationError> errorsList)
+        private static async Task ValidateDelimiterAndDataExists(Stream stream, CsvConfiguration csvConfiguration, List<ImportDataValidationError> errorsList)
         {
 
             var notCompatibleErrors = new[]

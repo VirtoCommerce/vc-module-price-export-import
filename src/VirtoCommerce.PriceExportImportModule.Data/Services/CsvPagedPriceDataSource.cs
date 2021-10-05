@@ -20,12 +20,12 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
     {
         private readonly IProductSearchService _productSearchService;
         private readonly Stream _stream;
-        private readonly Configuration _configuration;
+        private readonly CsvConfiguration _configuration;
         private readonly StreamReader _streamReader;
         private readonly CsvReader _csvReader;
         private int? _totalCount;
 
-        public CsvPagedPriceDataSource(string filePath, IProductSearchService productSearchService, IBlobStorageProvider blobStorageProvider, int pageSize, Configuration configuration)
+        public CsvPagedPriceDataSource(string filePath, IProductSearchService productSearchService, IBlobStorageProvider blobStorageProvider, int pageSize, CsvConfiguration configuration)
         {
             _productSearchService = productSearchService;
 
@@ -52,7 +52,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             _stream.Seek(0, SeekOrigin.Begin);
 
             using var streamReader = new StreamReader(_stream, leaveOpen: true);
-            using var csvReader = new CsvReader(streamReader, _configuration, true);
+            using var csvReader = new CsvReader(streamReader, _configuration);
 
             try
             {
@@ -60,7 +60,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
                 csvReader.ReadHeader();
                 csvReader.ValidateHeader<CsvPrice>();
 
-                result = string.Join(csvReader.Configuration.Delimiter, csvReader.Context.HeaderRecord);
+                result = string.Join(csvReader.Configuration.Delimiter, csvReader.Context.Reader.HeaderRecord);
 
             }
             finally
@@ -84,7 +84,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             _stream.Seek(0, SeekOrigin.Begin);
 
             using var streamReader = new StreamReader(_stream, leaveOpen: true);
-            using var csvReader = new CsvReader(streamReader, _configuration, true);
+            using var csvReader = new CsvReader(streamReader, _configuration);
             try
             {
                 csvReader.Read();
@@ -120,8 +120,8 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             {
                 var csvRecord = _csvReader.GetRecord<CsvPrice>();
 
-                var rawRecord = _csvReader.Context.RawRecord;
-                var row = _csvReader.Context.Row;
+                var rawRecord = _csvReader.Context.Parser.RawRecord;
+                var row = _csvReader.Context.Parser.Row;
 
                 var recordTuple = (csvRecord, rawRecord, row);
                 recordTuples.Add(recordTuple);
