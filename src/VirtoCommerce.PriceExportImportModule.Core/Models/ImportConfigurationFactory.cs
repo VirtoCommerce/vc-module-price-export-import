@@ -5,7 +5,7 @@ namespace VirtoCommerce.PriceExportImportModule.Core.Models
 {
     public class ImportConfigurationFactory
     {
-        public CsvConfiguration Create()
+        public virtual CsvConfiguration Create()
         {
             var result = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
