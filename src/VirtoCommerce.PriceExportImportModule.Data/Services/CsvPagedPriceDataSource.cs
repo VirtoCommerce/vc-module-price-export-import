@@ -22,20 +22,25 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
         private readonly Stream _stream;
         private readonly CsvConfiguration _configuration;
         private readonly StreamReader _streamReader;
-        private readonly CsvReader _csvReader;
+        private readonly IReader _csvReader;
         private int? _totalCount;
 
-        public CsvPagedPriceDataSource(string filePath, IProductSearchService productSearchService, IBlobStorageProvider blobStorageProvider, int pageSize, CsvConfiguration configuration)
+        public CsvPagedPriceDataSource(
+            string filePath,
+            IProductSearchService productSearchService,
+            IBlobStorageProvider blobStorageProvider,
+            int pageSize,
+            CsvConfiguration configuration,
+            Func<TextReader, CsvConfiguration, IReader> csvReaderFactory)
         {
             _productSearchService = productSearchService;
 
             var stream = blobStorageProvider.OpenRead(filePath);
-
             _stream = stream;
             _streamReader = new StreamReader(stream);
 
             _configuration = configuration;
-            _csvReader = new CsvReader(_streamReader, configuration);
+            _csvReader = csvReaderFactory(_streamReader, _configuration);
 
             PageSize = pageSize;
         }
@@ -126,16 +131,26 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
             var recordTuples = new List<(CsvPrice, string, int)>();
 
+            _csvReader.Read();
+            _csvReader.ReadHeader();
+
             for (var i = 0; i < PageSize && await _csvReader.ReadAsync(); i++)
             {
-                var csvRecord = _csvReader.GetRecord<CsvPrice>();
+                if (_csvReader is VcCsvReader vcCsvReader)
+                {
+                    if (!vcCsvReader.IsFieldBadData)
+                    {
+                        var csvRecord = _csvReader.GetRecord<CsvPrice>();
 
-                var rawRecord = _csvReader.Context.Parser.RawRecord;
-                var row = _csvReader.Context.Parser.Row;
+                        var rawRecord = _csvReader.Context.Parser.RawRecord;
+                        var row = _csvReader.Context.Parser.Row;
 
-                var recordTuple = (csvRecord, rawRecord, row);
-                recordTuples.Add(recordTuple);
+                        var recordTuple = (csvRecord, rawRecord, row);
+                        recordTuples.Add(recordTuple);
+                    }
 
+                    vcCsvReader.IsFieldBadData = false;
+                }
             }
 
             var skus = recordTuples.Where(x => x.Item1 != null).Select(x => x.Item1.Sku).ToArray();

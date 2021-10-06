@@ -269,6 +269,11 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
             reporter.Write(importError);
 
+            if (context.Reader is VcCsvReader vcCsvReader)
+            {
+                vcCsvReader.IsFieldBadData = true;
+            }
+
             errorsContext.ErrorsRows.Add(context.Parser.Row);
             HandleError(progressCallback, importProgress);
         }
