@@ -1,4 +1,8 @@
+using System;
+using System.IO;
 using System.Linq;
+using CsvHelper;
+using CsvHelper.Configuration;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +43,7 @@ namespace VirtoCommerce.PriceExportImportModule.Web
             serviceCollection.AddSingleton<ImportConfigurationFactory>();
 
             serviceCollection.AddTransient<IValidator<ImportProductPrice[]>, ImportProductPricesValidator>();
+            serviceCollection.AddTransient<Func<TextReader, CsvConfiguration, IReader>>(provider => (textReader, csvConfiguration) => new VcCsvReader(textReader, csvConfiguration));
 
             serviceCollection.AddOptions<ExportOptions>().Bind(Configuration.GetSection("PriceExportImport:Export")).ValidateDataAnnotations();
             serviceCollection.AddOptions<ImportOptions>().Bind(Configuration.GetSection("PriceExportImport:Import")).ValidateDataAnnotations();
