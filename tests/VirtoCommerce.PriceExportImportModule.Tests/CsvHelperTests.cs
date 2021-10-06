@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using VirtoCommerce.PriceExportImportModule.Data.Models;
+using VirtoCommerce.PriceExportImportModule.Data.Services;
 using Xunit;
 
 namespace VirtoCommerce.PriceExportImportModule.Tests
@@ -21,6 +22,10 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
                 BadDataFound = args =>
                 {
                     ++errorCount;
+                    if (args.Context.Reader is VcCsvReader vcCsvReader)
+                    {
+                        vcCsvReader.IsFieldBadData = true;
+                    }
                 },
                 Delimiter = ";",
             };
@@ -29,11 +34,20 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var csv = TestHelper.GetCsv(records, header);
             var textReader = new StreamReader(TestHelper.GetStream(csv), leaveOpen: true);
 
-            var csvReader = new CsvReader(textReader, csvConfiguration);
+            var csvReader = new VcCsvReader(textReader, csvConfiguration);
+
+            await csvReader.ReadAsync();
+            csvReader.ReadHeader();
 
             while (await csvReader.ReadAsync())
             {
-                csvReader.GetRecord<CsvPrice>();
+                if (!csvReader.IsFieldBadData)
+                {
+                    csvReader.GetRecord<CsvPrice>();
+                }
+
+                csvReader.IsFieldBadData = false;
+
             }
 
             Assert.Equal(1, errorCount);
