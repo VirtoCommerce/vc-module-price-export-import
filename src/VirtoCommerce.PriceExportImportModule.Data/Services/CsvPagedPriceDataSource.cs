@@ -41,8 +41,6 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
             _configuration = configuration;
             _csvReader = csvReaderFactory(_streamReader, _configuration);
-            _csvReader.Read();
-            _csvReader.ReadHeader();
 
             PageSize = pageSize;
         }
