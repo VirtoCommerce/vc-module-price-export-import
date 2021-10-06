@@ -41,6 +41,8 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
             _configuration = configuration;
             _csvReader = csvReaderFactory(_streamReader, _configuration);
+            _csvReader.Read();
+            _csvReader.ReadHeader();
 
             PageSize = pageSize;
         }
@@ -130,9 +132,6 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             }
 
             var recordTuples = new List<(CsvPrice, string, int)>();
-
-            _csvReader.Read();
-            _csvReader.ReadHeader();
 
             for (var i = 0; i < PageSize && await _csvReader.ReadAsync(); i++)
             {
