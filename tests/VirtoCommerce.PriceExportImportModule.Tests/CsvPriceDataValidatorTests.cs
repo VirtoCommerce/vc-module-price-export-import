@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Moq;
-using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.PriceExportImportModule.Core;
 using VirtoCommerce.PriceExportImportModule.Core.Models;
 using VirtoCommerce.PriceExportImportModule.Data.Services;

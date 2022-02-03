@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using FluentValidation;
-using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.PriceExportImportModule.Core;
 using VirtoCommerce.PriceExportImportModule.Core.Models;
@@ -110,7 +110,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
                         var createdPrices = new List<Price>();
                         var updatedPrices = new List<Price>();
 
-                        var validationResult = await _importProductPricesValidator.ValidateAsync(importProductPrices, ruleSet: request.ImportMode.ToString());
+                        var validationResult = await _importProductPricesValidator.ValidateAsync(importProductPrices, options => options.IncludeRuleSets(request.ImportMode.ToString()));
 
                         var invalidImportProductPrices = validationResult.Errors.Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
 

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <module>
     <id>VirtoCommerce.PriceExportImport</id>
-    <version>1.3.0</version>
+    <version>3.200.0</version>
     <version-tag></version-tag>
-    <platformVersion>3.49.0</platformVersion>
+    <platformVersion>3.200.0</platformVersion>
     <dependencies>
-        <dependency id="VirtoCommerce.Pricing" version="3.19.0" />
-        <dependency id="VirtoCommerce.FeatureManagement" version="3.0.0" />
-        <dependency id="VirtoCommerce.Catalog" version="3.35.0" />
-        <dependency id="VirtoCommerce.Export" version="3.11.0" />
+        <dependency id="VirtoCommerce.Pricing" version="3.200.0" />
+        <dependency id="VirtoCommerce.Catalog" version="3.200.0" />
+        <dependency id="VirtoCommerce.Export" version="3.200.0" />
+        <dependency id="VirtoCommerce.Assets" version="3.200.0" />
     </dependencies>
     <incompatibilities>
-        <module id="VirtoCommerce.SimpleExportImport" version="1.0.0" />
     </incompatibilities>
 
     <title>Price Export Import</title>
@@ -27,7 +26,7 @@
     <iconUrl>Modules/$(VirtoCommerce.PriceExportImport)/Content/logo.png</iconUrl>
 
     <releaseNotes>First version.</releaseNotes>
-    <copyright>Copyright © 2011-2021 Virto Commerce. All rights reserved</copyright>
+    <copyright>Copyright © 2011-2022 Virto Commerce. All rights reserved</copyright>
     <tags>price import export</tags>
 
     <assemblyFile>VirtoCommerce.PriceExportImportModule.Web.dll</assemblyFile>

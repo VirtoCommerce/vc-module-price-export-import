@@ -9,7 +9,7 @@ using Moq;
 using VirtoCommerce.CatalogModule.Core.Model;
 using VirtoCommerce.CatalogModule.Core.Model.Search;
 using VirtoCommerce.CatalogModule.Core.Search;
-using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.Platform.Core.Settings;
 using VirtoCommerce.PriceExportImportModule.Core;
 using VirtoCommerce.PriceExportImportModule.Core.Models;

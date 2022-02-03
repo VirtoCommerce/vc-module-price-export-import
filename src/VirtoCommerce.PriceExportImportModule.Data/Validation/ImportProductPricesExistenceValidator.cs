@@ -33,13 +33,13 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Validation
                         : new ImportProductPriceExistsValidator()));
         }
 
-        private async Task LoadExistingPricesAsync(ImportProductPrice[] importProductPrices, CustomContext context, CancellationToken cancellationToken)
+        private async Task LoadExistingPricesAsync(ImportProductPrice[] importProductPrices, ValidationContext<ImportProductPrice[]> context, CancellationToken cancellationToken)
         {
             var productIds = importProductPrices.Select(importProductPrice => importProductPrice.ProductId).ToArray();
             var priceListIds = importProductPrices.Select(importProductPrice => importProductPrice.Price.PricelistId).ToArray();
             var existingPricesSearchResult = await _pricingSearchService.SearchPricesAsync(new PricesSearchCriteria { ProductIds = productIds, PriceListIds = priceListIds, Take = int.MaxValue });
             var existingPrices = existingPricesSearchResult.Results.ToArray();
-            context.ParentContext.RootContextData[ExistingPrices] = existingPrices;
+            context.RootContextData[ExistingPrices] = existingPrices;
         }
     }
 }

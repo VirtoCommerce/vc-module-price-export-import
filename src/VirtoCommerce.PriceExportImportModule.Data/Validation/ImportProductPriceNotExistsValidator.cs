@@ -18,7 +18,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Validation
             RuleFor(price => price)
                 .Must((_, price, context) =>
                 {
-                    var existingPrices = (Price[])context.ParentContext.RootContextData[ImportProductPricesExistenceValidator.ExistingPrices];
+                    var existingPrices = (Price[])context.RootContextData[ImportProductPricesExistenceValidator.ExistingPrices];
                     var exist = existingPrices.Any(existingPrice =>
                         existingPrice.ProductId == price.ProductId &&
                         existingPrice.MinQuantity == price.Price.MinQuantity);

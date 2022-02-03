@@ -3,7 +3,7 @@ using System.IO;
 using CsvHelper;
 using CsvHelper.Configuration;
 using VirtoCommerce.CatalogModule.Core.Search;
-using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.PriceExportImportModule.Core.Models;
 using VirtoCommerce.PriceExportImportModule.Core.Services;
 

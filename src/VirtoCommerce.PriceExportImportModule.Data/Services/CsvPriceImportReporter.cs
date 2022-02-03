@@ -1,6 +1,6 @@
 using System.IO;
 using System.Threading.Tasks;
-using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.PriceExportImportModule.Core.Models;
 using VirtoCommerce.PriceExportImportModule.Core.Services;
@@ -29,7 +29,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
         public async Task WriteAsync(ImportError error)
         {
-            using (await AsyncLock.GetLockByKey(_reportFilePath).LockAsync())
+            using (await AsyncLock.GetLockByKey(_reportFilePath).GetReleaserAsync())
             {
                 ReportIsNotEmpty = true;
                 await _streamWriter.WriteLineAsync(GetLine(error));
@@ -55,7 +55,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
         public async ValueTask DisposeAsync()
         {
-            using (await AsyncLock.GetLockByKey(_reportFilePath).LockAsync())
+            using (await AsyncLock.GetLockByKey(_reportFilePath).GetReleaserAsync())
             {
                 await _streamWriter.DisposeAsync();
 
