@@ -24,12 +24,12 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Validation
                 .ForEach(rule => rule.SetValidator(_ => new ImportProductPriceIsNotDuplicateValidator()));
         }
 
-        private void GetDuplicates(ImportProductPrice[] importProductPrices, CustomContext context, ImportMode importMode)
+        private void GetDuplicates(ImportProductPrice[] importProductPrices, ValidationContext<ImportProductPrice[]> context, ImportMode importMode)
         {
             var duplicates = importProductPrices.GroupBy(importProductPrice => new { importProductPrice.Sku, importProductPrice.Price.MinQuantity })
                 .SelectMany(group => importMode == ImportMode.CreateOnly ? group.Skip(1) : group.Take(group.Count() - 1))
                 .ToArray();
-            context.ParentContext.RootContextData[Duplicates] = duplicates;
+            context.RootContextData[Duplicates] = duplicates;
         }
     }
 }

@@ -7,7 +7,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using VirtoCommerce.CatalogModule.Core.Model.Search;
 using VirtoCommerce.CatalogModule.Core.Search;
-using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.PriceExportImportModule.Core.Models;
 using VirtoCommerce.PriceExportImportModule.Core.Services;
@@ -20,22 +20,27 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
     {
         private readonly IProductSearchService _productSearchService;
         private readonly Stream _stream;
-        private readonly Configuration _configuration;
+        private readonly CsvConfiguration _configuration;
         private readonly StreamReader _streamReader;
-        private readonly CsvReader _csvReader;
+        private readonly IReader _csvReader;
         private int? _totalCount;
 
-        public CsvPagedPriceDataSource(string filePath, IProductSearchService productSearchService, IBlobStorageProvider blobStorageProvider, int pageSize, Configuration configuration)
+        public CsvPagedPriceDataSource(
+            string filePath,
+            IProductSearchService productSearchService,
+            IBlobStorageProvider blobStorageProvider,
+            int pageSize,
+            CsvConfiguration configuration,
+            Func<TextReader, CsvConfiguration, IReader> csvReaderFactory)
         {
             _productSearchService = productSearchService;
 
             var stream = blobStorageProvider.OpenRead(filePath);
-
             _stream = stream;
             _streamReader = new StreamReader(stream);
 
             _configuration = configuration;
-            _csvReader = new CsvReader(_streamReader, configuration);
+            _csvReader = csvReaderFactory(_streamReader, _configuration);
 
             PageSize = pageSize;
         }
@@ -52,7 +57,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             _stream.Seek(0, SeekOrigin.Begin);
 
             using var streamReader = new StreamReader(_stream, leaveOpen: true);
-            using var csvReader = new CsvReader(streamReader, _configuration, true);
+            using var csvReader = new CsvReader(streamReader, _configuration);
 
             try
             {
@@ -60,7 +65,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
                 csvReader.ReadHeader();
                 csvReader.ValidateHeader<CsvPrice>();
 
-                result = string.Join(csvReader.Configuration.Delimiter, csvReader.Context.HeaderRecord);
+                result = string.Join(csvReader.Configuration.Delimiter, csvReader.Context.Reader.HeaderRecord);
 
             }
             finally
@@ -83,8 +88,15 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             var streamPosition = _stream.Position;
             _stream.Seek(0, SeekOrigin.Begin);
 
+            // Because of these properties are delegates we have to null them to fix false positive firing
+            var originReadingExceptionOccurredDelegate = _configuration.ReadingExceptionOccurred;
+            var originBadDataFoundDelegate = _configuration.BadDataFound;
+
+            _configuration.ReadingExceptionOccurred = args => false;
+            _configuration.BadDataFound = null;
+
             using var streamReader = new StreamReader(_stream, leaveOpen: true);
-            using var csvReader = new CsvReader(streamReader, _configuration, true);
+            using var csvReader = new CsvReader(streamReader, _configuration);
             try
             {
                 csvReader.Read();
@@ -95,13 +107,16 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             {
                 _totalCount++;
             }
-
             while (csvReader.Read())
             {
                 _totalCount++;
             }
 
             _stream.Seek(streamPosition, SeekOrigin.Begin);
+
+            // And after counting totals return back delegates
+            _configuration.ReadingExceptionOccurred = originReadingExceptionOccurredDelegate;
+            _configuration.BadDataFound = originBadDataFoundDelegate;
 
             return _totalCount.Value;
         }
@@ -118,14 +133,21 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
             for (var i = 0; i < PageSize && await _csvReader.ReadAsync(); i++)
             {
-                var csvRecord = _csvReader.GetRecord<CsvPrice>();
+                if (_csvReader is VcCsvReader vcCsvReader)
+                {
+                    if (!vcCsvReader.IsFieldBadData)
+                    {
+                        var csvRecord = _csvReader.GetRecord<CsvPrice>();
 
-                var rawRecord = _csvReader.Context.RawRecord;
-                var row = _csvReader.Context.Row;
+                        var rawRecord = _csvReader.Context.Parser.RawRecord;
+                        var row = _csvReader.Context.Parser.Row;
 
-                var recordTuple = (csvRecord, rawRecord, row);
-                recordTuples.Add(recordTuple);
+                        var recordTuple = (csvRecord, rawRecord, row);
+                        recordTuples.Add(recordTuple);
+                    }
 
+                    vcCsvReader.IsFieldBadData = false;
+                }
             }
 
             var skus = recordTuples.Where(x => x.Item1 != null).Select(x => x.Item1.Sku).ToArray();

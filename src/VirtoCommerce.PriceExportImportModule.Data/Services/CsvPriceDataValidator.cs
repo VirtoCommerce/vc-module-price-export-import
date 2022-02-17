@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
-using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.Platform.Core.Settings;
 using VirtoCommerce.PriceExportImportModule.Core;
 using VirtoCommerce.PriceExportImportModule.Core.Models;
@@ -17,11 +17,16 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
     {
         private readonly IBlobStorageProvider _blobStorageProvider;
         private readonly ISettingsManager _settingsManager;
+        private readonly ImportConfigurationFactory _importConfigurationFactory;
 
-        public CsvPriceDataValidator(IBlobStorageProvider blobStorageProvider, ISettingsManager settingsManager)
+        public CsvPriceDataValidator(
+            IBlobStorageProvider blobStorageProvider,
+            ISettingsManager settingsManager,
+            ImportConfigurationFactory importConfigurationFactory)
         {
             _blobStorageProvider = blobStorageProvider;
             _settingsManager = settingsManager;
+            _importConfigurationFactory = importConfigurationFactory;
         }
         public async Task<ImportDataValidationResult> ValidateAsync(string filePath)
         {
@@ -47,11 +52,9 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             else
             {
                 var stream = _blobStorageProvider.OpenRead(filePath);
-                var csvConfiguration = new ImportConfiguration()
-                {
-                    BadDataFound = null,
-                    MissingFieldFound = null
-                };
+                var csvConfiguration = _importConfigurationFactory.Create();
+                csvConfiguration.BadDataFound = null;
+                csvConfiguration.ReadingExceptionOccurred = null;
 
                 await ValidateDelimiterAndDataExists(stream, csvConfiguration, errorsList);
 
@@ -67,7 +70,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             return result;
         }
 
-        private void ValidateLineLimit(Stream stream, Configuration csvConfiguration, List<ImportDataValidationError> errorsList)
+        private void ValidateLineLimit(Stream stream, CsvConfiguration csvConfiguration, List<ImportDataValidationError> errorsList)
         {
             var notCompatibleErrors = new[]
             {
@@ -108,7 +111,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             }
         }
 
-        private static void ValidateRequiredColumns(Stream stream, Configuration csvConfiguration, List<ImportDataValidationError> errorsList)
+        private static void ValidateRequiredColumns(Stream stream, CsvConfiguration csvConfiguration, List<ImportDataValidationError> errorsList)
         {
             var notCompatibleErrors = new[]
             {
@@ -130,7 +133,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             csvReader.Read();
             csvReader.ReadHeader();
 
-            var existedColumns = csvReader.Context.HeaderRecord;
+            var existedColumns = csvReader.Context.Reader.HeaderRecord;
 
             var requiredColumns = CsvPriceImportHelper.GetImportPriceRequiredColumns();
 
@@ -144,7 +147,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             }
         }
 
-        private static async Task ValidateDelimiterAndDataExists(Stream stream, Configuration csvConfiguration, List<ImportDataValidationError> errorsList)
+        private static async Task ValidateDelimiterAndDataExists(Stream stream, CsvConfiguration csvConfiguration, List<ImportDataValidationError> errorsList)
         {
 
             var notCompatibleErrors = new[]

@@ -58,7 +58,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var validator = GetValidator();
 
             // Act
-            var validationResult = await validator.ValidateAsync(Prices, ruleSet: ImportMode.CreateOnly.ToString());
+            var validationResult = await validator.ValidateAsync(Prices, options => options.IncludeRuleSets(ImportMode.CreateOnly.ToString()));
 
             // Assert
             var error = validationResult.Errors.FirstOrDefault(validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.DuplicateError);
@@ -73,7 +73,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var validator = GetValidator();
 
             // Act
-            var validationResult = await validator.ValidateAsync(Prices, ruleSet: ImportMode.UpdateOnly.ToString());
+            var validationResult = await validator.ValidateAsync(Prices, options => options.IncludeRuleSets(ImportMode.UpdateOnly.ToString()));
 
             // Assert
             var error = validationResult.Errors.FirstOrDefault(validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.DuplicateError);
@@ -88,7 +88,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var validator = GetValidator();
 
             // Act
-            var validationResult = await validator.ValidateAsync(Prices, ruleSet: ImportMode.CreateAndUpdate.ToString());
+            var validationResult = await validator.ValidateAsync(Prices, options => options.IncludeRuleSets(ImportMode.CreateAndUpdate.ToString()));
 
             // Assert
             var error = validationResult.Errors.FirstOrDefault(validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.DuplicateError);
@@ -103,7 +103,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var validator = GetValidator();
 
             // Act
-            var validationResult = await validator.ValidateAsync(Prices, ruleSet: ImportMode.CreateOnly.ToString());
+            var validationResult = await validator.ValidateAsync(Prices, options => options.IncludeRuleSets(ImportMode.CreateOnly.ToString()));
 
             // Assert
             Assert.Single(validationResult.Errors, validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.AlreadyExistsError);
@@ -116,7 +116,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var validator = GetValidator();
 
             // Act
-            var validationResult = await validator.ValidateAsync(Prices, ruleSet: ImportMode.UpdateOnly.ToString());
+            var validationResult = await validator.ValidateAsync(Prices, options => options.IncludeRuleSets(ImportMode.UpdateOnly.ToString()));
 
             // Assert
             var errors = validationResult.Errors.Where(validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.NotExistsError).ToArray();
@@ -134,7 +134,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var validator = GetValidator();
 
             // Act
-            var validationResult = await validator.ValidateAsync(Prices, ruleSet: importMode.ToString());
+            var validationResult = await validator.ValidateAsync(Prices, options => options.IncludeRuleSets(importMode.ToString()));
 
             // Assert
             var errors = validationResult.Errors.Where(validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.ProductMissingError).ToArray();
@@ -149,7 +149,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var validator = GetValidator();
 
             // Act
-            var validationResult = await validator.ValidateAsync(Prices, ruleSet: ImportMode.CreateOnly.ToString());
+            var validationResult = await validator.ValidateAsync(Prices, options => options.IncludeRuleSets(ImportMode.CreateOnly.ToString()));
 
             // Assert
             Assert.Equal(3, validationResult.Errors.Count(validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.NegativeNumbers));
@@ -162,7 +162,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var validator = GetValidator();
 
             // Act
-            var validationResult = await validator.ValidateAsync(Prices, ruleSet: ImportMode.CreateOnly.ToString());
+            var validationResult = await validator.ValidateAsync(Prices, options => options.IncludeRuleSets(ImportMode.CreateOnly.ToString()));
 
             // Assert
             Assert.Equal(1, validationResult.Errors.Count(validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.SkuIsEmpty));

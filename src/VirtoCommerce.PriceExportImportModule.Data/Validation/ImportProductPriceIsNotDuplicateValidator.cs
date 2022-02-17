@@ -17,7 +17,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Validation
             RuleFor(price => price)
                 .Must((_, price, context) =>
                 {
-                    var duplicates = (ImportProductPrice[])context.ParentContext.RootContextData[ImportProductPricesAreNotDuplicatesValidator.Duplicates];
+                    var duplicates = (ImportProductPrice[])context.RootContextData[ImportProductPricesAreNotDuplicatesValidator.Duplicates];
                     return !duplicates.Contains(price);
                 })
                 .WithErrorCode(ModuleConstants.ValidationErrors.DuplicateError)

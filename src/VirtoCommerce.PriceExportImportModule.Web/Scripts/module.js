@@ -7,10 +7,8 @@ if (AppDependencies !== undefined) {
 
 angular.module(moduleName, [])
     .run(
-        ['virtoCommerce.featureManagerSubscriber', 'platformWebApp.toolbarService', 'platformWebApp.bladeNavigationService', 'platformWebApp.dialogService', 'platformWebApp.settings',
-            function (featureManagerSubscriber, toolbarService, bladeNavigationService, dialogService, settings) {
-                featureManagerSubscriber.onLoginStatusChanged('PriceExportImport', () => {
-
+        [ 'platformWebApp.toolbarService', 'platformWebApp.bladeNavigationService', 'platformWebApp.dialogService', 'platformWebApp.settings',
+            function ( toolbarService, bladeNavigationService, dialogService, settings) {
                     toolbarService.register({
                         name: "platform.commands.export",
                         icon: 'fa fa-upload',
@@ -140,7 +138,6 @@ angular.module(moduleName, [])
                         }
                     }
 
-                });
             }
         ]);
 

@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,15 +15,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="12.2.2" />
-    <PackageReference Include="FluentValidation" Version="8.6.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.8">
+    <PackageReference Include="CsvHelper" Version="27.1.1" />
+    <PackageReference Include="FluentValidation" Version="10.3.4" />
+    <PackageReference Include="VirtoCommerce.AssetsModule.Core" Version="3.200.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="VirtoCommerce.CatalogModule.Core" Version="3.35.0" />
-    <PackageReference Include="VirtoCommerce.Platform.Data" Version="3.49.0" />
-    <PackageReference Include="VirtoCommerce.Platform.Hangfire" Version="3.49.0" />
+    <PackageReference Include="VirtoCommerce.CatalogModule.Core" Version="3.200.0" />
+    <PackageReference Include="VirtoCommerce.Platform.Data" Version="3.200.0" />
+    <PackageReference Include="VirtoCommerce.Platform.Hangfire" Version="3.200.0" />
   </ItemGroup>
 
 </Project>

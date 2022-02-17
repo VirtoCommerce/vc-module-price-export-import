@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.PriceExportImportModule.Core.Services;
 
 namespace VirtoCommerce.PriceExportImportModule.Data.Services

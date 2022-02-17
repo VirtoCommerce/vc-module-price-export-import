@@ -1,12 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Moq;
 using VirtoCommerce.CatalogModule.Core.Model;
 using VirtoCommerce.CatalogModule.Core.Model.Search;
 using VirtoCommerce.CatalogModule.Core.Search;
-using VirtoCommerce.Platform.Core.Assets;
+using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.Platform.Core.Settings;
 using VirtoCommerce.PriceExportImportModule.Core;
 using VirtoCommerce.PriceExportImportModule.Core.Models;
@@ -46,7 +49,14 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
 
         public static CsvPagedPriceDataSourceFactory GetCsvPagedPriceDataSourceFactory(IBlobStorageProvider blobStorageProvider)
         {
-            return new CsvPagedPriceDataSourceFactory(blobStorageProvider, GetProductSearchService());
+            return new CsvPagedPriceDataSourceFactory(blobStorageProvider, GetProductSearchService(), new ImportConfigurationFactory(), GetCsvReaderFactory());
+        }
+
+        public static Func<TextReader, CsvConfiguration, IReader> GetCsvReaderFactory()
+        {
+            IReader Result(TextReader reader, CsvConfiguration configuration) => new VcCsvReader(reader, configuration);
+
+            return Result;
         }
 
         public static Stream GetStream(string csv)
