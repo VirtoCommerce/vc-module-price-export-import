@@ -4,6 +4,11 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+      <!-- Project is not a test project -->
+      <SonarQubeTestProject>false</SonarQubeTestProject>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\VirtoCommerce.PriceExportImportModule.Core\VirtoCommerce.PriceExportImportModule.Core.csproj" />
   </ItemGroup>
