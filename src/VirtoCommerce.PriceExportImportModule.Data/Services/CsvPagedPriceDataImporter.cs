@@ -29,6 +29,8 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
         private readonly IBlobUrlResolver _blobUrlResolver;
         private readonly ImportConfigurationFactory _importConfigurationFactory;
 
+        const string _importDescription = "{0} out of {1} have been imported.";
+
         public CsvPagedPriceDataImporter(IBlobStorageProvider blobStorageProvider, IPricingService pricingService, IPricingSearchService pricingSearchService,
             ICsvPriceDataValidator csvPriceDataValidator, ICsvPagedPriceDataSourceFactory dataSourceFactory, IValidator<ImportProductPrice[]> importProductPricesValidator, ICsvPriceImportReporterFactory importReporterFactory
             , IBlobUrlResolver blobUrlResolver, ImportConfigurationFactory importConfigurationFactory)
@@ -45,7 +47,6 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
         public async Task ImportAsync(ImportDataRequest request, Action<ImportProgressInfo> progressCallback, ICancellationToken cancellationToken)
         {
-
             ValidateParameters(request, progressCallback, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -83,8 +84,6 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             importProgress.TotalCount = dataSource.GetTotalCount();
             progressCallback(importProgress);
 
-            const string importDescription = "{0} out of {1} have been imported.";
-
             try
             {
                 importProgress.Description = "Fetching...";
@@ -96,86 +95,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var importProductPrices = dataSource.Items
-                        // expect records that was parsed with errors
-                        .Where(importProductPrice => !errorsContext.ErrorsRows.Contains(importProductPrice.Row))
-                        .Select(importProductPrice =>
-                    {
-                        importProductPrice.Price.PricelistId = request.PricelistId;
-                        return importProductPrice;
-                    }).ToArray();
-
-                    try
-                    {
-                        var createdPrices = new List<Price>();
-                        var updatedPrices = new List<Price>();
-
-                        var validationResult = await _importProductPricesValidator.ValidateAsync(importProductPrices, options => options.IncludeRuleSets(request.ImportMode.ToString()));
-
-                        var invalidImportProductPrices = validationResult.Errors.Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
-
-                        var errorsInfos = validationResult.Errors.Select(x => new { Message = x.ErrorMessage, ImportProductPrice = (x.CustomState as ImportValidationState)?.InvalidImportProductPrice }).ToArray();
-
-                        var errorsGroups = errorsInfos.GroupBy(x => x.ImportProductPrice);
-
-                        foreach (var group in errorsGroups)
-                        {
-                            var importPrice = group.Key;
-
-                            var errorMessages = string.Join(" ", group.Select(x => x.Message).ToArray());
-
-                            var importError = new ImportError { Error = errorMessages, RawRow = importPrice.RawRecord };
-
-                            await importReporter.WriteAsync(importError);
-                        }
-
-                        importProgress.ErrorCount += invalidImportProductPrices.Length;
-                        importProductPrices = importProductPrices.Except(invalidImportProductPrices).ToArray();
-
-                        switch (request.ImportMode)
-                        {
-                            case ImportMode.CreateOnly:
-                                createdPrices.AddRange(importProductPrices.Select(importProductPrice => importProductPrice.Price));
-                                break;
-                            case ImportMode.UpdateOnly:
-                                var existingPrices = await GetAndPatchExistingPrices(request, importProductPrices);
-                                updatedPrices.AddRange(existingPrices);
-                                break;
-                            case ImportMode.CreateAndUpdate:
-                                var importProductPriceNotExistValidationResult = await importProductPricesExistValidator.ValidateAsync(importProductPrices);
-
-                                var importProductPricesToCreate = importProductPriceNotExistValidationResult.Errors
-                                    .Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
-
-                                var importProductPricesToUpdate = importProductPrices.Except(importProductPricesToCreate).ToArray();
-                                createdPrices.AddRange(importProductPricesToCreate.Select(importProductPrice => importProductPrice.Price));
-                                var existingPricesToUpdate = await GetAndPatchExistingPrices(request, importProductPricesToUpdate);
-                                updatedPrices.AddRange(existingPricesToUpdate);
-                                break;
-                            default:
-                                throw new ArgumentException("Import mode has invalid value", nameof(request));
-                        }
-
-                        var allChangingPrices = createdPrices.Concat(updatedPrices).ToArray();
-                        await _pricingService.SavePricesAsync(allChangingPrices);
-
-                        importProgress.CreatedCount += createdPrices.Count;
-                        importProgress.UpdatedCount += updatedPrices.Count;
-                    }
-                    catch (Exception e)
-                    {
-                        HandleError(progressCallback, importProgress, e.Message);
-                    }
-                    finally
-                    {
-                        importProgress.ProcessedCount = Math.Min(dataSource.CurrentPageNumber * dataSource.PageSize, importProgress.TotalCount);
-                    }
-
-                    if (importProgress.ProcessedCount != importProgress.TotalCount)
-                    {
-                        importProgress.Description = string.Format(importDescription, importProgress.ProcessedCount, importProgress.TotalCount);
-                        progressCallback(importProgress);
-                    }
+                    await InternalImportAsync(request, dataSource, importReporter, importProductPricesExistValidator, importProgress, progressCallback, errorsContext);
                 }
             }
             catch (Exception e)
@@ -185,7 +105,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             finally
             {
                 var completedMessage = importProgress.ErrorCount > 0 ? "Import completed with errors" : "Import completed";
-                importProgress.Description = $"{completedMessage}: {string.Format(importDescription, importProgress.ProcessedCount, importProgress.TotalCount)}";
+                importProgress.Description = $"{completedMessage}: {string.Format(_importDescription, importProgress.ProcessedCount, importProgress.TotalCount)}";
 
                 if (importReporter.ReportIsNotEmpty)
                 {
@@ -194,6 +114,106 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
                 progressCallback(importProgress);
 
+            }
+        }
+
+        private async Task InternalImportAsync(ImportDataRequest request,
+            ICsvPagedPriceDataSource dataSource,
+            ICsvPriceImportReporter importReporter,
+            ImportProductPricesExistenceValidator importProductPricesExistValidator,
+            ImportProgressInfo importProgress,
+            Action<ImportProgressInfo> progressCallback,
+            ImportErrorsContext errorsContext)
+        {
+            var importProductPrices = dataSource.Items
+                // expect records that was parsed with errors
+                .Where(importProductPrice => !errorsContext.ErrorsRows.Contains(importProductPrice.Row))
+                .Select(importProductPrice =>
+                {
+                    importProductPrice.Price.PricelistId = request.PricelistId;
+                    return importProductPrice;
+                }).ToArray();
+
+            try
+            {
+                var createdPrices = new List<Price>();
+                var updatedPrices = new List<Price>();
+
+                var validationResult = await _importProductPricesValidator.ValidateAsync(importProductPrices, options => options.IncludeRuleSets(request.ImportMode.ToString()));
+
+                var invalidImportProductPrices = validationResult.Errors.Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
+
+                await WriteErrors(importReporter, validationResult);
+
+                importProgress.ErrorCount += invalidImportProductPrices.Length;
+                importProductPrices = importProductPrices.Except(invalidImportProductPrices).ToArray();
+
+                await SplitToCreatedAndUpdatePrices(request, importProductPricesExistValidator, importProductPrices, createdPrices, updatedPrices);
+
+                var allChangingPrices = createdPrices.Concat(updatedPrices).ToArray();
+                await _pricingService.SavePricesAsync(allChangingPrices);
+
+                importProgress.CreatedCount += createdPrices.Count;
+                importProgress.UpdatedCount += updatedPrices.Count;
+            }
+            catch (Exception e)
+            {
+                HandleError(progressCallback, importProgress, e.Message);
+            }
+            finally
+            {
+                importProgress.ProcessedCount = Math.Min(dataSource.CurrentPageNumber * dataSource.PageSize, importProgress.TotalCount);
+            }
+
+            if (importProgress.ProcessedCount != importProgress.TotalCount)
+            {
+                importProgress.Description = string.Format(_importDescription, importProgress.ProcessedCount, importProgress.TotalCount);
+                progressCallback(importProgress);
+            }
+        }
+
+        private async Task SplitToCreatedAndUpdatePrices(ImportDataRequest request, ImportProductPricesExistenceValidator importProductPricesExistValidator, ImportProductPrice[] importProductPrices, List<Price> createdPrices, List<Price> updatedPrices)
+        {
+            switch (request.ImportMode)
+            {
+                case ImportMode.CreateOnly:
+                    createdPrices.AddRange(importProductPrices.Select(importProductPrice => importProductPrice.Price));
+                    break;
+                case ImportMode.UpdateOnly:
+                    var existingPrices = await GetAndPatchExistingPrices(request, importProductPrices);
+                    updatedPrices.AddRange(existingPrices);
+                    break;
+                case ImportMode.CreateAndUpdate:
+                    var importProductPriceNotExistValidationResult = await importProductPricesExistValidator.ValidateAsync(importProductPrices);
+
+                    var importProductPricesToCreate = importProductPriceNotExistValidationResult.Errors
+                        .Select(x => (x.CustomState as ImportValidationState)?.InvalidImportProductPrice).Distinct().ToArray();
+
+                    var importProductPricesToUpdate = importProductPrices.Except(importProductPricesToCreate).ToArray();
+                    createdPrices.AddRange(importProductPricesToCreate.Select(importProductPrice => importProductPrice.Price));
+                    var existingPricesToUpdate = await GetAndPatchExistingPrices(request, importProductPricesToUpdate);
+                    updatedPrices.AddRange(existingPricesToUpdate);
+                    break;
+                default:
+                    throw new ArgumentException("Import mode has invalid value", nameof(request));
+            }
+        }
+
+        private async Task WriteErrors(ICsvPriceImportReporter importReporter, FluentValidation.Results.ValidationResult validationResult)
+        {
+            var errorsInfos = validationResult.Errors.Select(x => new { Message = x.ErrorMessage, ImportProductPrice = (x.CustomState as ImportValidationState)?.InvalidImportProductPrice }).ToArray();
+
+            var errorsGroups = errorsInfos.GroupBy(x => x.ImportProductPrice);
+
+            foreach (var group in errorsGroups)
+            {
+                var importPrice = group.Key;
+
+                var errorMessages = string.Join(" ", group.Select(x => x.Message).ToArray());
+
+                var importError = new ImportError { Error = errorMessages, RawRow = importPrice.RawRecord };
+
+                await importReporter.WriteAsync(importError);
             }
         }
 
