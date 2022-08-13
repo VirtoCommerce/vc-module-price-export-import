@@ -22,14 +22,14 @@ The business goal for the module is to provide to non-technical not high skilled
 You can export and view a sample priceline CSV file to use as a template.
 
 The sample file includes many columns but for import only the SKU column, min quantity and prices will be used, other columns will be skipped
-![Main-Screen](media\Screenshot_12.png)
+![Main-Screen](media/Screenshot_12.png)
 
 ### Priceline CSV file format for import
 The first line should be Header: `SKU`;`List price`;`Sale price`;`Min quantity`. Each column must be separated by a semicolon. Product SKU, Min quantity and List price values are required for creation and updating prices. Priceline KEY - the pair SKU + min quantity, so it should not be duplicated in CSV file. Where SKU = product Item code and Min quantity = minimum product quantity needed for specifided price
 
  Example:
 
- ![csv file](media\Screenshot_9.png)
+ ![csv file](media/Screenshot_9.png)
 
 SKU | List price | Sale price | Min quantity 
 ---| --- | --- |
@@ -97,8 +97,8 @@ SKU | List price | Sale price | Min quantity
 6. The user clicks "Import" icon
 5. The system opens the Import progress blade where the Total count, Lines created, Lines updated, Error count display. Error report download URL with link to download error report file appears when the processing is finished with some errors.
 6. System updates existing lines and create new lines.
-![price import](media\Screenshot_3.png)
-![price import](media\Screenshot_4.png)    
+![price import](media/Screenshot_3.png)
+![price import](media/Screenshot_4.png)    
 
 ## Advanced settings
 There are default limit values exist in the system
