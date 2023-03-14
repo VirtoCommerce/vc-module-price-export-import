@@ -17,16 +17,13 @@
     <Folder Include="Caching\" />
     <Folder Include="ExportImport\" />
     <Folder Include="Handlers\" />
+    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="27.1.1" />
     <PackageReference Include="FluentValidation" Version="10.3.4" />
     <PackageReference Include="VirtoCommerce.AssetsModule.Core" Version="3.200.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="VirtoCommerce.CatalogModule.Core" Version="3.200.0" />
     <PackageReference Include="VirtoCommerce.Platform.Data" Version="3.200.0" />
     <PackageReference Include="VirtoCommerce.Platform.Hangfire" Version="3.200.0" />

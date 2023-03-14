@@ -5,7 +5,6 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -16,7 +15,6 @@ using VirtoCommerce.Platform.Core.Settings;
 using VirtoCommerce.PriceExportImportModule.Core;
 using VirtoCommerce.PriceExportImportModule.Core.Models;
 using VirtoCommerce.PriceExportImportModule.Core.Services;
-using VirtoCommerce.PriceExportImportModule.Data.Repositories;
 using VirtoCommerce.PriceExportImportModule.Data.Services;
 using VirtoCommerce.PriceExportImportModule.Data.Validation;
 using VirtoCommerce.PricingModule.Data.ExportImport;
@@ -31,10 +29,6 @@ namespace VirtoCommerce.PriceExportImportModule.Web
 
         public void Initialize(IServiceCollection serviceCollection)
         {
-            // database initialization
-            var connectionString = Configuration.GetConnectionString("VirtoCommerce.PriceExportImport") ?? Configuration.GetConnectionString("VirtoCommerce");
-            serviceCollection.AddDbContext<VirtoCommercePriceExportImportModuleDbContext>(options => options.UseSqlServer(connectionString));
-
             serviceCollection.AddTransient<ICsvPagedPriceDataSourceFactory, CsvPagedPriceDataSourceFactory>();
             serviceCollection.AddTransient<ICsvPriceDataValidator, CsvPriceDataValidator>();
             serviceCollection.AddTransient<ICsvPagedPriceDataImporter, CsvPagedPriceDataImporter>();
@@ -80,16 +74,6 @@ namespace VirtoCommerce.PriceExportImportModule.Web
                     ModuleId = ModuleInfo.Id,
                     Name = x
                 }).ToArray());
-
-            // Ensure that any pending migrations are applied
-            using (var serviceScope = appBuilder.ApplicationServices.CreateScope())
-            {
-                using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<VirtoCommercePriceExportImportModuleDbContext>())
-                {
-                    dbContext.Database.EnsureCreated();
-                    dbContext.Database.Migrate();
-                }
-            }
         }
 
         public void Uninstall()
