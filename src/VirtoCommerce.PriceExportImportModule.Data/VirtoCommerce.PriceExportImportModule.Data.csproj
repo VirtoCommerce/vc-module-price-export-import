@@ -24,9 +24,10 @@
     <PackageReference Include="CsvHelper" Version="27.1.1" />
     <PackageReference Include="FluentValidation" Version="10.3.4" />
     <PackageReference Include="VirtoCommerce.AssetsModule.Core" Version="3.200.0" />
-    <PackageReference Include="VirtoCommerce.CatalogModule.Core" Version="3.200.0" />
-    <PackageReference Include="VirtoCommerce.Platform.Data" Version="3.200.0" />
-    <PackageReference Include="VirtoCommerce.Platform.Hangfire" Version="3.200.0" />
+    <PackageReference Include="VirtoCommerce.CatalogModule.Core" Version="3.401.0" />
+    <PackageReference Include="VirtoCommerce.PricingModule.Core" Version="3.400.0" />
+    <PackageReference Include="VirtoCommerce.Platform.Data" Version="3.400.0" />
+    <PackageReference Include="VirtoCommerce.Platform.Hangfire" Version="3.400.0" />
   </ItemGroup>
 
 </Project>

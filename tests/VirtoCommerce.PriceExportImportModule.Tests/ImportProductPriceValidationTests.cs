@@ -168,10 +168,10 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             Assert.Equal(1, validationResult.Errors.Count(validationError => validationError.ErrorCode == ModuleConstants.ValidationErrors.SkuIsEmpty));
         }
 
-        private static IPricingSearchService GetPricingSearchService()
+        private static IPriceSearchService GetPricingSearchService()
         {
-            var pricingSearchServiceMock = new Mock<IPricingSearchService>();
-            pricingSearchServiceMock.Setup(service => service.SearchPricesAsync(It.IsAny<PricesSearchCriteria>()))
+            var pricingSearchServiceMock = new Mock<IPriceSearchService>();
+            pricingSearchServiceMock.Setup(service => service.SearchAsync(It.IsAny<PricesSearchCriteria>(), It.IsAny<bool>()))
                 .Returns(() => Task.FromResult(new PriceSearchResult
                 {
                     Results = new[]

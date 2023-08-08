@@ -2,7 +2,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-using FluentValidation.Validators;
 using VirtoCommerce.PriceExportImportModule.Core.Models;
 using VirtoCommerce.PricingModule.Core.Model.Search;
 using VirtoCommerce.PricingModule.Core.Services;
@@ -13,10 +12,10 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Validation
     {
         internal const string ExistingPrices = nameof(ExistingPrices);
 
-        private readonly IPricingSearchService _pricingSearchService;
+        private readonly IPriceSearchService _pricingSearchService;
         private readonly ImportProductPricesExistenceValidationMode _mode;
 
-        public ImportProductPricesExistenceValidator(IPricingSearchService pricingSearchService, ImportProductPricesExistenceValidationMode mode)
+        public ImportProductPricesExistenceValidator(IPriceSearchService pricingSearchService, ImportProductPricesExistenceValidationMode mode)
         {
             _pricingSearchService = pricingSearchService;
             _mode = mode;
@@ -37,7 +36,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Validation
         {
             var productIds = importProductPrices.Select(importProductPrice => importProductPrice.ProductId).ToArray();
             var priceListIds = importProductPrices.Select(importProductPrice => importProductPrice.Price.PricelistId).ToArray();
-            var existingPricesSearchResult = await _pricingSearchService.SearchPricesAsync(new PricesSearchCriteria { ProductIds = productIds, PriceListIds = priceListIds, Take = int.MaxValue });
+            var existingPricesSearchResult = await _pricingSearchService.SearchAsync(new PricesSearchCriteria { ProductIds = productIds, PriceListIds = priceListIds, Take = int.MaxValue });
             var existingPrices = existingPricesSearchResult.Results.ToArray();
             context.RootContextData[ExistingPrices] = existingPrices;
         }

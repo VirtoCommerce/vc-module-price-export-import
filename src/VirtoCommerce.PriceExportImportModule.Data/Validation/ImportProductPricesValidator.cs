@@ -6,9 +6,9 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Validation
 {
     public sealed class ImportProductPricesValidator : AbstractValidator<ImportProductPrice[]>
     {
-        private readonly IPricingSearchService _pricingSearchService;
+        private readonly IPriceSearchService _pricingSearchService;
 
-        public ImportProductPricesValidator(IPricingSearchService pricingSearchService)
+        public ImportProductPricesValidator(IPriceSearchService pricingSearchService)
         {
             _pricingSearchService = pricingSearchService;
             AttachValidators();
