@@ -340,18 +340,18 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             return blobStorageProviderMock.Object;
         }
 
-        private static IPricingService GetPricingService()
+        private static IPriceService GetPricingService()
         {
-            var pricingServiceMock = new Mock<IPricingService>();
-            pricingServiceMock.Setup(x => x.SavePricesAsync(It.IsAny<Price[]>()));
+            var pricingServiceMock = new Mock<IPriceService>();
+            pricingServiceMock.Setup(x => x.SaveChangesAsync(It.IsAny<Price[]>()));
             return pricingServiceMock.Object;
         }
 
 
-        private static IPricingSearchService GetPricingSearchService()
+        private static IPriceSearchService GetPricingSearchService()
         {
-            var pricingSearchServiceMock = new Mock<IPricingSearchService>();
-            pricingSearchServiceMock.Setup(x => x.SearchPricesAsync(It.IsAny<PricesSearchCriteria>()))
+            var pricingSearchServiceMock = new Mock<IPriceSearchService>();
+            pricingSearchServiceMock.Setup(x => x.SearchAsync(It.IsAny<PricesSearchCriteria>(), It.IsAny<bool>()))
                 .Returns(() => Task.FromResult(new PriceSearchResult
                 {
                     TotalCount = 2,
@@ -370,7 +370,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             return new CsvPriceDataValidator(blobStorageProvider, TestHelper.GetSettingsManagerMoq().Object, new ImportConfigurationFactory());
         }
 
-        private static ImportProductPricesValidator GetImportProductPricesValidator(IPricingSearchService pricingSearchService)
+        private static ImportProductPricesValidator GetImportProductPricesValidator(IPriceSearchService pricingSearchService)
         {
             return new ImportProductPricesValidator(pricingSearchService);
         }

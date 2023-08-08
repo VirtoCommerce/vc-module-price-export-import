@@ -20,8 +20,8 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 {
     public sealed class CsvPagedPriceDataImporter : ICsvPagedPriceDataImporter
     {
-        private readonly IPricingService _pricingService;
-        private readonly IPricingSearchService _pricingSearchService;
+        private readonly IPriceService _pricingService;
+        private readonly IPriceSearchService _pricingSearchService;
         private readonly ICsvPagedPriceDataSourceFactory _dataSourceFactory;
         private readonly IValidator<ImportProductPrice[]> _importProductPricesValidator;
         private readonly ICsvPriceDataValidator _csvPriceDataValidator;
@@ -31,7 +31,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
         const string _importDescription = "{0} out of {1} have been imported.";
 
-        public CsvPagedPriceDataImporter(IBlobStorageProvider blobStorageProvider, IPricingService pricingService, IPricingSearchService pricingSearchService,
+        public CsvPagedPriceDataImporter(IBlobStorageProvider blobStorageProvider, IPriceService pricingService, IPriceSearchService pricingSearchService,
             ICsvPriceDataValidator csvPriceDataValidator, ICsvPagedPriceDataSourceFactory dataSourceFactory, IValidator<ImportProductPrice[]> importProductPricesValidator, ICsvPriceImportReporterFactory importReporterFactory
             , IBlobUrlResolver blobUrlResolver, ImportConfigurationFactory importConfigurationFactory)
         {
@@ -151,7 +151,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
                 await SplitToCreatedAndUpdatePrices(request, importProductPricesExistValidator, importProductPrices, createdPrices, updatedPrices);
 
                 var allChangingPrices = createdPrices.Concat(updatedPrices).ToArray();
-                await _pricingService.SavePricesAsync(allChangingPrices);
+                await _pricingService.SaveChangesAsync(allChangingPrices);
 
                 importProgress.CreatedCount += createdPrices.Count;
                 importProgress.UpdatedCount += updatedPrices.Count;
@@ -220,7 +220,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
         private async Task<Price[]> GetAndPatchExistingPrices(ImportDataRequest request, ImportProductPrice[] importProductPrices)
         {
             var updateProductIds = importProductPrices.Select(x => x.ProductId).ToArray();
-            var existingPricesSearchResult = await _pricingSearchService.SearchPricesAsync(
+            var existingPricesSearchResult = await _pricingSearchService.SearchAsync(
                 new PricesSearchCriteria { ProductIds = updateProductIds, PriceListIds = new[] { request.PricelistId }, Take = int.MaxValue });
             var existingPrices = existingPricesSearchResult
                 .Results

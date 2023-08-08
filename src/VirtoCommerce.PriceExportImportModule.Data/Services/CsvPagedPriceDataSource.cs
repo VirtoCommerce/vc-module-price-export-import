@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
+using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.CatalogModule.Core.Model.Search;
 using VirtoCommerce.CatalogModule.Core.Search;
-using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.PriceExportImportModule.Core.Models;
 using VirtoCommerce.PriceExportImportModule.Core.Services;
@@ -151,7 +151,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             }
 
             var skus = recordTuples.Where(x => x.Item1 != null).Select(x => x.Item1.Sku).ToArray();
-            var products = await _productSearchService.SearchProductsAsync(new ProductSearchCriteria { Skus = skus, SearchInVariations = true, Take = skus.Length });
+            var products = await _productSearchService.SearchAsync(new ProductSearchCriteria { Skus = skus, SearchInVariations = true, Take = skus.Length });
 
             Items = recordTuples.Where(x => x.Item1 != null).Select(record =>
               {

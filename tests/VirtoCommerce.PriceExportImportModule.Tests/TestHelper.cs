@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Moq;
+using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.CatalogModule.Core.Model;
 using VirtoCommerce.CatalogModule.Core.Model.Search;
 using VirtoCommerce.CatalogModule.Core.Search;
-using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.Platform.Core.Settings;
 using VirtoCommerce.PriceExportImportModule.Core;
 using VirtoCommerce.PriceExportImportModule.Core.Models;
@@ -22,7 +22,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
         private static IProductSearchService GetProductSearchService()
         {
             var productSearchServiceMock = new Mock<IProductSearchService>();
-            productSearchServiceMock.Setup(service => service.SearchProductsAsync(It.IsAny<ProductSearchCriteria>()))
+            productSearchServiceMock.Setup(service => service.SearchAsync(It.IsAny<ProductSearchCriteria>(), It.IsAny<bool>()))
                 .Returns(() => Task.FromResult(new ProductSearchResult
                 {
                     Results = new[]

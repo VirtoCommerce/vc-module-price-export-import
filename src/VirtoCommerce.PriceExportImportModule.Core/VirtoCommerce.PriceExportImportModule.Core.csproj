@@ -11,9 +11,9 @@
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="27.1.1" />
-    <PackageReference Include="VirtoCommerce.Platform.Core" Version="3.200.0" />
-    <PackageReference Include="VirtoCommerce.PricingModule.Core" Version="3.200.0" />
-    <PackageReference Include="VirtoCommerce.PricingModule.Data" Version="3.200.0" />
+    <PackageReference Include="VirtoCommerce.Platform.Core" Version="3.400.0" />
+    <PackageReference Include="VirtoCommerce.PricingModule.Core" Version="3.400.0" />
+    <PackageReference Include="VirtoCommerce.PricingModule.Data" Version="3.400.0" />
   </ItemGroup>
 
   <ItemGroup>

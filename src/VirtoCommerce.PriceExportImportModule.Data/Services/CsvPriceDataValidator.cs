@@ -32,8 +32,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
         {
             var errorsList = new List<ImportDataValidationError>();
 
-            var fileMaxSize = _settingsManager.GetValue(ModuleConstants.Settings.General.ImportFileMaxSize.Name,
-                (int)ModuleConstants.Settings.General.ImportFileMaxSize.DefaultValue) * ModuleConstants.MByte;
+            var fileMaxSize = _settingsManager.GetValue<int>(ModuleConstants.Settings.General.ImportFileMaxSize) * ModuleConstants.MByte;
 
             var blobInfo = await _blobStorageProvider.GetBlobInfoAsync(filePath);
 
@@ -84,8 +83,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
                 return;
             }
 
-            var importLimitOfLines = _settingsManager.GetValue(ModuleConstants.Settings.General.ImportLimitOfLines.Name,
-                (int)ModuleConstants.Settings.General.ImportLimitOfLines.DefaultValue);
+            var importLimitOfLines = _settingsManager.GetValue<int>(ModuleConstants.Settings.General.ImportLimitOfLines);
 
             stream.Seek(0, SeekOrigin.Begin);
 
