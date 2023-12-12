@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
@@ -81,9 +80,9 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
                 {
                     csvReader.GetRecord<CsvPrice>();
                 }
-                catch (Exception e)
+                catch
                 {
-                    // skip exception
+                    // ignore exception
                 }
             }
 
