@@ -18,10 +18,10 @@
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="30.0.1" />
     <PackageReference Include="FluentValidation" Version="11.8.1" />
-    <PackageReference Include="VirtoCommerce.AssetsModule.Core" Version="3.800.0-alpha.108-pt-14740-net8" />
-    <PackageReference Include="VirtoCommerce.CatalogModule.Core" Version="3.800.0-alpha.2182-pt-14740-net8" />
-    <PackageReference Include="VirtoCommerce.PricingModule.Core" Version="3.800.0-alpha.712-pt-14740-net8" />
-    <PackageReference Include="VirtoCommerce.Platform.Data" Version="3.800.0-alpha.12831-net8" />
-    <PackageReference Include="VirtoCommerce.Platform.Hangfire" Version="3.800.0-alpha.12831-net8" />
+    <PackageReference Include="VirtoCommerce.AssetsModule.Core" Version="3.800.0" />
+    <PackageReference Include="VirtoCommerce.CatalogModule.Core" Version="3.800.0" />
+    <PackageReference Include="VirtoCommerce.PricingModule.Core" Version="3.800.0" />
+    <PackageReference Include="VirtoCommerce.Platform.Data" Version="3.800.0" />
+    <PackageReference Include="VirtoCommerce.Platform.Hangfire" Version="3.800.0" />
   </ItemGroup>
 </Project>
