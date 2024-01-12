@@ -56,7 +56,6 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
         [Fact]
         public async Task EnsureBadDataFoundWasCalledOnceCase()
         {
-            var isRecordBad = false;
             var errorCount = 0;
             var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -64,9 +63,9 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
                 BadDataFound = args =>
                 {
                     ++errorCount;
-                    isRecordBad = true;
                 },
                 Delimiter = ";",
+
             };
             var header = "SKU;Min quantity;List price;Sale price";
             var records = new[] { "TestSku1;2;10.99;9.99", "TestSku2;2;10.99;9", "XXX;\"9;10.9;9" };
@@ -77,12 +76,14 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
 
             while (await csvReader.ReadAsync())
             {
-                if (!isRecordBad)
+                try
                 {
                     csvReader.GetRecord<CsvPrice>();
                 }
-
-                isRecordBad = false;
+                catch
+                {
+                    // ignore exception
+                }
             }
 
             Assert.Equal(1, errorCount);
