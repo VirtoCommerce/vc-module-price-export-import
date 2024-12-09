@@ -1,0 +1,105 @@
+{
+  "priceExportImport": {
+    "blades": {
+      "file-upload": {
+        "title": "CSV hochladen",
+        "subtitle": "Laden Sie die Datei hoch, die Sie importieren möchten",
+        "labels": {
+          "progress": "Fortschritt"
+        },
+        "drag-and-drop": {
+          "placeholder": "Ziehen Sie Ihre Datei hierher",
+          "or": "oder ",
+          "link": "durchsuchen Sie Ihre Dateien"
+        },
+        "upload-result": {
+          "failed": "Hochladen fehlgeschlagen",
+          "success": "Hochgeladen",
+          "max-size-error": "Die Dateigröße ist zu groß. Versuchen Sie, eine andere hochzuladen",
+          "file-type-error": "Die Datei, die Sie hochladen möchten, hat ein ungültiges Format. Laden Sie eine CSV-Datei hoch"
+        },
+        "actions": {
+          "preview": "Vorschau",
+          "delete": "Löschen"
+        }
+      },
+      "import-preview": {
+        "title": "Vorschau",
+        "subtitle": "Vorschau der CSV-Datei, die Sie hochladen möchten",
+        "labels": {
+          "sku": "SKU",
+          "min-quantity": "Mindestmenge",
+          "list-price": "Listenpreis",
+          "sale-price": "Verkaufspreis",
+          "import-strategy": "Was möchten Sie mit den importierten Daten tun?",
+          "create-new-only": "Nur neu erstellen",
+          "update-existing-only": "Nur bestehende aktualisieren",
+          "create-and-update": "Erstellen und aktualisieren",
+          "preview-count": "Vorschauanzahl:"
+        },
+        "upload-new": "Neu hochladen"
+      },
+      "import-processing": {
+        "title": "Importfortschritt",
+        "labels": {
+          "start": "Start",
+          "end": "Ende",
+          "errors": "Fehleranzahl",
+          "total": "Gesamtanzahl",
+          "created": "Erstellte Zeilen",
+          "updated": "Aktualisierte Zeilen",
+          "errors-url": "URL zum Herunterladen des Fehlerberichts:",
+          "errors-log": "Fehler"
+        }
+      }
+    },
+    "commands": {
+      "upload-new": "Neu hochladen"
+    },
+    "dialogs": {
+      "pricelist-export": {
+        "title": "Preisexport",
+        "subtitle-all": "Alle {{count}} Zeilen",
+        "subtitle-not-all": "{{count}} Preiszeilen",
+        "subtitle-end": "aus dieser Kategorie werden in eine CSV-Datei exportiert.",
+        "advanced-export-subtitle-start": "Sie können",
+        "advanced-export-subtitle-link": "erweiterte Exporte verwenden",
+        "advanced-export-subtitle-end": "um nur bestimmte Preise auszuwählen",
+        "validation-error-subtitle-start": "Sie haben ausgewählt",
+        "validation-error-subtitle-middle": "während Sie nicht mehr als",
+        "validation-error-subtitle-count": "{{count}} Artikel{{comma}}",
+        "validation-error-subtitle-end": "exportieren können. Wählen Sie eine gültige Anzahl von Artikeln und versuchen Sie es erneut",
+        "export": "Exportieren"
+      },
+      "csv-file-delete": {
+        "title": "CSV löschen",
+        "subtitle": "Sind Sie sicher, dass Sie diese CSV-Datei löschen möchten?"
+      }
+    },
+    "widgets": {
+      "prices": {
+        "title": "Preise",
+        "subtitle": "(Preisexport/-import)"
+      }
+    },
+    "settings": {
+      "PriceExport": {
+        "LimitOfLines": {
+          "title": "Maximale Anzahl von Zeilen für Export oder Import",
+          "description": "Hohe Werte können zu einer langsameren Leistung führen"
+        }
+      }
+    },
+    "validation-errors": {
+      "file-not-existed": "Die Datei existiert nicht",
+      "exceeding-file-max-size": "Die Dateigröße ist zu groß. Versuchen Sie, eine andere hochzuladen",
+      "wrong-delimiter": "Ungültiges Trennzeichen. Verwenden Sie nur Semikolon (;) als Trennzeichen",
+      "exceeding-line-limits": "Wir können Ihre Datei nicht importieren, da die maximale Anzahl von Zeilen zum Importieren {{ importLimitOfLines }} beträgt. Ihre Datei hat derzeit {{ linesCount }} Zeilen",
+      "missing-required-columns": "Wir können Ihre Datei nicht importieren, da die folgenden erforderlichen Spalten: \"{{ missedColumns }}\" fehlen",
+      "no-data": "Diese Datei enthält keine Daten"
+    }
+  },
+  "permissions": {
+    "pricing:simpleImport": "Preisdaten importieren"
+  }
+}

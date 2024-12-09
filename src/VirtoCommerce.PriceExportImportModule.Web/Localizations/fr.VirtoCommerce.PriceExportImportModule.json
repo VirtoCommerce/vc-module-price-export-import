@@ -1,0 +1,105 @@
+{
+  "priceExportImport": {
+    "blades": {
+      "file-upload": {
+        "title": "Télécharger CSV",
+        "subtitle": "Téléchargez le fichier que vous souhaitez importer",
+        "labels": {
+          "progress": "Progression"
+        },
+        "drag-and-drop": {
+          "placeholder": "Glissez et déposez votre fichier ici",
+          "or": "ou ",
+          "link": "parcourez vos fichiers"
+        },
+        "upload-result": {
+          "failed": "Échec du téléchargement",
+          "success": "Téléchargé",
+          "max-size-error": "La taille du fichier est trop grande. Essayez d'en télécharger un autre",
+          "file-type-error": "Le fichier que vous essayez de télécharger a un format invalide. Téléchargez un fichier CSV"
+        },
+        "actions": {
+          "preview": "Aperçu",
+          "delete": "Supprimer"
+        }
+      },
+      "import-preview": {
+        "title": "Aperçu",
+        "subtitle": "Aperçu du fichier CSV que vous allez télécharger",
+        "labels": {
+          "sku": "SKU",
+          "min-quantity": "Quantité minimale",
+          "list-price": "Prix de liste",
+          "sale-price": "Prix de vente",
+          "import-strategy": "Que souhaitez-vous faire avec les données importées ?",
+          "create-new-only": "Créer uniquement de nouveaux",
+          "update-existing-only": "Mettre à jour uniquement les existants",
+          "create-and-update": "Créer et mettre à jour",
+          "preview-count": "Nombre d'aperçus :"
+        },
+        "upload-new": "Télécharger un nouveau"
+      },
+      "import-processing": {
+        "title": "Progression de l'importation",
+        "labels": {
+          "start": "Début",
+          "end": "Fin",
+          "errors": "Nombre d'erreurs",
+          "total": "Nombre total",
+          "created": "Lignes créées",
+          "updated": "Lignes mises à jour",
+          "errors-url": "URL pour télécharger le rapport d'erreurs :",
+          "errors-log": "Erreurs"
+        }
+      }
+    },
+    "commands": {
+      "upload-new": "Télécharger un nouveau"
+    },
+    "dialogs": {
+      "pricelist-export": {
+        "title": "Exportation des prix",
+        "subtitle-all": "Toutes les {{count}} lignes",
+        "subtitle-not-all": "{{count}} lignes de prix",
+        "subtitle-end": "de cette catégorie seront exportées vers un fichier CSV.",
+        "advanced-export-subtitle-start": "Vous pouvez",
+        "advanced-export-subtitle-link": "utiliser l'exportation avancée",
+        "advanced-export-subtitle-end": "pour sélectionner uniquement certains prix",
+        "validation-error-subtitle-start": "Vous avez sélectionné",
+        "validation-error-subtitle-middle": "alors que vous ne pouvez pas exporter plus de",
+        "validation-error-subtitle-count": "{{count}} articles{{comma}}",
+        "validation-error-subtitle-end": "sélectionnez un nombre valide d'articles et réessayez",
+        "export": "Exporter"
+      },
+      "csv-file-delete": {
+        "title": "Supprimer CSV",
+        "subtitle": "Êtes-vous sûr de vouloir supprimer ce fichier CSV ?"
+      }
+    },
+    "widgets": {
+      "prices": {
+        "title": "Prix",
+        "subtitle": "(Exportation/importation de prix)"
+      }
+    },
+    "settings": {
+      "PriceExport": {
+        "LimitOfLines": {
+          "title": "Nombre maximum de lignes pour l'exportation ou l'importation",
+          "description": "Des valeurs élevées peuvent entraîner une performance plus lente"
+        }
+      }
+    },
+    "validation-errors": {
+      "file-not-existed": "Le fichier n'existe pas",
+      "exceeding-file-max-size": "La taille du fichier est trop grande. Essayez d'en télécharger un autre",
+      "wrong-delimiter": "Délimiteur invalide. Utilisez uniquement le point-virgule (;) comme délimiteur",
+      "exceeding-line-limits": "Nous ne pouvons pas importer votre fichier, car le nombre maximum de lignes à importer est de {{ importLimitOfLines }}. Votre fichier contient actuellement {{ linesCount }} lignes",
+      "missing-required-columns": "Nous ne pouvons pas importer votre fichier, car les colonnes requises suivantes : \"{{ missedColumns }}\" sont manquantes",
+      "no-data": "Ce fichier ne contient pas de données"
+    }
+  },
+  "permissions": {
+    "pricing:simpleImport": "Importer des données de prix"
+  }
+}
