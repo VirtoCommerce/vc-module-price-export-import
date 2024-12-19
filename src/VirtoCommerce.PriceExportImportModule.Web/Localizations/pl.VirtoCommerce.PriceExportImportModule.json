@@ -1,0 +1,105 @@
+{
+  "priceExportImport": {
+    "blades": {
+      "file-upload": {
+        "title": "Prześlij CSV",
+        "subtitle": "Prześlij plik, który chcesz zaimportować",
+        "labels": {
+          "progress": "Postęp"
+        },
+        "drag-and-drop": {
+          "placeholder": "Przeciągnij i upuść swój plik tutaj",
+          "or": "lub ",
+          "link": "przeglądaj swoje pliki"
+        },
+        "upload-result": {
+          "failed": "Przesyłanie nie powiodło się",
+          "success": "Przesłano",
+          "max-size-error": "Rozmiar pliku jest zbyt duży. Spróbuj przesłać inny",
+          "file-type-error": "Plik, który próbujesz przesłać, ma nieprawidłowy format. Prześlij plik CSV"
+        },
+        "actions": {
+          "preview": "Podgląd",
+          "delete": "Usuń"
+        }
+      },
+      "import-preview": {
+        "title": "Podgląd",
+        "subtitle": "Podgląd pliku CSV, który zamierzasz przesłać",
+        "labels": {
+          "sku": "SKU",
+          "min-quantity": "Minimalna ilość",
+          "list-price": "Cena katalogowa",
+          "sale-price": "Cena sprzedaży",
+          "import-strategy": "Co chcesz zrobić z zaimportowanymi danymi?",
+          "create-new-only": "Twórz tylko nowe",
+          "update-existing-only": "Aktualizuj tylko istniejące",
+          "create-and-update": "Twórz i aktualizuj",
+          "preview-count": "Liczba podglądów:"
+        },
+        "upload-new": "Prześlij nowy"
+      },
+      "import-processing": {
+        "title": "Postęp importu",
+        "labels": {
+          "start": "Początek",
+          "end": "Koniec",
+          "errors": "Liczba błędów",
+          "total": "Całkowita liczba",
+          "created": "Utworzone linie",
+          "updated": "Zaktualizowane linie",
+          "errors-url": "URL do pobrania raportu błędów:",
+          "errors-log": "Błędy"
+        }
+      }
+    },
+    "commands": {
+      "upload-new": "Prześlij nowy"
+    },
+    "dialogs": {
+      "pricelist-export": {
+        "title": "Eksport cen",
+        "subtitle-all": "Wszystkie {{count}} linie",
+        "subtitle-not-all": "{{count}} linie cen",
+        "subtitle-end": "z tej kategorii zostaną wyeksportowane do pliku CSV.",
+        "advanced-export-subtitle-start": "Możesz",
+        "advanced-export-subtitle-link": "użyć zaawansowanego eksportu",
+        "advanced-export-subtitle-end": "aby wybrać tylko określone ceny",
+        "validation-error-subtitle-start": "Wybrałeś",
+        "validation-error-subtitle-middle": "podczas gdy nie możesz wyeksportować więcej niż",
+        "validation-error-subtitle-count": "{{count}} elementów{{comma}}",
+        "validation-error-subtitle-end": "wybierz prawidłową liczbę elementów i spróbuj ponownie",
+        "export": "Eksportuj"
+      },
+      "csv-file-delete": {
+        "title": "Usuń CSV",
+        "subtitle": "Czy na pewno chcesz usunąć ten plik CSV?"
+      }
+    },
+    "widgets": {
+      "prices": {
+        "title": "Ceny",
+        "subtitle": "(Eksport/import cen)"
+      }
+    },
+    "settings": {
+      "PriceExport": {
+        "LimitOfLines": {
+          "title": "Maksymalna liczba linii do eksportu lub importu",
+          "description": "Wysokie wartości mogą prowadzić do wolniejszego działania"
+        }
+      }
+    },
+    "validation-errors": {
+      "file-not-existed": "Plik nie istnieje",
+      "exceeding-file-max-size": "Rozmiar pliku jest zbyt duży. Spróbuj przesłać inny",
+      "wrong-delimiter": "Nieprawidłowy separator. Używaj tylko średnika (;) jako separatora",
+      "exceeding-line-limits": "Nie możemy zaimportować twojego pliku, ponieważ maksymalna liczba linii do importu to {{ importLimitOfLines }}. Twój plik ma obecnie {{ linesCount }} linii",
+      "missing-required-columns": "Nie możemy zaimportować twojego pliku, ponieważ brakuje następujących wymaganych kolumn: \"{{ missedColumns }}\"",
+      "no-data": "Ten plik nie zawiera danych"
+    }
+  },
+  "permissions": {
+    "pricing:simpleImport": "Importuj dane cenowe"
+  }
+}
