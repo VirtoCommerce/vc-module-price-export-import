@@ -1,0 +1,105 @@
+{
+  "priceExportImport": {
+    "blades": {
+      "file-upload": {
+        "title": "Subir CSV",
+        "subtitle": "Sube el archivo que deseas importar",
+        "labels": {
+          "progress": "Progreso"
+        },
+        "drag-and-drop": {
+          "placeholder": "Arrastra y suelta tu archivo aquí",
+          "or": "o ",
+          "link": "explora tus archivos"
+        },
+        "upload-result": {
+          "failed": "La carga falló",
+          "success": "Cargado",
+          "max-size-error": "El tamaño del archivo es demasiado grande. Intenta subir otro",
+          "file-type-error": "El archivo que intentas subir tiene un formato no válido. Sube un archivo CSV"
+        },
+        "actions": {
+          "preview": "Vista previa",
+          "delete": "Eliminar"
+        }
+      },
+      "import-preview": {
+        "title": "Vista previa",
+        "subtitle": "Vista previa del archivo CSV que vas a subir",
+        "labels": {
+          "sku": "SKU",
+          "min-quantity": "Cantidad mínima",
+          "list-price": "Precio de lista",
+          "sale-price": "Precio de venta",
+          "import-strategy": "¿Qué te gustaría hacer con los datos importados?",
+          "create-new-only": "Crear solo nuevos",
+          "update-existing-only": "Actualizar solo existentes",
+          "create-and-update": "Crear y actualizar",
+          "preview-count": "Conteo de vista previa:"
+        },
+        "upload-new": "Subir nuevo"
+      },
+      "import-processing": {
+        "title": "Progreso de importación",
+        "labels": {
+          "start": "Inicio",
+          "end": "Fin",
+          "errors": "Conteo de errores",
+          "total": "Conteo total",
+          "created": "Líneas creadas",
+          "updated": "Líneas actualizadas",
+          "errors-url": "URL para descargar el informe de errores:",
+          "errors-log": "Errores"
+        }
+      }
+    },
+    "commands": {
+      "upload-new": "Subir nuevo"
+    },
+    "dialogs": {
+      "pricelist-export": {
+        "title": "Exportación de precios",
+        "subtitle-all": "Todas las {{count}} líneas",
+        "subtitle-not-all": "{{count}} líneas de precios",
+        "subtitle-end": "de esta categoría se exportarán a un archivo CSV.",
+        "advanced-export-subtitle-start": "Puedes",
+        "advanced-export-subtitle-link": "usar la exportación avanzada",
+        "advanced-export-subtitle-end": "para seleccionar solo precios particulares",
+        "validation-error-subtitle-start": "Has seleccionado",
+        "validation-error-subtitle-middle": "mientras que no puedes exportar más de",
+        "validation-error-subtitle-count": "{{count}} artículos{{comma}}",
+        "validation-error-subtitle-end": "selecciona un número válido de artículos e inténtalo de nuevo",
+        "export": "Exportar"
+      },
+      "csv-file-delete": {
+        "title": "Eliminar CSV",
+        "subtitle": "¿Estás seguro de que deseas eliminar este archivo CSV?"
+      }
+    },
+    "widgets": {
+      "prices": {
+        "title": "Precios",
+        "subtitle": "(Exportación/importación de precios)"
+      }
+    },
+    "settings": {
+      "PriceExport": {
+        "LimitOfLines": {
+          "title": "Número máximo de líneas para exportar o importar",
+          "description": "Valores altos pueden llevar a un rendimiento más lento"
+        }
+      }
+    },
+    "validation-errors": {
+      "file-not-existed": "El archivo no existe",
+      "exceeding-file-max-size": "El tamaño del archivo es demasiado grande. Intenta subir otro",
+      "wrong-delimiter": "Delimitador no válido. Usa solo punto y coma (;) como delimitador",
+      "exceeding-line-limits": "No podemos importar tu archivo, ya que el número máximo de líneas para importar es {{ importLimitOfLines }}. Tu archivo actualmente tiene {{ linesCount }} líneas",
+      "missing-required-columns": "No podemos importar tu archivo, ya que faltan las siguientes columnas requeridas: \"{{ missedColumns }}\"",
+      "no-data": "Este archivo no tiene datos"
+    }
+  },
+  "permissions": {
+    "pricing:simpleImport": "Importar datos de precios"
+  }
+}

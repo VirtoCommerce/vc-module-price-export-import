@@ -1,0 +1,105 @@
+{
+  "priceExportImport": {
+    "blades": {
+      "file-upload": {
+        "title": "CSVをアップロード",
+        "subtitle": "インポートしたいファイルをアップロードしてください",
+        "labels": {
+          "progress": "進行状況"
+        },
+        "drag-and-drop": {
+          "placeholder": "ここにファイルをドラッグ＆ドロップ",
+          "or": "または",
+          "link": "ファイルを参照"
+        },
+        "upload-result": {
+          "failed": "アップロードに失敗しました",
+          "success": "アップロード完了",
+          "max-size-error": "ファイルサイズが大きすぎます。別のファイルをアップロードしてください",
+          "file-type-error": "アップロードしようとしているファイルの形式が無効です。CSVファイルをアップロードしてください"
+        },
+        "actions": {
+          "preview": "プレビュー",
+          "delete": "削除"
+        }
+      },
+      "import-preview": {
+        "title": "プレビュー",
+        "subtitle": "アップロードしようとしているCSVファイルのプレビュー",
+        "labels": {
+          "sku": "SKU",
+          "min-quantity": "最小数量",
+          "list-price": "リスト価格",
+          "sale-price": "販売価格",
+          "import-strategy": "インポートしたデータをどうしますか？",
+          "create-new-only": "新規作成のみ",
+          "update-existing-only": "既存の更新のみ",
+          "create-and-update": "作成と更新",
+          "preview-count": "プレビュー数:"
+        },
+        "upload-new": "新しいファイルをアップロード"
+      },
+      "import-processing": {
+        "title": "インポートの進行状況",
+        "labels": {
+          "start": "開始",
+          "end": "終了",
+          "errors": "エラー数",
+          "total": "合計数",
+          "created": "作成された行",
+          "updated": "更新された行",
+          "errors-url": "エラーレポートをダウンロードするURL:",
+          "errors-log": "エラー"
+        }
+      }
+    },
+    "commands": {
+      "upload-new": "新しいファイルをアップロード"
+    },
+    "dialogs": {
+      "pricelist-export": {
+        "title": "価格のエクスポート",
+        "subtitle-all": "すべての{{count}}行",
+        "subtitle-not-all": "{{count}}価格行",
+        "subtitle-end": "このカテゴリからCSVファイルにエクスポートされます。",
+        "advanced-export-subtitle-start": "あなたは",
+        "advanced-export-subtitle-link": "高度なエクスポートを使用する",
+        "advanced-export-subtitle-end": "特定の価格のみを選択することができます",
+        "validation-error-subtitle-start": "選択しました",
+        "validation-error-subtitle-middle": "ただし、エクスポートできるのは",
+        "validation-error-subtitle-count": "{{count}}アイテム{{comma}}",
+        "validation-error-subtitle-end": "有効なアイテム数を選択して、もう一度やり直してください",
+        "export": "エクスポート"
+      },
+      "csv-file-delete": {
+        "title": "CSVを削除",
+        "subtitle": "このCSVファイルを削除してもよろしいですか？"
+      }
+    },
+    "widgets": {
+      "prices": {
+        "title": "価格",
+        "subtitle": "(価格のエクスポート/インポート)"
+      }
+    },
+    "settings": {
+      "PriceExport": {
+        "LimitOfLines": {
+          "title": "エクスポートまたはインポートの最大行数",
+          "description": "高い値はパフォーマンスの低下を招く可能性があります"
+        }
+      }
+    },
+    "validation-errors": {
+      "file-not-existed": "ファイルが存在しません",
+      "exceeding-file-max-size": "ファイルサイズが大きすぎます。別のファイルをアップロードしてください",
+      "wrong-delimiter": "無効な区切り文字です。区切り文字としてセミコロン（;）のみを使用してください",
+      "exceeding-line-limits": "ファイルをインポートできません。インポートできる最大行数は{{ importLimitOfLines }}です。現在、ファイルには{{ linesCount }}行があります",
+      "missing-required-columns": "ファイルをインポートできません。次の必須列がありません: \"{{ missedColumns }}\"",
+      "no-data": "このファイルにはデータがありません"
+    }
+  },
+  "permissions": {
+    "pricing:simpleImport": "価格データをインポート"
+  }
+}
