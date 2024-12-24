@@ -29,7 +29,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
         public async Task WriteAsync(ImportError error)
         {
-            using (await AsyncLock.GetLockByKey(_reportFilePath).GetReleaserAsync())
+            using (await AsyncLock.GetLockByKey(_reportFilePath).LockAsync())
             {
                 ReportIsNotEmpty = true;
                 await _streamWriter.WriteLineAsync(GetLine(error));
@@ -55,7 +55,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
 
         public async ValueTask DisposeAsync()
         {
-            using (await AsyncLock.GetLockByKey(_reportFilePath).GetReleaserAsync())
+            using (await AsyncLock.GetLockByKey(_reportFilePath).LockAsync())
             {
                 await _streamWriter.DisposeAsync();
 

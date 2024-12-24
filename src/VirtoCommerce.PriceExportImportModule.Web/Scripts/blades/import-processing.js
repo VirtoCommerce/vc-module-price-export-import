@@ -29,7 +29,12 @@ angular.module('virtoCommerce.priceExportImportModule')
                 );
             }
 
-            bladeNavigationService.closeBlade(blade);
+            if (blade.notification.finished) {
+                bladeNavigationService.closeChildrenBlades(blade.parentBlade.parentBlade.parentBlade, function () { });
+            }
+            else {
+                bladeNavigationService.closeBlade(blade);
+            }
         }
 
     }]);
