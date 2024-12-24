@@ -1,43 +1,105 @@
 {
   "priceExportImport": {
     "blades": {
+      "file-upload": {
+        "title": "Загрузить CSV",
+        "subtitle": "Загрузите файл, который вы хотите импортировать",
+        "labels": {
+          "progress": "Прогресс"
+        },
+        "drag-and-drop": {
+          "placeholder": "Перетащите ваш файл сюда",
+          "or": "или ",
+          "link": "загрузите ваши файлы"
+        },
+        "upload-result": {
+          "failed": "Загрузка не удалась",
+          "success": "Загружено",
+          "max-size-error": "Размер файла слишком велик. Попробуйте загрузить другой",
+          "file-type-error": "Файл, который вы пытаетесь загрузить, имеет неверный формат. Загрузите файл CSV"
+        },
+        "actions": {
+          "preview": "Предпросмотр",
+          "delete": "Удалить"
+        }
+      },
       "import-preview": {
-        "upload-new": "Новый CSV"
+        "title": "Предпросмотр",
+        "subtitle": "Предпросмотр файла CSV, который вы собираетесь загрузить",
+        "labels": {
+          "sku": "SKU",
+          "min-quantity": "Минимальное количество",
+          "list-price": "Цена по каталогу",
+          "sale-price": "Цена продажи",
+          "import-strategy": "Что вы хотите сделать с импортированными данными?",
+          "create-new-only": "Создать только новые",
+          "update-existing-only": "Обновить только существующие",
+          "create-and-update": "Создать и обновить",
+          "preview-count": "Количество предпросмотров:"
+        },
+        "upload-new": "Загрузить новый"
+      },
+      "import-processing": {
+        "title": "Прогресс импорта",
+        "labels": {
+          "start": "Начало",
+          "end": "Конец",
+          "errors": "Количество ошибок",
+          "total": "Общее количество",
+          "created": "Созданные строки",
+          "updated": "Обновленные строки",
+          "errors-url": "URL для загрузки отчета об ошибках:",
+          "errors-log": "Ошибки"
+        }
       }
+    },
+    "commands": {
+      "upload-new": "Загрузить новый"
     },
     "dialogs": {
       "pricelist-export": {
-        "title": "Экспортировать цены",
-        "subtitle-all": "Все {{count}} цены",
-        "subtitle-not-all": "{{count}} цен",
-        "subtitle-end": "из этой категории будут экспортированны в csv файл.",
+        "title": "Экспорт цен",
+        "subtitle-all": "Все {{count}} строки",
+        "subtitle-not-all": "{{count}} строки цен",
+        "subtitle-end": "из этой категории будут экспортированы в файл CSV.",
         "advanced-export-subtitle-start": "Вы можете",
-        "advanced-export-subtitle-link": "использовать продвинутый экспорт",
-        "advanced-export-subtitle-end": "чтобы сделать продуманный подбор цен.",
+        "advanced-export-subtitle-link": "использовать расширенный экспорт",
+        "advanced-export-subtitle-end": "чтобы выбрать только определенные цены",
         "validation-error-subtitle-start": "Вы выбрали",
-        "validation-error-subtitle-middle": "но экспорт ограничен",
-        "validation-error-subtitle-count": "{{count}} шт{{comma}}",
-        "validation-error-subtitle-end": "вернитесь, чтобы выбрать другое количество",
+        "validation-error-subtitle-middle": "но вы не можете экспортировать более",
+        "validation-error-subtitle-count": "{{count}} элементов{{comma}}",
+        "validation-error-subtitle-end": "выберите допустимое количество элементов и попробуйте снова",
         "export": "Экспорт"
       },
       "csv-file-delete": {
-        "title": "Удаление CSV",
-        "subtitle": "Вы действительно хотите удалить этот CSV файл?"
+        "title": "Удалить CSV",
+        "subtitle": "Вы уверены, что хотите удалить этот файл CSV?"
       }
     },
     "widgets": {
       "prices": {
         "title": "Цены",
-        "subtitle": "(Экспорт/Импорт)"
+        "subtitle": "(Экспорт/импорт цен)"
       }
     },
     "settings": {
       "PriceExport": {
         "LimitOfLines": {
-          "title": "Ограничение на количество строк, которые можно экспортировать / импортировать",
-          "description": "Большие значения могут привести к ухудшению производительности."
+          "title": "Максимальное количество строк для экспорта или импорта",
+          "description": "Высокие значения могут привести к снижению производительности"
         }
       }
+    },
+    "validation-errors": {
+      "file-not-existed": "Файл не существует",
+      "exceeding-file-max-size": "Размер файла слишком велик. Попробуйте загрузить другой",
+      "wrong-delimiter": "Неверный разделитель. Используйте только точку с запятой (;) в качестве разделителя",
+      "exceeding-line-limits": "Мы не можем импортировать ваш файл, так как максимальное количество строк для импорта составляет {{ importLimitOfLines }}. В вашем файле сейчас {{ linesCount }} строк",
+      "missing-required-columns": "Мы не можем импортировать ваш файл, так как отсутствуют следующие обязательные столбцы: \"{{ missedColumns }}\"",
+      "no-data": "Этот файл не содержит данных"
     }
+  },
+  "permissions": {
+    "pricing:simpleImport": "Импорт данных о ценах"
   }
 }

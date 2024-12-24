@@ -1,0 +1,105 @@
+{
+  "priceExportImport": {
+    "blades": {
+      "file-upload": {
+        "title": "上传 CSV",
+        "subtitle": "上传您要导入的文件",
+        "labels": {
+          "progress": "进度"
+        },
+        "drag-and-drop": {
+          "placeholder": "将文件拖放到此处",
+          "or": "或",
+          "link": "浏览您的文件"
+        },
+        "upload-result": {
+          "failed": "上传失败",
+          "success": "上传成功",
+          "max-size-error": "文件大小过大。请尝试上传另一个文件",
+          "file-type-error": "您尝试上传的文件格式无效。请上传 CSV 文件"
+        },
+        "actions": {
+          "preview": "预览",
+          "delete": "删除"
+        }
+      },
+      "import-preview": {
+        "title": "预览",
+        "subtitle": "预览您将上传的 CSV 文件",
+        "labels": {
+          "sku": "SKU",
+          "min-quantity": "最小数量",
+          "list-price": "标价",
+          "sale-price": "销售价格",
+          "import-strategy": "您希望如何处理导入的数据？",
+          "create-new-only": "仅创建新项",
+          "update-existing-only": "仅更新现有项",
+          "create-and-update": "创建和更新",
+          "preview-count": "预览计数："
+        },
+        "upload-new": "上传新文件"
+      },
+      "import-processing": {
+        "title": "导入进度",
+        "labels": {
+          "start": "开始",
+          "end": "结束",
+          "errors": "错误计数",
+          "total": "总计",
+          "created": "创建的行",
+          "updated": "更新的行",
+          "errors-url": "下载错误报告的 URL：",
+          "errors-log": "错误"
+        }
+      }
+    },
+    "commands": {
+      "upload-new": "上传新文件"
+    },
+    "dialogs": {
+      "pricelist-export": {
+        "title": "价格导出",
+        "subtitle-all": "所有 {{count}} 行",
+        "subtitle-not-all": "{{count}} 价格行",
+        "subtitle-end": "将从此类别导出到 CSV 文件。",
+        "advanced-export-subtitle-start": "您可以",
+        "advanced-export-subtitle-link": "使用高级导出",
+        "advanced-export-subtitle-end": "仅选择特定价格",
+        "validation-error-subtitle-start": "您已选择",
+        "validation-error-subtitle-middle": "但您不能导出超过",
+        "validation-error-subtitle-count": "{{count}} 项{{comma}}",
+        "validation-error-subtitle-end": "请选择有效的项目数量，然后重试",
+        "export": "导出"
+      },
+      "csv-file-delete": {
+        "title": "删除 CSV",
+        "subtitle": "您确定要删除此 CSV 文件吗？"
+      }
+    },
+    "widgets": {
+      "prices": {
+        "title": "价格",
+        "subtitle": "（价格导出/导入）"
+      }
+    },
+    "settings": {
+      "PriceExport": {
+        "LimitOfLines": {
+          "title": "导出或导入的最大行数",
+          "description": "较高的值可能导致性能下降"
+        }
+      }
+    },
+    "validation-errors": {
+      "file-not-existed": "文件不存在",
+      "exceeding-file-max-size": "文件大小过大。请尝试上传另一个文件",
+      "wrong-delimiter": "无效的分隔符。仅使用分号（;）作为分隔符",
+      "exceeding-line-limits": "我们无法导入您的文件，因为导入的最大行数为 {{ importLimitOfLines }}。您的文件当前有 {{ linesCount }} 行",
+      "missing-required-columns": "我们无法导入您的文件，因为缺少以下必需列：“{{ missedColumns }}”",
+      "no-data": "此文件没有数据"
+    }
+  },
+  "permissions": {
+    "pricing:simpleImport": "导入价格数据"
+  }
+}

@@ -13,10 +13,10 @@
           "link": "browse your files"
         },
         "upload-result": {
-          "failed": "Upload Failed",
+          "failed": "Upload failed",
           "success": "Uploaded",
-          "max-size-error": "The file size is too large. Try uploading another one.",
-          "file-type-error": "The file you are trying to upload has an invalid format. Please upload a CSV file."
+          "max-size-error": "The file size is too large. Try uploading another one",
+          "file-type-error": "The file you are trying to upload has an invalid format. Upload a CSV file"
         },
         "actions": {
           "preview": "Preview",
@@ -28,7 +28,7 @@
         "subtitle": "Preview the CSV file you are going to upload",
         "labels": {
           "sku": "SKU",
-          "min-quantity": "Min quantity",
+          "min-quantity": "Minimum quantity",
           "list-price": "List price",
           "sale-price": "Sale price",
           "import-strategy": "What would you like to do with the imported data?",
@@ -58,17 +58,17 @@
     },
     "dialogs": {
       "pricelist-export": {
-        "title": "Price Export",
+        "title": "Price export",
         "subtitle-all": "All {{count}} lines",
         "subtitle-not-all": "{{count}} price lines",
         "subtitle-end": "from this category will be exported to a CSV file.",
         "advanced-export-subtitle-start": "You can",
         "advanced-export-subtitle-link": "use advanced export",
-        "advanced-export-subtitle-end": "to select only particular prices.",
+        "advanced-export-subtitle-end": "to select only particular prices",
         "validation-error-subtitle-start": "You have selected",
         "validation-error-subtitle-middle": "while you cannot export more than",
         "validation-error-subtitle-count": "{{count}} items{{comma}}",
-        "validation-error-subtitle-end": "please select a valid number of items and try again.",
+        "validation-error-subtitle-end": "select a valid number of items and try again",
         "export": "Export"
       },
       "csv-file-delete": {
@@ -79,24 +79,24 @@
     "widgets": {
       "prices": {
         "title": "Prices",
-        "subtitle": "(Price Export/Import)"
+        "subtitle": "(Price export/import)"
       }
     },
     "settings": {
       "PriceExport": {
         "LimitOfLines": {
-          "title": "The limit for the number of lines that can be exported or imported",
-          "description": "A high value may result in slow performance"
+          "title": "Maximum number of lines for export or import",
+          "description": "High values may lead to slower performance"
         }
       }
     },
     "validation-errors": {
-      "file-not-existed": "The file does not exist.",
-      "exceeding-file-max-size": "The file size is too large. Try uploading another one.",
-      "wrong-delimiter": "Invalid delimiter. Please use only semicolon (;) as a delimiter.",
-      "exceeding-line-limits": "We are unable to import your file, as the maximum number of lines to import is {{ importLimitOfLines }}. Your file currently has {{ linesCount }} lines.",
-      "missing-required-columns": "We are unable to import your file, as the following required columns: \"{{ missedColumns }}\" are missing in it.",
-      "no-data": "This file has no data."
+      "file-not-existed": "The file does not exist",
+      "exceeding-file-max-size": "The file size is too large. Try uploading another one",
+      "wrong-delimiter": "Invalid delimiter. Use only semicolon (;) as a delimiter",
+      "exceeding-line-limits": "We are unable to import your file, as the maximum number of lines to import is {{ importLimitOfLines }}. Your file currently has {{ linesCount }} lines",
+      "missing-required-columns": "We are unable to import your file, as the following required columns: \"{{ missedColumns }}\" are missing",
+      "no-data": "This file has no data"
     }
   },
   "permissions": {
