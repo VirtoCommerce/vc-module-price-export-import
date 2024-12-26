@@ -19,7 +19,7 @@ angular.module('virtoCommerce.priceExportImportModule')
             importResources.preview({ filePath: blade.csvFilePath}, (data) => {
                 blade.currentEntities = data.results;
                 blade.totalCount = data.totalCount;
-                $scope.pageSettings.totalItems = 10;
+                $scope.pageSettings.totalItems = Math.min(10, blade.totalCount);
                 getInvalidRowsCount();
                 blade.isLoading = false;
             }, (error) => { bladeNavigationService.setError('Error ' + error.status, blade); });

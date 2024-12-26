@@ -7,10 +7,10 @@
     <SonarQubeTestProject>false</SonarQubeTestProject>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="30.0.1" />
-    <PackageReference Include="VirtoCommerce.Platform.Core" Version="3.800.0" />
-    <PackageReference Include="VirtoCommerce.PricingModule.Core" Version="3.800.0" />
-    <PackageReference Include="VirtoCommerce.PricingModule.Data" Version="3.800.0" />
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
+    <PackageReference Include="VirtoCommerce.Platform.Core" Version="3.853.0" />
+    <PackageReference Include="VirtoCommerce.PricingModule.Core" Version="3.809.0" />
+    <PackageReference Include="VirtoCommerce.PricingModule.Data" Version="3.809.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Events\" />
