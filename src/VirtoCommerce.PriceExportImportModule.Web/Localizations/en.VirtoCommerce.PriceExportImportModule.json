@@ -86,7 +86,7 @@
       "PriceExport": {
         "LimitOfLines": {
           "title": "Maximum number of lines for export or import",
-          "description": "High values may lead to slower performance"
+          "description": "Specify the maximum number of lines allowed for export or import. Higher values may reduce performance"
         }
       }
     },
