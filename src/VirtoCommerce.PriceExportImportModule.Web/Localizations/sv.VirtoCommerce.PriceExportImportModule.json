@@ -1,0 +1,105 @@
+{
+  "priceExportImport": {
+    "blades": {
+      "file-upload": {
+        "title": "Ladda upp CSV",
+        "subtitle": "Ladda upp filen du vill importera",
+        "labels": {
+          "progress": "Förlopp"
+        },
+        "drag-and-drop": {
+          "placeholder": "Dra och släpp din fil här",
+          "or": "eller ",
+          "link": "bläddra bland dina filer"
+        },
+        "upload-result": {
+          "failed": "Uppladdning misslyckades",
+          "success": "Uppladdad",
+          "max-size-error": "Filstorleken är för stor. Försök ladda upp en annan fil",
+          "file-type-error": "Filen du försöker ladda upp har ett ogiltigt format. Ladda upp en CSV-fil"
+        },
+        "actions": {
+          "preview": "Förhandsgranska",
+          "delete": "Radera"
+        }
+      },
+      "import-preview": {
+        "title": "Förhandsgranskning",
+        "subtitle": "Förhandsgranska CSV-filen du ska ladda upp",
+        "labels": {
+          "sku": "SKU",
+          "min-quantity": "Minsta kvantitet",
+          "list-price": "Listpris",
+          "sale-price": "Reapris",
+          "import-strategy": "Vad vill du göra med de importerade uppgifterna?",
+          "create-new-only": "Skapa endast nya",
+          "update-existing-only": "Uppdatera endast befintliga",
+          "create-and-update": "Skapa och uppdatera",
+          "preview-count": "Antal förhandsgranskningar:"
+        },
+        "upload-new": "Ladda upp ny"
+      },
+      "import-processing": {
+        "title": "Importförlopp",
+        "labels": {
+          "start": "Start",
+          "end": "Slut",
+          "errors": "Antal fel",
+          "total": "Totalt antal",
+          "created": "Rader skapade",
+          "updated": "Rader uppdaterade",
+          "errors-url": "URL för att ladda ner felrapport:",
+          "errors-log": "Fel"
+        }
+      }
+    },
+    "commands": {
+      "upload-new": "Ladda upp ny"
+    },
+    "dialogs": {
+      "pricelist-export": {
+        "title": "Prisexport",
+        "subtitle-all": "Alla {{count}} rader",
+        "subtitle-not-all": "{{count}} prisrader",
+        "subtitle-end": "från denna kategori kommer att exporteras till en CSV-fil.",
+        "advanced-export-subtitle-start": "Du kan",
+        "advanced-export-subtitle-link": "använda avancerad export",
+        "advanced-export-subtitle-end": "för att välja endast specifika priser",
+        "validation-error-subtitle-start": "Du har valt",
+        "validation-error-subtitle-middle": "medan du inte kan exportera fler än",
+        "validation-error-subtitle-count": "{{count}} objekt{{comma}}",
+        "validation-error-subtitle-end": "välj ett giltigt antal objekt och försök igen",
+        "export": "Exportera"
+      },
+      "csv-file-delete": {
+        "title": "Radera CSV",
+        "subtitle": "Är du säker på att du vill radera denna CSV-fil?"
+      }
+    },
+    "widgets": {
+      "prices": {
+        "title": "Priser",
+        "subtitle": "(Prisexport/import)"
+      }
+    },
+    "settings": {
+      "PriceExport": {
+        "LimitOfLines": {
+          "title": "Maximalt antal rader för export eller import",
+          "description": "Höga värden kan leda till långsammare prestanda"
+        }
+      }
+    },
+    "validation-errors": {
+      "file-not-existed": "Filen finns inte",
+      "exceeding-file-max-size": "Filstorleken är för stor. Försök ladda upp en annan fil",
+      "wrong-delimiter": "Ogiltig avgränsare. Använd endast semikolon (;) som avgränsare",
+      "exceeding-line-limits": "Vi kan inte importera din fil eftersom det maximala antalet rader att importera är {{ importLimitOfLines }}. Din fil har för närvarande {{ linesCount }} rader",
+      "missing-required-columns": "Vi kan inte importera din fil eftersom följande obligatoriska kolumner saknas: \"{{ missedColumns }}\"",
+      "no-data": "Denna fil innehåller ingen data"
+    }
+  },
+  "permissions": {
+    "pricing:simpleImport": "Importera prisdata"
+  }
+}
