@@ -1,0 +1,105 @@
+{
+  "priceExportImport": {
+    "blades": {
+      "file-upload": {
+        "title": "Lataa CSV",
+        "subtitle": "Lataa tiedosto, jonka haluat tuoda",
+        "labels": {
+          "progress": "Edistyminen"
+        },
+        "drag-and-drop": {
+          "placeholder": "Vedä ja pudota tiedosto tähän",
+          "or": "tai ",
+          "link": "selaa tiedostojasi"
+        },
+        "upload-result": {
+          "failed": "Lataus epäonnistui",
+          "success": "Ladattu",
+          "max-size-error": "Tiedoston koko on liian suuri. Kokeile ladata toista tiedostoa",
+          "file-type-error": "Yrittämäsi tiedosto on väärässä muodossa. Lataa CSV-tiedosto"
+        },
+        "actions": {
+          "preview": "Esikatselu",
+          "delete": "Poista"
+        }
+      },
+      "import-preview": {
+        "title": "Esikatselu",
+        "subtitle": "Tarkastele CSV-tiedostoa, jonka aiot ladata",
+        "labels": {
+          "sku": "SKU",
+          "min-quantity": "Vähimmäismäärä",
+          "list-price": "Listahinta",
+          "sale-price": "Alennushinta",
+          "import-strategy": "Mitä haluat tehdä tuoduilla tiedoilla?",
+          "create-new-only": "Luo vain uusia",
+          "update-existing-only": "Päivitä vain olemassa olevia",
+          "create-and-update": "Luo ja päivitä",
+          "preview-count": "Esikatselun määrä:"
+        },
+        "upload-new": "Lataa uusi"
+      },
+      "import-processing": {
+        "title": "Tuonnin edistyminen",
+        "labels": {
+          "start": "Alku",
+          "end": "Loppu",
+          "errors": "Virheiden määrä",
+          "total": "Kokonaismäärä",
+          "created": "Luodut rivit",
+          "updated": "Päivitetyt rivit",
+          "errors-url": "URL virheraportin lataamiseen:",
+          "errors-log": "Virheet"
+        }
+      }
+    },
+    "commands": {
+      "upload-new": "Lataa uusi"
+    },
+    "dialogs": {
+      "pricelist-export": {
+        "title": "Hintaexport",
+        "subtitle-all": "Kaikki {{count}} riviä",
+        "subtitle-not-all": "{{count}} hintariviä",
+        "subtitle-end": "tästä kategoriasta viedään CSV-tiedostoon.",
+        "advanced-export-subtitle-start": "Voit",
+        "advanced-export-subtitle-link": "käyttää edistynyttä vientiä",
+        "advanced-export-subtitle-end": "valitaksesi vain tiettyjä hintoja",
+        "validation-error-subtitle-start": "Olet valinnut",
+        "validation-error-subtitle-middle": "kun et voi viedä enempää kuin",
+        "validation-error-subtitle-count": "{{count}} kohdetta{{comma}}",
+        "validation-error-subtitle-end": "valitse kelvollinen määrä kohteita ja yritä uudelleen",
+        "export": "Vie"
+      },
+      "csv-file-delete": {
+        "title": "Poista CSV",
+        "subtitle": "Oletko varma, että haluat poistaa tämän CSV-tiedoston?"
+      }
+    },
+    "widgets": {
+      "prices": {
+        "title": "Hinnat",
+        "subtitle": "(Hintaexport/tuonti)"
+      }
+    },
+    "settings": {
+      "PriceExport": {
+        "LimitOfLines": {
+          "title": "Suurin rivimäärä vientiin tai tuontiin",
+          "description": "Korkeat arvot voivat johtaa hitaampaan suorituskykyyn"
+        }
+      }
+    },
+    "validation-errors": {
+      "file-not-existed": "Tiedostoa ei ole olemassa",
+      "exceeding-file-max-size": "Tiedoston koko on liian suuri. Kokeile ladata toista tiedostoa",
+      "wrong-delimiter": "Virheellinen erotin. Käytä vain puolipistettä (;) erottimena",
+      "exceeding-line-limits": "Emme voi tuoda tiedostoasi, koska suurin sallittu rivimäärä on {{ importLimitOfLines }}. Tiedostossasi on tällä hetkellä {{ linesCount }} riviä",
+      "missing-required-columns": "Emme voi tuoda tiedostoasi, koska seuraavat vaaditut sarakkeet puuttuvat: \"{{ missedColumns }}\"",
+      "no-data": "Tässä tiedostossa ei ole dataa"
+    }
+  },
+  "permissions": {
+    "pricing:simpleImport": "Tuo hintatietoja"
+  }
+}

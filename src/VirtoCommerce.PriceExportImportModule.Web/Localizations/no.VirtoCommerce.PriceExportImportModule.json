@@ -1,0 +1,105 @@
+{
+  "priceExportImport": {
+    "blades": {
+      "file-upload": {
+        "title": "Last opp CSV",
+        "subtitle": "Last opp filen du ønsker å importere",
+        "labels": {
+          "progress": "Fremdrift"
+        },
+        "drag-and-drop": {
+          "placeholder": "Dra og slipp filen din her",
+          "or": "eller ",
+          "link": "bla gjennom filene dine"
+        },
+        "upload-result": {
+          "failed": "Opplasting mislyktes",
+          "success": "Opplastet",
+          "max-size-error": "Filstørrelsen er for stor. Prøv å laste opp en annen fil",
+          "file-type-error": "Filen du prøver å laste opp har ugyldig format. Last opp en CSV-fil"
+        },
+        "actions": {
+          "preview": "Forhåndsvisning",
+          "delete": "Slett"
+        }
+      },
+      "import-preview": {
+        "title": "Forhåndsvisning",
+        "subtitle": "Forhåndsvis CSV-filen du skal laste opp",
+        "labels": {
+          "sku": "SKU",
+          "min-quantity": "Minimumsantall",
+          "list-price": "Listepris",
+          "sale-price": "Salgspris",
+          "import-strategy": "Hva ønsker du å gjøre med de importerte dataene?",
+          "create-new-only": "Opprett kun nye",
+          "update-existing-only": "Oppdater kun eksisterende",
+          "create-and-update": "Opprett og oppdater",
+          "preview-count": "Forhåndsvisningsantall:"
+        },
+        "upload-new": "Last opp ny"
+      },
+      "import-processing": {
+        "title": "Importfremdrift",
+        "labels": {
+          "start": "Start",
+          "end": "Slutt",
+          "errors": "Antall feil",
+          "total": "Totalt antall",
+          "created": "Rader opprettet",
+          "updated": "Rader oppdatert",
+          "errors-url": "URL for å laste ned feilrapport:",
+          "errors-log": "Feil"
+        }
+      }
+    },
+    "commands": {
+      "upload-new": "Last opp ny"
+    },
+    "dialogs": {
+      "pricelist-export": {
+        "title": "Priseksport",
+        "subtitle-all": "Alle {{count}} rader",
+        "subtitle-not-all": "{{count}} prisrader",
+        "subtitle-end": "fra denne kategorien vil bli eksportert til en CSV-fil.",
+        "advanced-export-subtitle-start": "Du kan",
+        "advanced-export-subtitle-link": "bruke avansert eksport",
+        "advanced-export-subtitle-end": "for å velge kun spesifikke priser",
+        "validation-error-subtitle-start": "Du har valgt",
+        "validation-error-subtitle-middle": "mens du ikke kan eksportere mer enn",
+        "validation-error-subtitle-count": "{{count}} elementer{{comma}}",
+        "validation-error-subtitle-end": "velg et gyldig antall elementer og prøv igjen",
+        "export": "Eksporter"
+      },
+      "csv-file-delete": {
+        "title": "Slett CSV",
+        "subtitle": "Er du sikker på at du vil slette denne CSV-filen?"
+      }
+    },
+    "widgets": {
+      "prices": {
+        "title": "Priser",
+        "subtitle": "(Priseksport/import)"
+      }
+    },
+    "settings": {
+      "PriceExport": {
+        "LimitOfLines": {
+          "title": "Maksimalt antall rader for eksport eller import",
+          "description": "Høye verdier kan føre til langsommere ytelse"
+        }
+      }
+    },
+    "validation-errors": {
+      "file-not-existed": "Filen eksisterer ikke",
+      "exceeding-file-max-size": "Filstørrelsen er for stor. Prøv å laste opp en annen fil",
+      "wrong-delimiter": "Ugyldig avgrenser. Bruk kun semikolon (;) som avgrenser",
+      "exceeding-line-limits": "Vi kan ikke importere filen din, da maksimalt antall rader å importere er {{ importLimitOfLines }}. Filen din har for øyeblikket {{ linesCount }} rader",
+      "missing-required-columns": "Vi kan ikke importere filen din, da følgende obligatoriske kolonner mangler: \"{{ missedColumns }}\"",
+      "no-data": "Denne filen har ingen data"
+    }
+  },
+  "permissions": {
+    "pricing:simpleImport": "Importer prisdata"
+  }
+}
