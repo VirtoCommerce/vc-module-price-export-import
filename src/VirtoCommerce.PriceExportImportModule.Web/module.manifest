@@ -21,7 +21,7 @@
     <owner>Virto Commerce</owner>
   </owners>
   <projectUrl>https://github.com/VirtoCommerce/vc-module-price-export-import</projectUrl>
-  <iconUrl>Modules/$(VirtoCommerce.PriceExportImport)/Content/logo.png</iconUrl>
+  <iconUrl>Modules/$(VirtoCommerce.PriceExportImport)/Content/logo.svg</iconUrl>
   <requireLicenseAcceptance>false</requireLicenseAcceptance>
   <releaseNotes>First version.</releaseNotes>
   <copyright>Copyright © 2011-2026 Virto Commerce. All rights reserved</copyright>
