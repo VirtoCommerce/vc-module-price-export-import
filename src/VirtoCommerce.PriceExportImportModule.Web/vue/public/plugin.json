@@ -1,0 +1,4 @@
+{
+  // Price export/import admin UI for the Admin Shell host (Module Federation remote): CSV export/import on the price list products
+  "remote": { "name": "priceexportimport_admin", "exposed": "./Module" }
+}
