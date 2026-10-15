@@ -26,7 +26,7 @@ namespace VirtoCommerce.PriceExportImportModule.Core.Models
 
         public ICollection<string> Errors { get; set; }
 
-        public DateTime Finished { get; set; }
+        public DateTime? Finished { get; set; }
 
         public string ReportUrl { get; set; }
     }
