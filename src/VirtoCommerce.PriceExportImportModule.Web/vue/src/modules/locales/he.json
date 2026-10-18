@@ -1,0 +1,70 @@
+{
+  "PRICE_EXPORT_IMPORT": {
+    "TOOLBAR": {
+      "EXPORT": "ייצוא CSV",
+      "IMPORT": "ייבוא CSV",
+      "RUN_IMPORT": "ייבוא",
+      "START_EXPORT": "התחלת ייצוא",
+      "UPLOAD_NEW": "העלאת קובץ חדש",
+      "CANCEL": "ביטול"
+    },
+    "EXPORT": {
+      "TITLE": "ייצוא מחירים",
+      "SUMMARY": "ייצוא ל-CSV",
+      "ALL": "כל השורות במחירון זה ({count}) ייוצאו לקובץ CSV.",
+      "SELECTED": "שורות המחיר שנבחרו במחירון זה ({count}) ייוצאו לקובץ CSV.",
+      "ADVANCED_HINT": "כדי לבחור רק מחירים או עמודות מסוימים, יש להשתמש בייצוא המתקדם.",
+      "ADVANCED": "ייצוא מתקדם",
+      "TOO_MANY": "פריטים שנבחרו: {count}, והמספר המרבי לייצוא: {limit}. יש לבחור מספר תקין של פריטים ולנסות שוב."
+    },
+    "UPLOAD": {
+      "TITLE": "העלאת CSV",
+      "SUBTITLE": "יש להעלות את הקובץ לייבוא",
+      "DROP": "יש לגרור את הקובץ לכאן או",
+      "BROWSE": "לעיין בקבצים",
+      "FAILED": "ההעלאה נכשלה",
+      "SUCCESS": "הועלה",
+      "MAX_SIZE_ERROR": "הקובץ גדול מדי. יש לנסות להעלות קובץ אחר",
+      "FILE_TYPE_ERROR": "פורמט הקובץ שמנסים להעלות אינו תקין. יש להעלות קובץ CSV",
+      "PREVIEW": "תצוגה מקדימה",
+      "DELETE": "מחיקה",
+      "DELETE_CONFIRMATION": "האם למחוק את קובץ ה-CSV הזה?"
+    },
+    "PREVIEW": {
+      "TITLE": "תצוגה מקדימה",
+      "SUBTITLE": "תצוגה מקדימה של קובץ ה-CSV שעומד להיות מועלה",
+      "STRATEGY": "מה לעשות בנתונים המיובאים?",
+      "CREATE_ONLY": "יצירת חדשים בלבד",
+      "UPDATE_ONLY": "עדכון קיימים בלבד",
+      "CREATE_AND_UPDATE": "יצירה ועדכון",
+      "COUNT": "בתצוגה המקדימה: {count} מתוך {total}",
+      "UNPARSED": "שורות מתוך {preview} שלא נותחו לתצוגה המקדימה: {count}. יש לבדוק את הדוח הסופי לאחר ייבוא המחירים.",
+      "EMPTY": "אין נתונים",
+      "SKU": "SKU",
+      "MIN_QUANTITY": "כמות מינימלית",
+      "LIST_PRICE": "מחיר מחירון",
+      "SALE_PRICE": "מחיר מבצע"
+    },
+    "PROCESSING": {
+      "TITLE": "התקדמות הייבוא",
+      "CREATED": "שורות שנוצרו",
+      "UPDATED": "שורות שעודכנו",
+      "REPORT": "הורדת דוח שגיאות"
+    },
+    "JOB": {
+      "STARTED": "התחלה",
+      "FINISHED": "סיום",
+      "ELAPSED": "זמן שחלף",
+      "PROCESSED": "עובדו",
+      "ERRORS": "שגיאות"
+    },
+    "VALIDATION": {
+      "file-not-existed": "הקובץ אינו קיים",
+      "exceeding-file-max-size": "הקובץ גדול מדי. יש לנסות להעלות קובץ אחר",
+      "wrong-delimiter": "מפריד לא תקין. יש להשתמש רק בנקודה-פסיק (;) כמפריד",
+      "exceeding-line-limits": "לא ניתן לייבא את הקובץ, כי המספר המרבי של שורות לייבוא הוא {importLimitOfLines}. מספר השורות בקובץ כעת: {linesCount}",
+      "missing-required-columns": "לא ניתן לייבא את הקובץ, כי חסרות בו העמודות הנדרשות הבאות: \"{missedColumns}\"",
+      "no-data": "אין נתונים בקובץ זה"
+    }
+  }
+}
