@@ -1,0 +1,70 @@
+{
+  "PRICE_EXPORT_IMPORT": {
+    "TOOLBAR": {
+      "EXPORT": "CSVをエクスポート",
+      "IMPORT": "CSVをインポート",
+      "RUN_IMPORT": "インポート",
+      "START_EXPORT": "エクスポートを開始",
+      "UPLOAD_NEW": "新しいファイルをアップロード",
+      "CANCEL": "キャンセル"
+    },
+    "EXPORT": {
+      "TITLE": "価格のエクスポート",
+      "SUMMARY": "CSVへのエクスポート",
+      "ALL": "この価格表の全 {count} 行が CSV ファイルにエクスポートされます。",
+      "SELECTED": "この価格表の {count} 件の価格行が CSV ファイルにエクスポートされます。",
+      "ADVANCED_HINT": "特定の価格や列のみを選択するには、高度なエクスポートを使用してください。",
+      "ADVANCED": "高度なエクスポート",
+      "TOO_MANY": "{count} 件の項目が選択されていますが、エクスポートできるのは最大 {limit} 件です。有効な件数を選択して、もう一度お試しください。"
+    },
+    "UPLOAD": {
+      "TITLE": "CSVをアップロード",
+      "SUBTITLE": "インポートするファイルをアップロードしてください",
+      "DROP": "ここにファイルをドラッグ＆ドロップするか、",
+      "BROWSE": "ファイルを参照",
+      "FAILED": "アップロードに失敗しました",
+      "SUCCESS": "アップロード完了",
+      "MAX_SIZE_ERROR": "ファイルサイズが大きすぎます。別のファイルをアップロードしてください",
+      "FILE_TYPE_ERROR": "アップロードしようとしているファイルの形式が無効です。CSV ファイルをアップロードしてください",
+      "PREVIEW": "プレビュー",
+      "DELETE": "削除",
+      "DELETE_CONFIRMATION": "この CSV ファイルを削除してもよろしいですか？"
+    },
+    "PREVIEW": {
+      "TITLE": "プレビュー",
+      "SUBTITLE": "アップロードする CSV ファイルをプレビューします",
+      "STRATEGY": "インポートしたデータをどのように処理しますか？",
+      "CREATE_ONLY": "新規作成のみ",
+      "UPDATE_ONLY": "既存の更新のみ",
+      "CREATE_AND_UPDATE": "作成と更新",
+      "COUNT": "プレビュー数: {count} / {total}",
+      "UNPARSED": "{preview} 行のうち {count} 行はプレビュー用に解析されませんでした。価格のインポート後に最終レポートを確認してください。",
+      "EMPTY": "データがありません",
+      "SKU": "SKU",
+      "MIN_QUANTITY": "最小数量",
+      "LIST_PRICE": "リスト価格",
+      "SALE_PRICE": "販売価格"
+    },
+    "PROCESSING": {
+      "TITLE": "インポートの進行状況",
+      "CREATED": "作成された行",
+      "UPDATED": "更新された行",
+      "REPORT": "エラーレポートをダウンロード"
+    },
+    "JOB": {
+      "STARTED": "開始",
+      "FINISHED": "終了",
+      "ELAPSED": "経過時間",
+      "PROCESSED": "処理済み",
+      "ERRORS": "エラー"
+    },
+    "VALIDATION": {
+      "file-not-existed": "ファイルが存在しません",
+      "exceeding-file-max-size": "ファイルサイズが大きすぎます。別のファイルをアップロードしてください",
+      "wrong-delimiter": "区切り文字が無効です。区切り文字にはセミコロン (;) のみを使用してください",
+      "exceeding-line-limits": "インポートできる最大行数は {importLimitOfLines} 行のため、ファイルをインポートできません。現在のファイルは {linesCount} 行です",
+      "missing-required-columns": "次の必須列がないため、ファイルをインポートできません: \"{missedColumns}\"",
+      "no-data": "このファイルにはデータがありません"
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "PRICE_EXPORT_IMPORT": {
+    "TOOLBAR": {
+      "EXPORT": "CSV exportieren",
+      "IMPORT": "CSV importieren",
+      "RUN_IMPORT": "Importieren",
+      "START_EXPORT": "Export starten",
+      "UPLOAD_NEW": "Neu hochladen",
+      "CANCEL": "Abbrechen"
+    },
+    "EXPORT": {
+      "TITLE": "Preisexport",
+      "SUMMARY": "Export nach CSV",
+      "ALL": "Alle {count} Zeilen dieser Preisliste werden in eine CSV-Datei exportiert.",
+      "SELECTED": "{count} Preiszeilen dieser Preisliste werden in eine CSV-Datei exportiert.",
+      "ADVANCED_HINT": "Um nur bestimmte Preise oder Spalten auszuwählen, verwenden Sie den erweiterten Export.",
+      "ADVANCED": "Erweiterter Export",
+      "TOO_MANY": "Sie haben {count} Elemente ausgewählt, können aber höchstens {limit} Elemente exportieren: Wählen Sie eine gültige Anzahl aus und versuchen Sie es erneut."
+    },
+    "UPLOAD": {
+      "TITLE": "CSV hochladen",
+      "SUBTITLE": "Laden Sie die Datei hoch, die Sie importieren möchten",
+      "DROP": "Ziehen Sie Ihre Datei hierher oder",
+      "BROWSE": "durchsuchen Sie Ihre Dateien",
+      "FAILED": "Hochladen fehlgeschlagen",
+      "SUCCESS": "Hochgeladen",
+      "MAX_SIZE_ERROR": "Die Datei ist zu groß. Versuchen Sie, eine andere hochzuladen",
+      "FILE_TYPE_ERROR": "Die Datei, die Sie hochladen möchten, hat ein ungültiges Format. Laden Sie eine CSV-Datei hoch",
+      "PREVIEW": "Vorschau",
+      "DELETE": "Löschen",
+      "DELETE_CONFIRMATION": "Möchten Sie diese CSV-Datei wirklich löschen?"
+    },
+    "PREVIEW": {
+      "TITLE": "Vorschau",
+      "SUBTITLE": "Vorschau der CSV-Datei, die Sie hochladen werden",
+      "STRATEGY": "Was möchten Sie mit den importierten Daten tun?",
+      "CREATE_ONLY": "Nur neu erstellen",
+      "UPDATE_ONLY": "Nur bestehende aktualisieren",
+      "CREATE_AND_UPDATE": "Erstellen und aktualisieren",
+      "COUNT": "Vorschauanzahl: {count} von {total}",
+      "UNPARSED": "{count} Zeilen von {preview} wurden für die Vorschau nicht analysiert. Prüfen Sie den abschließenden Bericht nach dem Preisimport.",
+      "EMPTY": "Keine Daten",
+      "SKU": "SKU",
+      "MIN_QUANTITY": "Mindestmenge",
+      "LIST_PRICE": "Listenpreis",
+      "SALE_PRICE": "Verkaufspreis"
+    },
+    "PROCESSING": {
+      "TITLE": "Importfortschritt",
+      "CREATED": "Erstellte Zeilen",
+      "UPDATED": "Aktualisierte Zeilen",
+      "REPORT": "Fehlerbericht herunterladen"
+    },
+    "JOB": {
+      "STARTED": "Start",
+      "FINISHED": "Ende",
+      "ELAPSED": "Verstrichene Zeit",
+      "PROCESSED": "Verarbeitet",
+      "ERRORS": "Fehler"
+    },
+    "VALIDATION": {
+      "file-not-existed": "Die Datei existiert nicht",
+      "exceeding-file-max-size": "Die Datei ist zu groß. Versuchen Sie, eine andere hochzuladen",
+      "wrong-delimiter": "Ungültiges Trennzeichen. Verwenden Sie nur Semikolon (;) als Trennzeichen",
+      "exceeding-line-limits": "Ihre Datei kann nicht importiert werden, da die maximale Anzahl zu importierender Zeilen {importLimitOfLines} beträgt. Ihre Datei hat derzeit {linesCount} Zeilen",
+      "missing-required-columns": "Ihre Datei kann nicht importiert werden, da die folgenden Pflichtspalten fehlen: \"{missedColumns}\"",
+      "no-data": "Diese Datei enthält keine Daten"
+    }
+  }
+}
