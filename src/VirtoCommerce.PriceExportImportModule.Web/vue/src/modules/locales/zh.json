@@ -1,0 +1,70 @@
+{
+  "PRICE_EXPORT_IMPORT": {
+    "TOOLBAR": {
+      "EXPORT": "导出 CSV",
+      "IMPORT": "导入 CSV",
+      "RUN_IMPORT": "导入",
+      "START_EXPORT": "开始导出",
+      "UPLOAD_NEW": "上传新文件",
+      "CANCEL": "取消"
+    },
+    "EXPORT": {
+      "TITLE": "价格导出",
+      "SUMMARY": "导出为 CSV",
+      "ALL": "此价目表中的全部 {count} 行将导出到 CSV 文件。",
+      "SELECTED": "此价目表中的 {count} 个价格行将导出到 CSV 文件。",
+      "ADVANCED_HINT": "如需仅选择特定价格或列，请使用高级导出。",
+      "ADVANCED": "高级导出",
+      "TOO_MANY": "您选择了 {count} 项，但最多只能导出 {limit} 项：请选择有效数量的项目后重试。"
+    },
+    "UPLOAD": {
+      "TITLE": "上传 CSV",
+      "SUBTITLE": "上传要导入的文件",
+      "DROP": "将文件拖放到此处，或",
+      "BROWSE": "浏览文件",
+      "FAILED": "上传失败",
+      "SUCCESS": "上传成功",
+      "MAX_SIZE_ERROR": "文件过大。请尝试上传其他文件",
+      "FILE_TYPE_ERROR": "您尝试上传的文件格式无效。请上传 CSV 文件",
+      "PREVIEW": "预览",
+      "DELETE": "删除",
+      "DELETE_CONFIRMATION": "确定要删除此 CSV 文件吗？"
+    },
+    "PREVIEW": {
+      "TITLE": "预览",
+      "SUBTITLE": "预览要上传的 CSV 文件",
+      "STRATEGY": "您希望如何处理导入的数据？",
+      "CREATE_ONLY": "仅创建新项",
+      "UPDATE_ONLY": "仅更新现有项",
+      "CREATE_AND_UPDATE": "创建和更新",
+      "COUNT": "预览数量：{count} / {total}",
+      "UNPARSED": "{preview} 行中有 {count} 行未能解析以供预览。请在价格导入后查看最终报告。",
+      "EMPTY": "无数据",
+      "SKU": "SKU",
+      "MIN_QUANTITY": "最小数量",
+      "LIST_PRICE": "标价",
+      "SALE_PRICE": "销售价格"
+    },
+    "PROCESSING": {
+      "TITLE": "导入进度",
+      "CREATED": "已创建的行",
+      "UPDATED": "已更新的行",
+      "REPORT": "下载错误报告"
+    },
+    "JOB": {
+      "STARTED": "开始",
+      "FINISHED": "结束",
+      "ELAPSED": "已用时间",
+      "PROCESSED": "已处理",
+      "ERRORS": "错误"
+    },
+    "VALIDATION": {
+      "file-not-existed": "文件不存在",
+      "exceeding-file-max-size": "文件过大。请尝试上传其他文件",
+      "wrong-delimiter": "分隔符无效。请仅使用分号 (;) 作为分隔符",
+      "exceeding-line-limits": "无法导入您的文件，因为最多可导入 {importLimitOfLines} 行。您的文件当前有 {linesCount} 行",
+      "missing-required-columns": "无法导入您的文件，因为缺少以下必填列：\"{missedColumns}\"",
+      "no-data": "此文件没有数据"
+    }
+  }
+}

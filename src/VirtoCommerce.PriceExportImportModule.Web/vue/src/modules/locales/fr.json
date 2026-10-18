@@ -1,0 +1,70 @@
+{
+  "PRICE_EXPORT_IMPORT": {
+    "TOOLBAR": {
+      "EXPORT": "Exporter en CSV",
+      "IMPORT": "Importer un CSV",
+      "RUN_IMPORT": "Importer",
+      "START_EXPORT": "Démarrer l'exportation",
+      "UPLOAD_NEW": "Charger un nouveau fichier",
+      "CANCEL": "Annuler"
+    },
+    "EXPORT": {
+      "TITLE": "Exportation des prix",
+      "SUMMARY": "Exportation vers CSV",
+      "ALL": "Les {count} lignes de cette liste de prix seront exportées vers un fichier CSV.",
+      "SELECTED": "{count} lignes de prix de cette liste de prix seront exportées vers un fichier CSV.",
+      "ADVANCED_HINT": "Pour sélectionner uniquement certains prix ou colonnes, utilisez l'exportation avancée.",
+      "ADVANCED": "Exportation avancée",
+      "TOO_MANY": "Vous avez sélectionné {count} éléments, mais vous ne pouvez pas en exporter plus de {limit} : sélectionnez un nombre valide d'éléments et réessayez."
+    },
+    "UPLOAD": {
+      "TITLE": "Charger un CSV",
+      "SUBTITLE": "Chargez le fichier à importer",
+      "DROP": "Glissez-déposez votre fichier ici ou",
+      "BROWSE": "parcourez vos fichiers",
+      "FAILED": "Échec du chargement",
+      "SUCCESS": "Chargé",
+      "MAX_SIZE_ERROR": "Le fichier est trop volumineux. Essayez d'en charger un autre",
+      "FILE_TYPE_ERROR": "Le fichier que vous essayez de charger a un format non valide. Chargez un fichier CSV",
+      "PREVIEW": "Aperçu",
+      "DELETE": "Supprimer",
+      "DELETE_CONFIRMATION": "Voulez-vous vraiment supprimer ce fichier CSV ?"
+    },
+    "PREVIEW": {
+      "TITLE": "Aperçu",
+      "SUBTITLE": "Aperçu du fichier CSV que vous allez charger",
+      "STRATEGY": "Que voulez-vous faire des données importées ?",
+      "CREATE_ONLY": "Créer uniquement les nouveaux",
+      "UPDATE_ONLY": "Mettre à jour uniquement les existants",
+      "CREATE_AND_UPDATE": "Créer et mettre à jour",
+      "COUNT": "Lignes en aperçu : {count} sur {total}",
+      "UNPARSED": "{count} lignes sur {preview} n'ont pas été analysées pour l'aperçu. Consultez le rapport final après l'importation des prix.",
+      "EMPTY": "Aucune donnée",
+      "SKU": "SKU",
+      "MIN_QUANTITY": "Quantité minimale",
+      "LIST_PRICE": "Prix de liste",
+      "SALE_PRICE": "Prix de vente"
+    },
+    "PROCESSING": {
+      "TITLE": "Progression de l'importation",
+      "CREATED": "Lignes créées",
+      "UPDATED": "Lignes mises à jour",
+      "REPORT": "Télécharger le rapport d'erreurs"
+    },
+    "JOB": {
+      "STARTED": "Début",
+      "FINISHED": "Fin",
+      "ELAPSED": "Temps écoulé",
+      "PROCESSED": "Traité",
+      "ERRORS": "Erreurs"
+    },
+    "VALIDATION": {
+      "file-not-existed": "Le fichier n'existe pas",
+      "exceeding-file-max-size": "Le fichier est trop volumineux. Essayez d'en charger un autre",
+      "wrong-delimiter": "Délimiteur non valide. Utilisez uniquement le point-virgule (;) comme délimiteur",
+      "exceeding-line-limits": "Impossible d'importer votre fichier : le nombre maximal de lignes à importer est de {importLimitOfLines}. Votre fichier contient actuellement {linesCount} lignes",
+      "missing-required-columns": "Impossible d'importer votre fichier : les colonnes obligatoires suivantes sont manquantes : \"{missedColumns}\"",
+      "no-data": "Ce fichier ne contient aucune donnée"
+    }
+  }
+}
