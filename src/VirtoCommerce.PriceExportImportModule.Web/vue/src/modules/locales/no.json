@@ -1,0 +1,70 @@
+{
+  "PRICE_EXPORT_IMPORT": {
+    "TOOLBAR": {
+      "EXPORT": "Eksporter CSV",
+      "IMPORT": "Importer CSV",
+      "RUN_IMPORT": "Importer",
+      "START_EXPORT": "Start eksport",
+      "UPLOAD_NEW": "Last opp ny",
+      "CANCEL": "Avbryt"
+    },
+    "EXPORT": {
+      "TITLE": "Priseksport",
+      "SUMMARY": "Eksport til CSV",
+      "ALL": "Alle {count} rader fra denne prislisten eksporteres til en CSV-fil.",
+      "SELECTED": "{count} prisrader fra denne prislisten eksporteres til en CSV-fil.",
+      "ADVANCED_HINT": "Bruk avansert eksport for å velge bare bestemte priser eller kolonner.",
+      "ADVANCED": "Avansert eksport",
+      "TOO_MANY": "Du har valgt {count} elementer, men du kan ikke eksportere mer enn {limit} elementer: velg et gyldig antall elementer og prøv igjen."
+    },
+    "UPLOAD": {
+      "TITLE": "Last opp CSV",
+      "SUBTITLE": "Last opp filen du vil importere",
+      "DROP": "Dra og slipp filen her eller",
+      "BROWSE": "bla gjennom filene",
+      "FAILED": "Opplasting mislyktes",
+      "SUCCESS": "Lastet opp",
+      "MAX_SIZE_ERROR": "Filen er for stor. Prøv å laste opp en annen",
+      "FILE_TYPE_ERROR": "Filen du prøver å laste opp, har et ugyldig format. Last opp en CSV-fil",
+      "PREVIEW": "Forhåndsvisning",
+      "DELETE": "Slett",
+      "DELETE_CONFIRMATION": "Er du sikker på at du vil slette denne CSV-filen?"
+    },
+    "PREVIEW": {
+      "TITLE": "Forhåndsvisning",
+      "SUBTITLE": "Forhåndsvis CSV-filen du skal laste opp",
+      "STRATEGY": "Hva vil du gjøre med de importerte dataene?",
+      "CREATE_ONLY": "Opprett kun nye",
+      "UPDATE_ONLY": "Oppdater kun eksisterende",
+      "CREATE_AND_UPDATE": "Opprett og oppdater",
+      "COUNT": "Antall i forhåndsvisning: {count} av {total}",
+      "UNPARSED": "{count} av {preview} rader ble ikke analysert for forhåndsvisning. Sjekk sluttrapporten etter prisimporten.",
+      "EMPTY": "Ingen data",
+      "SKU": "SKU",
+      "MIN_QUANTITY": "Minimumsantall",
+      "LIST_PRICE": "Listepris",
+      "SALE_PRICE": "Salgspris"
+    },
+    "PROCESSING": {
+      "TITLE": "Importfremdrift",
+      "CREATED": "Rader opprettet",
+      "UPDATED": "Rader oppdatert",
+      "REPORT": "Last ned feilrapport"
+    },
+    "JOB": {
+      "STARTED": "Start",
+      "FINISHED": "Slutt",
+      "ELAPSED": "Medgått tid",
+      "PROCESSED": "Behandlet",
+      "ERRORS": "Feil"
+    },
+    "VALIDATION": {
+      "file-not-existed": "Filen finnes ikke",
+      "exceeding-file-max-size": "Filen er for stor. Prøv å laste opp en annen",
+      "wrong-delimiter": "Ugyldig skilletegn. Bruk bare semikolon (;) som skilletegn",
+      "exceeding-line-limits": "Filen kan ikke importeres fordi maksimalt antall rader som kan importeres, er {importLimitOfLines}. Filen har nå {linesCount} rader",
+      "missing-required-columns": "Filen kan ikke importeres fordi følgende obligatoriske kolonner mangler: \"{missedColumns}\"",
+      "no-data": "Denne filen har ingen data"
+    }
+  }
+}

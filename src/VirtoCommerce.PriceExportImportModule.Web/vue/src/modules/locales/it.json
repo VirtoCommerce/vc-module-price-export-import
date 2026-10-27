@@ -1,0 +1,70 @@
+{
+  "PRICE_EXPORT_IMPORT": {
+    "TOOLBAR": {
+      "EXPORT": "Esporta CSV",
+      "IMPORT": "Importa CSV",
+      "RUN_IMPORT": "Importa",
+      "START_EXPORT": "Avvia esportazione",
+      "UPLOAD_NEW": "Carica nuovo",
+      "CANCEL": "Annulla"
+    },
+    "EXPORT": {
+      "TITLE": "Esportazione prezzi",
+      "SUMMARY": "Esporta in CSV",
+      "ALL": "Tutte le {count} righe di questo listino prezzi verranno esportate in un file CSV.",
+      "SELECTED": "{count} righe di prezzo di questo listino prezzi verranno esportate in un file CSV.",
+      "ADVANCED_HINT": "Per selezionare solo determinati prezzi o colonne, usare l'esportazione avanzata.",
+      "ADVANCED": "Esportazione avanzata",
+      "TOO_MANY": "Sono stati selezionati {count} elementi, ma non è possibile esportarne più di {limit}: selezionare un numero valido di elementi e riprovare."
+    },
+    "UPLOAD": {
+      "TITLE": "Carica CSV",
+      "SUBTITLE": "Caricare il file da importare",
+      "DROP": "Trascinare il file qui oppure",
+      "BROWSE": "sfogliare i file",
+      "FAILED": "Caricamento non riuscito",
+      "SUCCESS": "Caricato",
+      "MAX_SIZE_ERROR": "Il file è troppo grande. Provare a caricarne un altro",
+      "FILE_TYPE_ERROR": "Il file che si sta tentando di caricare ha un formato non valido. Caricare un file CSV",
+      "PREVIEW": "Anteprima",
+      "DELETE": "Elimina",
+      "DELETE_CONFIRMATION": "Eliminare questo file CSV?"
+    },
+    "PREVIEW": {
+      "TITLE": "Anteprima",
+      "SUBTITLE": "Anteprima del file CSV da caricare",
+      "STRATEGY": "Cosa si desidera fare con i dati importati?",
+      "CREATE_ONLY": "Crea solo nuovi",
+      "UPDATE_ONLY": "Aggiorna solo esistenti",
+      "CREATE_AND_UPDATE": "Crea e aggiorna",
+      "COUNT": "Righe in anteprima: {count} di {total}",
+      "UNPARSED": "{count} righe su {preview} non sono state analizzate per l'anteprima. Controllare il report finale dopo l'importazione dei prezzi.",
+      "EMPTY": "Nessun dato",
+      "SKU": "SKU",
+      "MIN_QUANTITY": "Quantità minima",
+      "LIST_PRICE": "Prezzo di listino",
+      "SALE_PRICE": "Prezzo di vendita"
+    },
+    "PROCESSING": {
+      "TITLE": "Progresso importazione",
+      "CREATED": "Righe create",
+      "UPDATED": "Righe aggiornate",
+      "REPORT": "Scarica il report degli errori"
+    },
+    "JOB": {
+      "STARTED": "Inizio",
+      "FINISHED": "Fine",
+      "ELAPSED": "Tempo trascorso",
+      "PROCESSED": "Elaborato",
+      "ERRORS": "Errori"
+    },
+    "VALIDATION": {
+      "file-not-existed": "Il file non esiste",
+      "exceeding-file-max-size": "Il file è troppo grande. Provare a caricarne un altro",
+      "wrong-delimiter": "Delimitatore non valido. Usare solo il punto e virgola (;) come delimitatore",
+      "exceeding-line-limits": "Impossibile importare il file: il numero massimo di righe importabili è {importLimitOfLines}. Il file contiene attualmente {linesCount} righe",
+      "missing-required-columns": "Impossibile importare il file: mancano le seguenti colonne obbligatorie: \"{missedColumns}\"",
+      "no-data": "Questo file non contiene dati"
+    }
+  }
+}

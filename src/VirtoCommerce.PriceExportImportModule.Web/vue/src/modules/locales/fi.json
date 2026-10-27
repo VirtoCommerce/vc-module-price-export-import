@@ -1,0 +1,70 @@
+{
+  "PRICE_EXPORT_IMPORT": {
+    "TOOLBAR": {
+      "EXPORT": "Vie CSV",
+      "IMPORT": "Tuo CSV",
+      "RUN_IMPORT": "Tuo",
+      "START_EXPORT": "Aloita vienti",
+      "UPLOAD_NEW": "Lataa uusi",
+      "CANCEL": "Peruuta"
+    },
+    "EXPORT": {
+      "TITLE": "Hintojen vienti",
+      "SUMMARY": "Vienti CSV-tiedostoon",
+      "ALL": "Kaikki tämän hinnaston {count} riviä viedään CSV-tiedostoon.",
+      "SELECTED": "Tämän hinnaston {count} hintariviä viedään CSV-tiedostoon.",
+      "ADVANCED_HINT": "Jos haluat valita vain tietyt hinnat tai sarakkeet, käytä edistynyttä vientiä.",
+      "ADVANCED": "Edistynyt vienti",
+      "TOO_MANY": "Olet valinnut {count} kohdetta, mutta voit viedä enintään {limit} kohdetta: valitse sallittu määrä kohteita ja yritä uudelleen."
+    },
+    "UPLOAD": {
+      "TITLE": "Lataa CSV",
+      "SUBTITLE": "Lataa tiedosto, jonka haluat tuoda",
+      "DROP": "Vedä ja pudota tiedosto tähän tai",
+      "BROWSE": "selaa tiedostoja",
+      "FAILED": "Lataus epäonnistui",
+      "SUCCESS": "Ladattu",
+      "MAX_SIZE_ERROR": "Tiedosto on liian suuri. Yritä ladata toinen tiedosto",
+      "FILE_TYPE_ERROR": "Lataamasi tiedoston muoto on virheellinen. Lataa CSV-tiedosto",
+      "PREVIEW": "Esikatselu",
+      "DELETE": "Poista",
+      "DELETE_CONFIRMATION": "Haluatko varmasti poistaa tämän CSV-tiedoston?"
+    },
+    "PREVIEW": {
+      "TITLE": "Esikatselu",
+      "SUBTITLE": "Esikatsele ladattavaa CSV-tiedostoa",
+      "STRATEGY": "Mitä haluat tehdä tuoduille tiedoille?",
+      "CREATE_ONLY": "Luo vain uusia",
+      "UPDATE_ONLY": "Päivitä vain olemassa olevia",
+      "CREATE_AND_UPDATE": "Luo ja päivitä",
+      "COUNT": "Esikatselun määrä: {count} / {total}",
+      "UNPARSED": "{preview} rivistä {count} ei jäsennetty esikatselua varten. Tarkista loppuraportti hintojen tuonnin jälkeen.",
+      "EMPTY": "Ei tietoja",
+      "SKU": "SKU",
+      "MIN_QUANTITY": "Vähimmäismäärä",
+      "LIST_PRICE": "Listahinta",
+      "SALE_PRICE": "Alennushinta"
+    },
+    "PROCESSING": {
+      "TITLE": "Tuonnin edistyminen",
+      "CREATED": "Luodut rivit",
+      "UPDATED": "Päivitetyt rivit",
+      "REPORT": "Lataa virheraportti"
+    },
+    "JOB": {
+      "STARTED": "Alku",
+      "FINISHED": "Loppu",
+      "ELAPSED": "Kulunut aika",
+      "PROCESSED": "Käsitelty",
+      "ERRORS": "Virheet"
+    },
+    "VALIDATION": {
+      "file-not-existed": "Tiedostoa ei ole olemassa",
+      "exceeding-file-max-size": "Tiedosto on liian suuri. Yritä ladata toinen tiedosto",
+      "wrong-delimiter": "Virheellinen erotin. Käytä erottimena vain puolipistettä (;)",
+      "exceeding-line-limits": "Tiedostoa ei voi tuoda, koska tuotavien rivien enimmäismäärä on {importLimitOfLines}. Tiedostossa on tällä hetkellä {linesCount} riviä",
+      "missing-required-columns": "Tiedostoa ei voi tuoda, koska seuraavat pakolliset sarakkeet puuttuvat: \"{missedColumns}\"",
+      "no-data": "Tiedostossa ei ole tietoja"
+    }
+  }
+}

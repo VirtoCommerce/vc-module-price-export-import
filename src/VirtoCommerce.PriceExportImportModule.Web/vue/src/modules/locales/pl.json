@@ -1,0 +1,70 @@
+{
+  "PRICE_EXPORT_IMPORT": {
+    "TOOLBAR": {
+      "EXPORT": "Eksportuj CSV",
+      "IMPORT": "Importuj CSV",
+      "RUN_IMPORT": "Importuj",
+      "START_EXPORT": "Rozpocznij eksport",
+      "UPLOAD_NEW": "Prześlij nowy",
+      "CANCEL": "Anuluj"
+    },
+    "EXPORT": {
+      "TITLE": "Eksport cen",
+      "SUMMARY": "Eksport do CSV",
+      "ALL": "Wszystkie wiersze ({count}) z tego cennika zostaną wyeksportowane do pliku CSV.",
+      "SELECTED": "Wiersze cen ({count}) z tego cennika zostaną wyeksportowane do pliku CSV.",
+      "ADVANCED_HINT": "Aby wybrać tylko określone ceny lub kolumny, użyj eksportu zaawansowanego.",
+      "ADVANCED": "Eksport zaawansowany",
+      "TOO_MANY": "Wybrano elementy ({count}), a można wyeksportować maksymalnie {limit}: wybierz prawidłową liczbę elementów i spróbuj ponownie."
+    },
+    "UPLOAD": {
+      "TITLE": "Prześlij CSV",
+      "SUBTITLE": "Prześlij plik, który chcesz zaimportować",
+      "DROP": "Przeciągnij i upuść plik tutaj lub",
+      "BROWSE": "przeglądaj pliki",
+      "FAILED": "Przesyłanie nie powiodło się",
+      "SUCCESS": "Przesłano",
+      "MAX_SIZE_ERROR": "Plik jest za duży. Spróbuj przesłać inny",
+      "FILE_TYPE_ERROR": "Plik, który próbujesz przesłać, ma nieprawidłowy format. Prześlij plik CSV",
+      "PREVIEW": "Podgląd",
+      "DELETE": "Usuń",
+      "DELETE_CONFIRMATION": "Czy na pewno chcesz usunąć ten plik CSV?"
+    },
+    "PREVIEW": {
+      "TITLE": "Podgląd",
+      "SUBTITLE": "Podgląd pliku CSV, który zamierzasz przesłać",
+      "STRATEGY": "Co chcesz zrobić z importowanymi danymi?",
+      "CREATE_ONLY": "Twórz tylko nowe",
+      "UPDATE_ONLY": "Aktualizuj tylko istniejące",
+      "CREATE_AND_UPDATE": "Twórz i aktualizuj",
+      "COUNT": "Liczba w podglądzie: {count} z {total}",
+      "UNPARSED": "Wiersze z {preview} nieprzetworzone do podglądu: {count}. Sprawdź raport końcowy po imporcie cen.",
+      "EMPTY": "Brak danych",
+      "SKU": "SKU",
+      "MIN_QUANTITY": "Minimalna ilość",
+      "LIST_PRICE": "Cena katalogowa",
+      "SALE_PRICE": "Cena sprzedaży"
+    },
+    "PROCESSING": {
+      "TITLE": "Postęp importu",
+      "CREATED": "Utworzone wiersze",
+      "UPDATED": "Zaktualizowane wiersze",
+      "REPORT": "Pobierz raport błędów"
+    },
+    "JOB": {
+      "STARTED": "Początek",
+      "FINISHED": "Koniec",
+      "ELAPSED": "Upłynęło",
+      "PROCESSED": "Przetworzone",
+      "ERRORS": "Błędy"
+    },
+    "VALIDATION": {
+      "file-not-existed": "Plik nie istnieje",
+      "exceeding-file-max-size": "Plik jest za duży. Spróbuj przesłać inny",
+      "wrong-delimiter": "Nieprawidłowy separator. Używaj tylko średnika (;) jako separatora",
+      "exceeding-line-limits": "Nie można zaimportować pliku, ponieważ maksymalna liczba wierszy do importu wynosi {importLimitOfLines}. Liczba wierszy w pliku: {linesCount}",
+      "missing-required-columns": "Nie można zaimportować pliku, ponieważ brakuje następujących wymaganych kolumn: \"{missedColumns}\"",
+      "no-data": "Ten plik nie zawiera danych"
+    }
+  }
+}
