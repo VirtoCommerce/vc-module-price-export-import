@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using VirtoCommerce.Platform.Core.Common;
+using VirtoCommerce.Platform.Core.Jobs;
 using VirtoCommerce.Platform.Core.Modularity;
 using VirtoCommerce.Platform.Core.Security;
 using VirtoCommerce.Platform.Core.Settings;
@@ -17,6 +18,7 @@ using VirtoCommerce.PriceExportImportModule.Core.Models;
 using VirtoCommerce.PriceExportImportModule.Core.Services;
 using VirtoCommerce.PriceExportImportModule.Data.Services;
 using VirtoCommerce.PriceExportImportModule.Data.Validation;
+using VirtoCommerce.PriceExportImportModule.Web.BackgroundJobs;
 using VirtoCommerce.PricingModule.Data.ExportImport;
 
 namespace VirtoCommerce.PriceExportImportModule.Web
@@ -32,6 +34,7 @@ namespace VirtoCommerce.PriceExportImportModule.Web
             serviceCollection.AddTransient<ICsvPagedPriceDataSourceFactory, CsvPagedPriceDataSourceFactory>();
             serviceCollection.AddTransient<ICsvPriceDataValidator, CsvPriceDataValidator>();
             serviceCollection.AddTransient<ICsvPagedPriceDataImporter, CsvPagedPriceDataImporter>();
+            serviceCollection.AddBackgroundJob<ImportJob>();
             serviceCollection.AddTransient<ICsvPriceImportReporterFactory, CsvPriceImportReporterFactory>();
             serviceCollection.AddSingleton<ImportConfigurationFactory>();
 
