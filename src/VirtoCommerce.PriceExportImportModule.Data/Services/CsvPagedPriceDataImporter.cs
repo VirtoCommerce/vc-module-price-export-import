@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -45,9 +46,9 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             _importConfigurationFactory = importConfigurationFactory;
         }
 
-        public async Task ImportAsync(ImportDataRequest request, Action<ImportProgressInfo> progressCallback, ICancellationToken cancellationToken)
+        public async Task ImportAsync(ImportDataRequest request, Action<ImportProgressInfo> progressCallback, CancellationToken cancellationToken)
         {
-            ValidateParameters(request, progressCallback, cancellationToken);
+            ValidateParameters(request, progressCallback);
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -254,7 +255,7 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             return result;
         }
 
-        private static void ValidateParameters(ImportDataRequest request, Action<ImportProgressInfo> progressCallback, ICancellationToken cancellationToken)
+        private static void ValidateParameters(ImportDataRequest request, Action<ImportProgressInfo> progressCallback)
         {
             if (request == null)
             {
@@ -264,11 +265,6 @@ namespace VirtoCommerce.PriceExportImportModule.Data.Services
             if (progressCallback == null)
             {
                 throw new ArgumentNullException(nameof(progressCallback));
-            }
-
-            if (cancellationToken == null)
-            {
-                throw new ArgumentNullException(nameof(cancellationToken));
             }
         }
 

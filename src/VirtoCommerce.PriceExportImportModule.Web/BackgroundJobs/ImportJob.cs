@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.Platform.Core.Exceptions;
 using VirtoCommerce.Platform.Core.Jobs;
 using VirtoCommerce.Platform.Core.PushNotifications;
@@ -45,7 +44,7 @@ namespace VirtoCommerce.PriceExportImportModule.Web.BackgroundJobs
             {
                 await _dataImporter.ImportAsync(request,
                     progressInfo => ProgressCallback(progressInfo, pushNotification, context),
-                    new CancellationTokenWrapper(cancellationToken));
+                    cancellationToken);
             }
             catch (OperationCanceledException)
             {

@@ -32,11 +32,10 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
                 // Arrange
                 var request = TestHelper.CreateImportDataRequest();
                 var cancellationToken = new CancellationToken(true);
-                var cancellationTokenWrapper = new CancellationTokenWrapper(cancellationToken);
                 var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
 
                 // Act
-                await importer.ImportAsync(request, ProgressCallbackMock, cancellationTokenWrapper);
+                await importer.ImportAsync(request, ProgressCallbackMock, cancellationToken);
             }
 
             // Assert
@@ -50,11 +49,11 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             {
                 // Arrange
                 var request = TestHelper.CreateImportDataRequest();
-                var cancellationTokenWrapper = GetCancellationTokenWrapper();
+                var cancellationToken = GetCancellationToken();
                 var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(null, CsvRecords));
 
                 // Act
-                await importer.ImportAsync(request, ProgressCallbackMock, cancellationTokenWrapper);
+                await importer.ImportAsync(request, ProgressCallbackMock, cancellationToken);
             }
 
             // Assert
@@ -66,7 +65,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
         {
             // Arrange
             var request = TestHelper.CreateImportDataRequest();
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
+            var cancellationToken = GetCancellationToken();
             var progressInfos = new List<ImportProgressInfo>();
 
             void ProgressCallback(ImportProgressInfo progressInfo)
@@ -77,7 +76,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
 
             // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+            await importer.ImportAsync(request, ProgressCallback, cancellationToken);
 
             // Assert
             var startProgressInfo = progressInfos.FirstOrDefault();
@@ -94,7 +93,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
         {
             // Arrange
             var request = TestHelper.CreateImportDataRequest();
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
+            var cancellationToken = GetCancellationToken();
             var progressInfos = new List<ImportProgressInfo>();
 
             void ProgressCallback(ImportProgressInfo progressInfo)
@@ -105,7 +104,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
 
             // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+            await importer.ImportAsync(request, ProgressCallback, cancellationToken);
 
             // Assert
             var startProgressInfo = progressInfos[1];
@@ -117,7 +116,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
         {
             // Arrange
             var request = TestHelper.CreateImportDataRequest();
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
+            var cancellationToken = GetCancellationToken();
             var progressInfos = new List<ImportProgressInfo>();
 
             void ProgressCallback(ImportProgressInfo progressInfo)
@@ -129,7 +128,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, invalidRows));
 
             // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+            await importer.ImportAsync(request, ProgressCallback, cancellationToken);
 
             // Assert
             var errorProgressInfo = progressInfos.LastOrDefault();
@@ -148,7 +147,6 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var request = TestHelper.CreateImportDataRequest();
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
-            var cancellationTokenWrapper = new CancellationTokenWrapper(cancellationToken);
             var progressInfos = new List<ImportProgressInfo>();
 
             void ProgressCallback(ImportProgressInfo progressInfo)
@@ -164,7 +162,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
 
             // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+            await importer.ImportAsync(request, ProgressCallback, cancellationToken);
 
             // Assert
             var errorProgressInfo = progressInfos.LastOrDefault();
@@ -181,7 +179,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
         {
             // Arrange
             var request = TestHelper.CreateImportDataRequest();
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
+            var cancellationToken = GetCancellationToken();
             var progressInfos = new List<ImportProgressInfo>();
 
             void ProgressCallback(ImportProgressInfo progressInfo)
@@ -192,7 +190,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, new[] { CsvRecords.First() }));
 
             // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+            await importer.ImportAsync(request, ProgressCallback, cancellationToken);
 
             // Assert
             var successProgressInfo = progressInfos.LastOrDefault();
@@ -210,7 +208,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
         {
             // Arrange
             var request = TestHelper.CreateImportDataRequest();
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
+            var cancellationToken = GetCancellationToken();
             var progressInfos = new List<ImportProgressInfo>();
 
             void ProgressCallback(ImportProgressInfo progressInfo)
@@ -221,7 +219,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords));
 
             // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+            await importer.ImportAsync(request, ProgressCallback, cancellationToken);
 
             // Assert
             var successProgressInfo = progressInfos.LastOrDefault();
@@ -238,7 +236,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
         {
             // Arrange
             var request = TestHelper.CreateImportDataRequest(ImportMode.UpdateOnly);
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
+            var cancellationToken = GetCancellationToken();
             var progressInfos = new List<ImportProgressInfo>();
 
             void ProgressCallback(ImportProgressInfo progressInfo)
@@ -249,7 +247,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, new[] { CsvRecords[1] }));
 
             // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+            await importer.ImportAsync(request, ProgressCallback, cancellationToken);
 
             // Assert
             var successProgressInfo = progressInfos.LastOrDefault();
@@ -267,7 +265,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
         {
             // Arrange
             var request = TestHelper.CreateImportDataRequest(ImportMode.CreateAndUpdate);
-            var cancellationTokenWrapper = GetCancellationTokenWrapper();
+            var cancellationToken = GetCancellationToken();
             var progressInfos = new List<ImportProgressInfo>();
 
             void ProgressCallback(ImportProgressInfo progressInfo)
@@ -291,7 +289,7 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
             var importer = GetCsvPagedPriceDataImporter(GetBlobStorageProvider(CsvHeader, CsvRecords.Take(2).ToArray()), null, pricingSearchService.Object);
 
             // Act
-            await importer.ImportAsync(request, ProgressCallback, cancellationTokenWrapper);
+            await importer.ImportAsync(request, ProgressCallback, cancellationToken);
 
             // Assert
             var successProgressInfo = progressInfos.LastOrDefault();
@@ -305,9 +303,9 @@ namespace VirtoCommerce.PriceExportImportModule.Tests
         }
 
 
-        private static CancellationTokenWrapper GetCancellationTokenWrapper()
+        private static CancellationToken GetCancellationToken()
         {
-            return new CancellationTokenWrapper(new CancellationToken());
+            return CancellationToken.None;
         }
 
         private static void ProgressCallbackMock(ImportProgressInfo progressInfo)
