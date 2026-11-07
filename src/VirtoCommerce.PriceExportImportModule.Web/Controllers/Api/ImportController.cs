@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VirtoCommerce.AssetsModule.Core.Assets;
 using VirtoCommerce.Platform.Core.Common;
+using VirtoCommerce.Platform.Core.Jobs;
 using VirtoCommerce.Platform.Core.PushNotifications;
 using VirtoCommerce.Platform.Core.Security;
 using VirtoCommerce.PriceExportImportModule.Core;
@@ -45,16 +45,17 @@ namespace VirtoCommerce.PriceExportImportModule.Web.Controllers.Api
             };
             await _pushNotificationManager.SendAsync(notification);
 
-            notification.JobId = BackgroundJob.Enqueue<ImportJob>(importJob => importJob.ImportBackgroundAsync(request, notification, JobCancellationToken.Null, null));
+            // The static facade rather than an injected IBackgroundJob keeps the controller constructor unchanged.
+            notification.JobId = await BackgroundJob.Enqueue<ImportJob>(new ImportJobPayload { Request = request, Notification = notification });
 
             return Ok(notification);
         }
 
         [HttpPost]
         [Route("cancel")]
-        public ActionResult CancelExport([FromBody] ImportCancellationRequest cancellationRequest)
+        public async Task<ActionResult> CancelExport([FromBody] ImportCancellationRequest cancellationRequest)
         {
-            BackgroundJob.Delete(cancellationRequest.JobId);
+            await BackgroundJob.Cancel(cancellationRequest.JobId);
             return Ok();
         }
 

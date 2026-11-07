@@ -1,17 +1,28 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
-using Hangfire;
-using Hangfire.Server;
+using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.Platform.Core.Exceptions;
+using VirtoCommerce.Platform.Core.Jobs;
 using VirtoCommerce.Platform.Core.PushNotifications;
-using VirtoCommerce.Platform.Hangfire;
 using VirtoCommerce.PriceExportImportModule.Core.Models;
 using VirtoCommerce.PriceExportImportModule.Core.Services;
 using VirtoCommerce.PriceExportImportModule.Web.Helpers;
 
 namespace VirtoCommerce.PriceExportImportModule.Web.BackgroundJobs
 {
-    public sealed class ImportJob
+    public class ImportJobPayload
+    {
+        public ImportDataRequest Request { get; set; }
+        public ImportPushNotification Notification { get; set; }
+    }
+
+    /// <summary>
+    /// Engine-agnostic price import job. Replaces the former Hangfire job that used <c>PerformContext</c> and
+    /// <c>IJobCancellationToken</c>: the job id now comes from <see cref="IJobExecutionContext.JobId"/> and cancellation
+    /// from the handler's <see cref="CancellationToken"/>.
+    /// </summary>
+    public sealed class ImportJob : IBackgroundJobHandler<ImportJobPayload>
     {
         private readonly ICsvPagedPriceDataImporter _dataImporter;
         private readonly IPushNotificationManager _pushNotificationManager;
@@ -23,17 +34,20 @@ namespace VirtoCommerce.PriceExportImportModule.Web.BackgroundJobs
             _pushNotificationManager = pushNotificationManager;
         }
 
-        public async Task ImportBackgroundAsync(ImportDataRequest request, ImportPushNotification pushNotification, IJobCancellationToken jobCancellationToken, PerformContext context)
+        public async Task Execute(ImportJobPayload payload, IJobExecutionContext context, CancellationToken cancellationToken = default)
         {
+            var request = payload.Request;
+            var pushNotification = payload.Notification;
+
             ValidateParameters(pushNotification);
 
             try
             {
                 await _dataImporter.ImportAsync(request,
                     progressInfo => ProgressCallback(progressInfo, pushNotification, context),
-                    new JobCancellationTokenWrapper(jobCancellationToken));
+                    new CancellationTokenWrapper(cancellationToken));
             }
-            catch (JobAbortedException)
+            catch (OperationCanceledException)
             {
                 // job is aborted, do nothing
             }
@@ -53,10 +67,10 @@ namespace VirtoCommerce.PriceExportImportModule.Web.BackgroundJobs
             }
         }
 
-        private void ProgressCallback(ImportProgressInfo x, ImportPushNotification pushNotification, PerformContext context)
+        private void ProgressCallback(ImportProgressInfo x, ImportPushNotification pushNotification, IJobExecutionContext context)
         {
             pushNotification.Patch(x);
-            pushNotification.JobId = context.BackgroundJob.Id;
+            pushNotification.JobId = context.JobId;
             _pushNotificationManager.Send(pushNotification);
         }
 
